@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Table, Input, Select, Space, Button, Tag, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { api } from '../api/client'
+import { exportCSV } from '../utils/export'
 import dayjs from 'dayjs'
 
 export default function DevicesPage() {
@@ -34,6 +35,22 @@ export default function DevicesPage() {
     if (s === 'online') return <Tag color="green">在线</Tag>
     if (s === 'low_battery') return <Tag color="orange">低电量</Tag>
     return <Tag>离线</Tag>
+  }
+
+  const handleExport = () => {
+    if (!data.length) { message.warning('当前无数据可导出'); return }
+    exportCSV('设备列表', [
+      { title: 'ID', dataIndex: 'id' },
+      { title: 'SN', dataIndex: 'sn' },
+      { title: '主人ID', dataIndex: 'user_id' },
+      { title: '宠物ID', dataIndex: 'pet_id' },
+      { title: '硬件类型', dataIndex: 'hardware_type' },
+      { title: '固件', dataIndex: 'firmware_version' },
+      { title: '电量', dataIndex: 'battery_level' },
+      { title: '状态', dataIndex: 'status' },
+      { title: '最后在线', dataIndex: 'last_online_at' },
+    ], data)
+    message.success('已导出 CSV')
   }
 
   const columns: ColumnsType<any> = [
@@ -72,6 +89,7 @@ export default function DevicesPage() {
           options={[{ value: 'online', label: '在线' }, { value: 'offline', label: '离线' }, { value: 'low_battery', label: '低电量' }]}
         />
         <Button onClick={load}>刷新</Button>
+        <Button onClick={handleExport}>导出 CSV</Button>
       </Space>
       <Table
         rowKey="id"

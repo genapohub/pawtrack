@@ -1,10 +1,11 @@
 /**
- * 管理后台 — 宠物管理（只读列表）
+ * 管理后台 — 宠物管理（列表/导出）
  */
 import { useEffect, useState } from 'react'
-import { Table, Tag, message } from 'antd'
+import { Table, Tag, Button, Space, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { api } from '../api/client'
+import { exportCSV } from '../utils/export'
 import dayjs from 'dayjs'
 
 export default function PetsPage() {
@@ -28,6 +29,23 @@ export default function PetsPage() {
 
   useEffect(() => { load() }, [page])
 
+  const handleExport = () => {
+    if (!data.length) { message.warning('当前无数据可导出'); return }
+    exportCSV('宠物列表', [
+      { title: 'ID', dataIndex: 'id' },
+      { title: '主人ID', dataIndex: 'user_id' },
+      { title: '名字', dataIndex: 'name' },
+      { title: '类型', dataIndex: 'type' },
+      { title: '品种', dataIndex: 'breed' },
+      { title: '性别', dataIndex: 'gender' },
+      { title: '围栏', dataIndex: 'fence_enabled' },
+      { title: '围栏半径', dataIndex: 'fence_radius' },
+      { title: '状态', dataIndex: 'status' },
+      { title: '创建时间', dataIndex: 'created_at' },
+    ], data)
+    message.success('已导出 CSV')
+  }
+
   const columns: ColumnsType<any> = [
     { title: 'ID', dataIndex: 'id', width: 70 },
     { title: '主人ID', dataIndex: 'user_id', width: 80 },
@@ -49,6 +67,10 @@ export default function PetsPage() {
   return (
     <>
       <h2 style={{ marginBottom: 16 }}>宠物管理</h2>
+      <Space style={{ marginBottom: 16 }}>
+        <Button onClick={load}>刷新</Button>
+        <Button onClick={handleExport}>导出 CSV</Button>
+      </Space>
       <Table
         rowKey="id"
         columns={columns}

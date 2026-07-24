@@ -1,10 +1,11 @@
 /**
- * 管理后台 — 报警管理
+ * 管理后台 — 报警管理（列表/批量处理/导出）
  */
 import { useEffect, useState } from 'react'
-import { Table, Select, Space, Button, Tag, message } from 'antd'
+import { Table, Select, Space, Button, Tag, message, Popconfirm } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { api } from '../api/client'
+import { exportCSV } from '../utils/export'
 import dayjs from 'dayjs'
 
 const TYPE_LABEL: Record<string, string> = {
@@ -19,6 +20,7 @@ export default function AlarmsPage() {
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<string>('')
   const [page, setPage] = useState(1)
+  const [selectedKeys, setSelectedKeys] = useState<number[]>([])
 
   const load = async () => {
     setLoading(true)
@@ -37,6 +39,39 @@ export default function AlarmsPage() {
 
   const sevTag = (s: string) => s === 'high' ? <Tag color="red">高</Tag> : s === 'medium' ? <Tag color="orange">中</Tag> : <Tag>低</Tag>
   const statusTag = (s: string) => s === 'active' ? <Tag color="orange">待处理</Tag> : s === 'false_positive' ? <Tag>误报</Tag> : <Tag color="green">已处理</Tag>
+
+  const batchHandle = async (newStatus: 'handled' | 'false_positive') => {
+    if (!selectedKeys.length) {
+      message.warning('请先选择报警记录')
+      return
+    }
+    try {
+      await api.alarms.handle(selectedKeys, newStatus)
+      message.success(`已${newStatus === 'handled' ? '处理' : '标记误报'} ${selectedKeys.length} 条`)
+      setSelectedKeys([])
+      load()
+    } catch (e: any) {
+      message.error(e.message)
+    }
+  }
+
+  const handleExport = () => {
+    if (!data.length) {
+      message.warning('当前无数据可导出')
+      return
+    }
+    exportCSV('报警列表', [
+      { title: 'ID', dataIndex: 'id' },
+      { title: '宠物ID', dataIndex: 'pet_id' },
+      { title: '用户ID', dataIndex: 'user_id' },
+      { title: '类型', dataIndex: 'type' },
+      { title: '严重程度', dataIndex: 'severity' },
+      { title: '状态', dataIndex: 'status' },
+      { title: '地址', dataIndex: 'address' },
+      { title: '触发时间', dataIndex: 'created_at' },
+    ], data)
+    message.success('已导出 CSV')
+  }
 
   const columns: ColumnsType<any> = [
     { title: 'ID', dataIndex: 'id', width: 70 },
@@ -66,6 +101,17 @@ export default function AlarmsPage() {
           options={[{ value: 'active', label: '待处理' }, { value: 'handled', label: '已处理' }, { value: 'false_positive', label: '误报' }]}
         />
         <Button onClick={load}>刷新</Button>
+        <Button onClick={handleExport}>导出 CSV</Button>
+        {selectedKeys.length > 0 && (
+          <>
+            <Popconfirm title={`确认批量处理 ${selectedKeys.length} 条报警？`} onConfirm={() => batchHandle('handled')}>
+              <Button type="primary" size="small">批量处理 ({selectedKeys.length})</Button>
+            </Popconfirm>
+            <Popconfirm title={`确认批量标记 ${selectedKeys.length} 条为误报？`} onConfirm={() => batchHandle('false_positive')}>
+              <Button size="small">标记误报 ({selectedKeys.length})</Button>
+            </Popconfirm>
+          </>
+        )}
       </Space>
       <Table
         rowKey="id"
@@ -73,6 +119,10 @@ export default function AlarmsPage() {
         dataSource={data}
         loading={loading}
         scroll={{ x: 1100 }}
+        rowSelection={{
+          selectedRowKeys: selectedKeys,
+          onChange: (keys) => setSelectedKeys(keys as number[]),
+        }}
         pagination={{ current: page, total, pageSize: 10, showSizeChanger: false, onChange: (p) => setPage(p) }}
       />
     </>

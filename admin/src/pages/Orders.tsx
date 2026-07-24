@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Table, Select, Space, Button, Tag, Popconfirm, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { api } from '../api/client'
+import { exportCSV } from '../utils/export'
 import dayjs from 'dayjs'
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
@@ -47,6 +48,23 @@ export default function OrdersPage() {
     }
   }
 
+  const handleExport = () => {
+    if (!data.length) { message.warning('当前无数据可导出'); return }
+    exportCSV('订单列表', [
+      { title: 'ID', dataIndex: 'id' },
+      { title: '订单号', dataIndex: 'order_no' },
+      { title: '用户ID', dataIndex: 'user_id' },
+      { title: '类型', dataIndex: 'type' },
+      { title: '套餐', dataIndex: 'product_id' },
+      { title: '金额', dataIndex: 'amount' },
+      { title: '渠道', dataIndex: 'pay_channel' },
+      { title: '状态', dataIndex: 'status' },
+      { title: '支付时间', dataIndex: 'paid_at' },
+      { title: '下单时间', dataIndex: 'created_at' },
+    ], data)
+    message.success('已导出 CSV')
+  }
+
   const columns: ColumnsType<any> = [
     { title: 'ID', dataIndex: 'id', width: 70 },
     { title: '订单号', dataIndex: 'order_no', width: 200 },
@@ -84,6 +102,7 @@ export default function OrdersPage() {
           options={Object.entries(STATUS_LABEL).map(([k, v]) => ({ value: k, label: v.label }))}
         />
         <Button onClick={load}>刷新</Button>
+        <Button onClick={handleExport}>导出 CSV</Button>
       </Space>
       <Table
         rowKey="id"

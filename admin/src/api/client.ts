@@ -71,7 +71,9 @@ export const api = {
       return request('GET', `/admin/users?${qs.toString()}`)
     },
     ban: (userId: number, action: 'ban' | 'unban') =>
-      request('PUT', `/admin/users/${userId}/ban?action=${action}`)
+      request('PUT', `/admin/users/${userId}/ban?action=${action}`),
+    edit: (userId: number, data: { nickname?: string; member_level?: string; points?: number; status?: string }) =>
+      request('PUT', `/admin/users/${userId}`, data)
   },
 
   pets: {
@@ -97,7 +99,9 @@ export const api = {
       qs.set('page', String(params.page))
       qs.set('size', String(params.size))
       return request('GET', `/admin/alarms?${qs.toString()}`)
-    }
+    },
+    handle: (ids: number[], status: 'handled' | 'false_positive') =>
+      request('PUT', '/admin/alarms/handle', { ids, status })
   },
 
   orders: {

@@ -158,6 +158,41 @@ async def ban_user(
     return {"code": 0, "message": f"已{'封禁' if action == 'ban' else '解封'}用户"}
 
 
+class AdminEditUserRequest(BaseModel):
+    nickname: Optional[str] = None
+    member_level: Optional[str] = None  # free / basic / pro
+    points: Optional[int] = None
+    status: Optional[str] = None  # active / blocked / deleted
+
+
+@router.put("/users/{user_id}", response_model=dict)
+async def admin_edit_user(
+    user_id: int,
+    body: AdminEditUserRequest,
+    admin: dict = Depends(get_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """管理员编辑用户（昵称/会员等级/积分/状态）"""
+    result = await db.execute(select(User).where(User.id == user_id))
+    u = result.scalar_one_or_none()
+    if not u:
+        raise HTTPException(404, detail={"code": 40001, "message": "用户不存在"})
+
+    if body.nickname is not None:
+        u.nickname = body.nickname
+    if body.member_level is not None:
+        from app.enums import MemberLevel
+        u.member_level = MemberLevel(body.member_level)
+    if body.points is not None:
+        u.points = body.points
+    if body.status is not None:
+        if body.status not in ("active", "blocked", "deleted"):
+            raise HTTPException(400, detail={"code": 40002, "message": "状态无效"})
+        u.status = body.status
+    await db.commit()
+    return {"code": 0, "message": "用户已更新"}
+
+
 # ── 宠物管理 ──────────────────────────────────────────────
 
 @router.get("/pets", response_model=dict)
@@ -262,6 +297,32 @@ async def update_alarm_rules(
 ):
     """报警规则配置（占位）"""
     return {"code": 0, "message": "报警规则配置已保存（MVP 占位）"}
+
+
+class AdminHandleAlarmRequest(BaseModel):
+    status: str  # handled / false_positive
+    ids: list[int]
+
+
+@router.put("/alarms/handle", response_model=dict)
+async def admin_handle_alarms(
+    body: AdminHandleAlarmRequest,
+    admin: dict = Depends(get_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """管理员批量处理报警"""
+    if body.status not in ("handled", "false_positive"):
+        raise HTTPException(400, detail={"code": 40002, "message": "状态无效"})
+    from app.enums import AlarmStatus
+    new_status = AlarmStatus.handled if body.status == "handled" else AlarmStatus.false_positive
+    from datetime import datetime, timezone
+    await db.execute(
+        update(Alarm).where(Alarm.id.in_(body.ids)).values(
+            status=new_status, handled_at=datetime.now(timezone.utc)
+        )
+    )
+    await db.commit()
+    return {"code": 0, "message": f"已处理 {len(body.ids)} 条报警"}
 
 
 # ── 订单管理 ──────────────────────────────────────────────

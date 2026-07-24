@@ -1,0 +1,649 @@
+/* 宠迹 PawTrack — 全局样式（与 UI 原型设计语言一致） */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #3B82F6;
+  --primary-dark: #2563EB;
+  --bg: #F8FAFC;
+  --card: #FFFFFF;
+  --text: #1E293B;
+  --sub: #64748B;
+  --muted: #94A3B8;
+  --border: #E2E8F0;
+  --danger: #EF4444;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --purple: #8B5CF6;
+  --cat: #F59E0B;
+  --dog: #3B82F6;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: #E2E8F0;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+}
+
+#root {
+  width: 414px;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow-x: hidden;
+  box-shadow: 0 0 40px rgba(0,0,0,0.08);
+}
+
+/* ── 状态栏 ──────────────────────────────── */
+.status-bar {
+  height: 44px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 12px;
+  color: var(--sub);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+/* ── 导航栏 ──────────────────────────────── */
+.nav-bar {
+  height: 56px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 44px;
+  z-index: 199;
+  border-bottom: 1px solid var(--border);
+  font-size: 17px;
+  font-weight: 700;
+}
+.nav-back {
+  position: absolute;
+  left: 16px;
+  font-size: 24px;
+  color: var(--primary);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.nav-right {
+  position: absolute;
+  right: 16px;
+  font-size: 14px;
+  color: var(--primary);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ── TabBar ──────────────────────────────── */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  width: 414px;
+  height: 83px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding-bottom: 20px;
+  z-index: 200;
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.tab-item.active { color: var(--primary); }
+.tab-icon { font-size: 22px; }
+
+/* ── 页面容器 ──────────────────────────────── */
+.screen { padding: 0; min-height: calc(100vh - 83px); padding-bottom: 83px; }
+
+/* ── 卡片 ──────────────────────────────── */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 16px;
+  border: 1px solid var(--border);
+}
+
+/* ── 按钮 ──────────────────────────────── */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.btn:active { opacity: 0.8; }
+.btn-primary { background: var(--primary); color: #FFF; }
+.btn-danger { background: var(--danger); color: #FFF; }
+.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 表单 ──────────────────────────────── */
+.input-group { margin-bottom: 16px; }
+.input-label { font-size: 13px; color: var(--sub); margin-bottom: 6px; font-weight: 500; }
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 16px;
+  background: var(--card);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input:focus { border-color: var(--primary); }
+
+/* ── 地图区域 ──────────────────────────────── */
+.map-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background: linear-gradient(135deg, #E0F2FE, #DBEAFE);
+  position: relative;
+  overflow: hidden;
+}
+.map-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sub);
+  font-size: 14px;
+  position: relative;
+}
+.map-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(var(--muted) 1px, transparent 1px),
+    linear-gradient(90deg, var(--muted) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.map-pin {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid #FFF;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: all 0.5s ease;
+}
+
+/* ── 宠物卡片 ──────────────────────────────── */
+.pet-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.pet-card:active { border-color: var(--primary); }
+.pet-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.pet-info { flex: 1; }
+.pet-name { font-size: 16px; font-weight: 700; }
+.pet-status { font-size: 12px; color: var(--sub); }
+
+/* ── 徽章 ──────────────────────────────── */
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+.badge-cat { background: #FFF7ED; color: var(--cat); }
+.badge-dog { background: #EFF6FF; color: var(--dog); }
+.badge-pro { background: #F5F3FF; color: var(--purple); }
+.badge-online { background: #ECFDF5; color: var(--success); }
+.badge-offline { background: #F1F5F9; color: var(--muted); }
+
+/* ── 标题 ──────────────────────────────── */
+.section-title { font-size: 22px; font-weight: 800; padding: 20px 16px 12px; }
+.section-desc { font-size: 14px; color: var(--sub); padding: 0 16px 16px; }
+
+/* ── FAB 浮动按钮 ──────────────────────────────── */
+.fab {
+  position: fixed;
+  bottom: 100px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+  cursor: pointer;
+  border: none;
+  z-index: 150;
+}
+
+/* ── Toast ──────────────────────────────── */
+.toast {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #FFF;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 999;
+  animation: toast-in 0.3s ease;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── 登录页 ──────────────────────────────── */
+.login-logo {
+  text-align: center;
+  padding: 60px 0 40px;
+}
+.login-logo-icon { font-size: 64px; }
+.login-logo-text { font-size: 28px; font-weight: 800; margin-top: 8px; }
+.login-logo-desc { font-size: 14px; color: var(--sub); margin-top: 4px; }
+
+/* ── 开关组件 ──────────────────────────────── */
+.toggle {
+  width: 52px;
+  height: 32px;
+  border-radius: 16px;
+  background: var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+  border: none;
+}
+.toggle.on { background: var(--primary); }
+.toggle-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #FFF;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.toggle.on .toggle-dot { transform: translateX(20px); }
+
+/* ── 类型选择 ──────────────────────────────── */
+.type-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.type-option {
+  flex: 1;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--card);
+}
+.type-option.selected {
+  border-color: var(--primary);
+  background: #EFF6FF;
+}
+.type-option-icon { font-size: 36px; }
+.type-option-label { font-size: 14px; font-weight: 600; margin-top: 4px; }
+
+/* ── 加载动画 ──────────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--muted);
+}
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── 空状态 ──────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; }
+
+/* ── 导航栏红点徽标 ──────────────────────── */
+.nav-badge {
+  position: absolute;
+  right: 16px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: var(--danger);
+  color: #FFF;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 筛选栏 ──────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.filter-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.filter-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFF;
+}
+
+/* ── 报警/通用卡片（Sprint 2 复用）──────────── */
+.alarm-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+.alarm-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.alarm-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.alarm-main { flex: 1; min-width: 0; }
+.alarm-title { font-size: 15px; font-weight: 700; }
+.alarm-time { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.alarm-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--sub);
+}
+.alarm-addr { color: var(--muted); }
+.alarm-status-row { margin-top: 8px; }
+.alarm-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.alarm-btn { flex: 1; padding: 10px; font-size: 14px; }
+
+/* ── 严重程度标签 ──────────────────────── */
+.severity {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+.sev-high { background: #FEE2E2; color: var(--danger); }
+.sev-medium { background: #FEF3C7; color: var(--warning); }
+.sev-low { background: #F1F5F9; color: var(--muted); }
+
+/* ── 附近宠物卡片 ──────────────────────── */
+.nearby-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.nearby-info { flex: 1; min-width: 0; }
+.nearby-name { font-size: 15px; font-weight: 700; }
+.nearby-distance { font-size: 12px; color: var(--sub); margin-top: 2px; }
+.nearby-btn { width: auto; padding: 10px 16px; font-size: 13px; flex-shrink: 0; }
+
+/* ── 会员 Hero ──────────────────────── */
+.member-hero {
+  margin: 12px 16px;
+  padding: 24px 20px;
+  border-radius: 18px;
+  color: #FFF;
+  text-align: center;
+  position: relative;
+}
+.member-hero-icon { font-size: 40px; }
+.member-hero-level { font-size: 22px; font-weight: 800; margin-top: 6px; }
+.member-hero-expire { font-size: 13px; opacity: 0.9; margin-top: 6px; }
+.member-cancel-btn {
+  margin-top: 14px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #FFF;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ── 权益对比 ──────────────────────── */
+.benefit-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.benefit-row.current {
+  background: #F0FDF4;
+  margin: 0 -16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border-bottom: none;
+}
+.benefit-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.benefit-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.benefit-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--sub);
+}
+
+/* ── 套餐卡片 ──────────────────────── */
+.plan-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1.5px solid var(--border);
+}
+.plan-card.plan-pro {
+  border-color: var(--purple);
+  background: linear-gradient(135deg, #FAF5FF, #FFF);
+}
+.plan-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.plan-name { font-size: 16px; font-weight: 700; }
+.plan-period { font-size: 12px; color: var(--sub); margin-top: 4px; }
+.plan-price { text-align: right; }
+.plan-price-num { font-size: 26px; font-weight: 800; color: var(--primary); }
+.plan-price-unit { font-size: 13px; color: var(--muted); margin-left: 2px; }
+.plan-save {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--success);
+  background: #ECFDF5;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
+}
+.btn-pro { background: var(--purple); color: #FFF; }
+.btn-disabled { background: var(--border); color: var(--muted); }
+
+/* ── 积分 Hero ──────────────────────── */
+.points-hero {
+  margin: 12px 16px;
+  padding: 28px 20px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  color: #FFF;
+  text-align: center;
+}
+.points-hero-label { font-size: 13px; opacity: 0.9; }
+.points-hero-num { font-size: 40px; font-weight: 800; margin: 6px 0; }
+.points-signin-btn {
+  width: auto;
+  display: inline-flex;
+  padding: 10px 24px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #FFF;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.points-signin-btn:disabled { opacity: 0.6; }
+
+/* ── 积分明细行 ──────────────────────── */
+.log-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.log-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.log-main { flex: 1; min-width: 0; }
+.log-title { font-size: 14px; font-weight: 600; }
+.log-time { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.log-amount { text-align: right; }
+.log-change { font-size: 16px; font-weight: 800; }
+.log-change.pos { color: var(--success); }
+.log-change.neg { color: var(--danger); }
+.log-balance { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── 积分商城 ──────────────────────── */
+.shop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.shop-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.shop-image { font-size: 40px; }
+.shop-name { font-size: 13px; font-weight: 600; margin-top: 6px; }
+.shop-points { font-size: 13px; color: var(--primary); font-weight: 700; margin: 6px 0 10px; }
+.shop-btn { width: 100%; padding: 8px; font-size: 13px; }
+
+/* ── 我的页面行 ──────────────────────── */
+.me-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 15px;
+}
+.me-row:active { background: var(--bg); }

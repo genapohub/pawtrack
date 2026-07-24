@@ -1,0 +1,24 @@
+# 宠迹后端 ruff 配置（渐进式 lint）
+target-version = "py312"
+line-length = 120
+
+[lint]
+# 选择常用规则集，但忽略现有代码中暂未处理的项
+# 注：暂不启用 I (isort)，避免对现有代码做大规模导入重排
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+]
+ignore = [
+    "E501",  # 行过长（团队暂未强制）
+    "E402",  # 模块级导入未在文件顶部（FastAPI 路由后置注册模式）
+    "E701",  # 单行多语句（紧凑 if 风格，团队可接受）
+    "F401",  # 未使用 import（部分模块为副作用导入）
+    "F403",  # from x import *（models 等）
+    "F811",  # 重定义（部分占位）
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["F401", "F811"]
+"app/routers/__init__.py" = ["F401"]

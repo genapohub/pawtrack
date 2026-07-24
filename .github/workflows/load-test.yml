@@ -1,0 +1,86 @@
+name: Load Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      users:
+        description: "并发用户数"
+        required: false
+        default: "100"
+      spawn_rate:
+        description: "爬坡速率（用户/秒）"
+        required: false
+        default: "10"
+      run_time:
+        description: "运行时长（如 60s / 2m）"
+        required: false
+        default: "60s"
+
+jobs:
+  load-test:
+    name: Locust Performance Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install backend + locust
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Start infrastructure
+        run: docker compose -f docker-compose.infra.yml up -d
+
+      - name: Wait for postgres
+        run: |
+          for i in $(seq 1 30); do
+            docker exec pawtrack-postgres pg_isready -U pawtrack && break
+            sleep 2
+          done
+
+      - name: Start backend (background)
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql+asyncpg://pawtrack:pawtrack_dev@localhost:5432/pawtrack
+          REDIS_URL: redis://localhost:6379/0
+          MONGODB_URL: mongodb://pawtrack:pawtrack_dev@localhost:27017/pawtrack
+          RABBITMQ_URL: amqp://pawtrack:pawtrack_dev@localhost:5672/
+          MQTT_BROKER_URL: mqtt://localhost:1883
+          ENV: dev
+        run: |
+          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/health >/dev/null && echo "backend ready" && break
+            sleep 2
+          done
+
+      - name: Run Locust (headless)
+        working-directory: backend
+        run: |
+          locust -f tests/load/locustfile.py --host=http://localhost:8000 \
+            --headless \
+            -u ${{ inputs.users }} \
+            -r ${{ inputs.spawn_rate }} \
+            --run-time ${{ inputs.run_time }} \
+            --html=loadtest-report.html \
+            --only-summary
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loadtest-report
+          path: backend/loadtest-report.html
+
+      - name: Teardown
+        if: always()
+        run: docker compose -f docker-compose.infra.yml down -v

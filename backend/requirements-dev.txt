@@ -1,0 +1,6 @@
+# 宠迹后端开发/测试依赖
+pytest==8.2.2
+pytest-asyncio==0.23.7
+httpx==0.27.0
+ruff==0.5.4
+locust==2.29.1          # 性能压测

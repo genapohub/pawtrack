@@ -1,0 +1,21 @@
+# 宠迹后端依赖（MVP）
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+sqlalchemy[asyncio]==2.0.31
+asyncpg==0.29.0
+geoalchemy2==0.15.0
+redis[hiredis]==5.0.7
+motor==3.5.1            # MongoDB async driver
+aio-pika==9.4.1         # RabbitMQ async driver
+paho-mqtt==2.0.0        # MQTT client
+PyJWT[crypto]==2.8.0    # JWT with RSA support
+cryptography==42.0.5
+pydantic==2.7.4
+pydantic-settings==2.3.4
+alembic==1.13.1         # 数据库迁移
+httpx==0.27.0           # HTTP client
+python-multipart==0.0.9
+
+# 监控告警
+prometheus-fastapi-instrumentator==7.0.0  # Prometheus 指标
+sentry-sdk==2.7.1                          # 错误上报（可选，通过 SENTRY_DSN 启用）

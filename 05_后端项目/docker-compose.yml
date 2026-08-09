@@ -1,0 +1,178 @@
+version: '3.8'
+
+services:
+  # PostgreSQL + PostGIS
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: pawtrack-postgres
+    environment:
+      POSTGRES_DB: pawtrack
+      POSTGRES_USER: pawtrack
+      POSTGRES_PASSWORD: pawtrack_dev
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pawtrack"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Redis (缓存 + Stream + GEO)
+  redis:
+    image: redis:7-alpine
+    container_name: pawtrack-redis
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # MongoDB (定位轨迹)
+  mongodb:
+    image: mongo:7
+    container_name: pawtrack-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: pawtrack
+      MONGO_INITDB_ROOT_PASSWORD: pawtrack_dev
+      MONGO_INITDB_DATABASE: pawtrack
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+      - ./docker/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # RabbitMQ (消息队列)
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pawtrack-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: pawtrack
+      RABBITMQ_DEFAULT_PASS: pawtrack_dev
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # 管理界面
+    volumes:
+      - rabbitdata:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # EMQX MQTT Broker
+  emqx:
+    image: emqx/emqx:5.8
+    container_name: pawtrack-emqx
+    environment:
+      EMQX_NODE__name: emqx@127.0.0.1
+      EMQX_CLUSTER__discovery_strategy: manual
+    ports:
+      - "1883:1883"     # MQTT
+      - "8883:8883"     # MQTT/TLS
+      - "8083:8083"     # WebSocket
+      - "8084:8084"     # WebSocket/TLS
+      - "18083:18083"   # Dashboard
+    volumes:
+      - emqxdata:/opt/emqx/data
+    healthcheck:
+      test: ["CMD", "emqx", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI 后端服务
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: pawtrack-backend
+    environment:
+      # 环境标识
+      ENV: dev
+      DEBUG: "true"
+      # 数据库（容器内访问，使用服务名）
+      DATABASE_URL: postgresql+asyncpg://pawtrack:pawtrack_dev@postgres:5432/pawtrack
+      REDIS_URL: redis://redis:6379/0
+      MONGODB_URL: mongodb://pawtrack:pawtrack_dev@mongodb:27017/pawtrack
+      RABBITMQ_URL: amqp://pawtrack:pawtrack_dev@rabbitmq:5672/
+      # MQTT
+      MQTT_BROKER_URL: mqtt://emqx:1883
+      # 安全
+      JWT_PRIVATE_KEY_PATH: /app/keys/jwt_private.pem
+      JWT_PUBLIC_KEY_PATH: /app/keys/jwt_public.pem
+      # 监控告警（dev 通常留空，从 .env 读取）
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+    ports:
+      - "8000:8000"
+      - "5678:5678"   # WebSocket
+    volumes:
+      - ./backend:/app
+      - ../keys:/app/keys
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # 前端 App (React + Vite)
+  frontend:
+    build:
+      context: ../04_前端项目/frontend
+      dockerfile: Dockerfile.dev
+    container_name: pawtrack-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../04_前端项目/frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE: http://localhost:8000
+
+  # 管理后台 (React + Vite + antd)
+  admin:
+    build:
+      context: ../04_前端项目/admin
+      dockerfile: Dockerfile.dev
+    container_name: pawtrack-admin
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../04_前端项目/admin:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE: http://localhost:8000
+
+volumes:
+  pgdata:
+  redisdata:
+  mongodata:
+  rabbitdata:
+  emqxdata:
+
+networks:
+  default:
+    name: pawtrack-network

@@ -29,16 +29,16 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: backend/requirements.txt
+          cache-dependency-path: 05_后端项目/backend/requirements.txt
 
       - name: Install backend + locust
-        working-directory: backend
+        working-directory: 05_后端项目/backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Start infrastructure
-        run: docker compose -f docker-compose.infra.yml up -d
+        run: docker compose -f 05_后端项目/docker-compose.infra.yml up -d
 
       - name: Wait for postgres
         run: |
@@ -48,7 +48,7 @@ jobs:
           done
 
       - name: Start backend (background)
-        working-directory: backend
+        working-directory: 05_后端项目/backend
         env:
           DATABASE_URL: postgresql+asyncpg://pawtrack:pawtrack_dev@localhost:5432/pawtrack
           REDIS_URL: redis://localhost:6379/0
@@ -64,7 +64,7 @@ jobs:
           done
 
       - name: Run Locust (headless)
-        working-directory: backend
+        working-directory: 05_后端项目/backend
         run: |
           locust -f tests/load/locustfile.py --host=http://localhost:8000 \
             --headless \
@@ -79,8 +79,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: loadtest-report
-          path: backend/loadtest-report.html
+          path: 05_后端项目/backend/loadtest-report.html
 
       - name: Teardown
         if: always()
-        run: docker compose -f docker-compose.infra.yml down -v
+        run: docker compose -f 05_后端项目/docker-compose.infra.yml down -v

@@ -1,0 +1,39 @@
+{
+  "name": "宠迹",
+  "appid": "",
+  "description": "宠物智能定位与社交平台",
+  "versionName": "0.1.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3
+  },
+  "quickapp": {},
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "minified": true
+    },
+    "usingComponents": true,
+    "permission": {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用于宠物定位与围栏提醒"
+      },
+      "scope.userLocationBackground": {
+        "desc": "你的位置信息将用于后台持续接收宠物位置推送"
+      }
+    },
+    "requiredPrivateInfos": ["getLocation"]
+  },
+  "h5": {
+    "title": "宠迹 PawTrack",
+    "router": {
+      "mode": "hash"
+    }
+  },
+  "vueVersion": "3"
+}

@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: 05_后端项目/backend
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: backend/requirements.txt
+          cache-dependency-path: 05_后端项目/backend/requirements.txt
 
       - name: Install dependencies
         run: |
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
+        working-directory: 04_前端项目/frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -60,7 +60,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: 04_前端项目/frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: frontend/dist
+          path: 04_前端项目/frontend/dist
           retention-days: 7
 
   # ── admin 后台：test + build ─────────────────────────────
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: admin
+        working-directory: 04_前端项目/admin
     steps:
       - uses: actions/checkout@v4
 
@@ -96,7 +96,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: admin/package-lock.json
+          cache-dependency-path: 04_前端项目/admin/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -114,7 +114,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: admin-dist
-          path: admin/dist
+          path: 04_前端项目/admin/dist
           retention-days: 7
 
   # ── 汇总门禁 ─────────────────────────────

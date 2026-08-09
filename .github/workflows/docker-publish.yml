@@ -32,14 +32,14 @@ jobs:
       matrix:
         include:
           - component: backend
-            context: backend
-            dockerfile: backend/Dockerfile
+            context: 05_后端项目/backend
+            dockerfile: 05_后端项目/backend/Dockerfile
           - component: frontend
-            context: frontend
-            dockerfile: frontend/Dockerfile
+            context: 04_前端项目/frontend
+            dockerfile: 04_前端项目/frontend/Dockerfile
           - component: admin
-            context: admin
-            dockerfile: admin/Dockerfile
+            context: 04_前端项目/admin
+            dockerfile: 04_前端项目/admin/Dockerfile
     steps:
       - uses: actions/checkout@v4
 

@@ -1,0 +1,141 @@
+# 宠迹 PawTrack 生产编排
+# 用法: docker compose -f docker-compose.prod.yml up -d
+# 镜像来自 GHCR（由 docker-publish.yml 构建推送）
+# 敏感配置通过 .env / secrets 注入，请勿硬编码密码
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: pawtrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pawtrack}
+      POSTGRES_USER: ${POSTGRES_USER:-pawtrack}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?请设置 POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pawtrack}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # 生产不暴露端口，仅容器网络内访问
+
+  redis:
+    image: redis:7-alpine
+    container_name: pawtrack-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru --requirepass ${REDIS_PASSWORD:?请设置 REDIS_PASSWORD}
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  mongodb:
+    image: mongo:7
+    container_name: pawtrack-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-pawtrack}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:?请设置 MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: pawtrack
+    volumes:
+      - mongodata:/data/db
+      - ./docker/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pawtrack-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-pawtrack}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?请设置 RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitdata:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  emqx:
+    image: emqx/emqx:5.8
+    container_name: pawtrack-emqx
+    restart: unless-stopped
+    environment:
+      EMQX_NODE__name: emqx@127.0.0.1
+      EMQX_CLUSTER__discovery_strategy: manual
+    volumes:
+      - emqxdata:/opt/emqx/data
+    healthcheck:
+      test: ["CMD", "emqx", "status"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ghcr.io/${GITHUB_OWNER:-owner}/pawtrack-backend:latest
+    container_name: pawtrack-backend
+    restart: unless-stopped
+    environment:
+      ENV: prod
+      DEBUG: "false"
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-pawtrack}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-pawtrack}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      MONGODB_URL: mongodb://${MONGO_USER:-pawtrack}:${MONGO_PASSWORD}@mongodb:27017/pawtrack
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-pawtrack}:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      MQTT_BROKER_URL: mqtt://emqx:1883
+      JWT_PRIVATE_KEY_PATH: /app/keys/jwt_private.pem
+      JWT_PUBLIC_KEY_PATH: /app/keys/jwt_public.pem
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?请设置 ADMIN_PASSWORD}
+      WECHAT_APP_ID: ${WECHAT_APP_ID:-}
+      WECHAT_APP_SECRET: ${WECHAT_APP_SECRET:-}
+      # 监控告警
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+    volumes:
+      - ../keys:/app/keys:ro
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      mongodb: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      emqx: { condition: service_healthy }
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: ghcr.io/${GITHUB_OWNER:-owner}/pawtrack-frontend:latest
+    container_name: pawtrack-frontend
+    restart: unless-stopped
+    depends_on: [backend]
+    ports:
+      - "3000:80"
+
+  admin:
+    image: ghcr.io/${GITHUB_OWNER:-owner}/pawtrack-admin:latest
+    container_name: pawtrack-admin
+    restart: unless-stopped
+    depends_on: [backend]
+    ports:
+      - "3001:80"
+
+volumes:
+  pgdata:
+  redisdata:
+  mongodata:
+  rabbitdata:
+  emqxdata:
+
+networks:
+  default:
+    name: pawtrack-network

@@ -1,0 +1,91 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "宠迹",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/pet-add/pet-add",
+      "style": {
+        "navigationBarTitleText": "添加宠物"
+      }
+    },
+    {
+      "path": "pages/device-bind/device-bind",
+      "style": {
+        "navigationBarTitleText": "绑定设备"
+      }
+    },
+    {
+      "path": "pages/alarms/alarms",
+      "style": {
+        "navigationBarTitleText": "报警记录"
+      }
+    },
+    {
+      "path": "pages/social/social",
+      "style": {
+        "navigationBarTitleText": "宠物社交"
+      }
+    },
+    {
+      "path": "pages/member/member",
+      "style": {
+        "navigationBarTitleText": "会员中心"
+      }
+    },
+    {
+      "path": "pages/points/points",
+      "style": {
+        "navigationBarTitleText": "积分中心"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#9aa0a6",
+    "selectedColor": "#3d6cf5",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tab/home.png",
+        "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/social/social",
+        "text": "社交",
+        "iconPath": "static/tab/social.png",
+        "selectedIconPath": "static/tab/social-active.png"
+      },
+      {
+        "pagePath": "pages/alarms/alarms",
+        "text": "报警",
+        "iconPath": "static/tab/alarm.png",
+        "selectedIconPath": "static/tab/alarm-active.png"
+      },
+      {
+        "pagePath": "pages/points/points",
+        "text": "我的",
+        "iconPath": "static/tab/me.png",
+        "selectedIconPath": "static/tab/me-active.png"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "宠迹",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f6f7fb"
+  }
+}

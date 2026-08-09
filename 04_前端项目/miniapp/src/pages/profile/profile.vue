@@ -121,10 +121,10 @@ async function loadStats() {
 
 function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 function goPoints() { uni.switchTab({ url: '/pages/points/points' }) }
-function goInvite() { uni.showToast({ title: '邀请功能开发中', icon: 'none' }) }
-function goDevices() { uni.navigateTo({ url: '/pages/device-bind/device-bind' }) }
-function goNotify() { uni.showToast({ title: '通知设置开发中', icon: 'none' }) }
-function goSettings() { uni.showToast({ title: '设置开发中', icon: 'none' }) }
+function goInvite() { uni.navigateTo({ url: '/pages/invite/invite' }) }
+function goDevices() { uni.navigateTo({ url: '/pages/device-manage/device-manage' }) }
+function goNotify() { uni.navigateTo({ url: '/pages/notify-settings/notify-settings' }) }
+function goSettings() { uni.navigateTo({ url: '/pages/settings/settings' }) }
 function goPetDetail(id: number) { uni.navigateTo({ url: '/pages/pet-detail/pet-detail?id=' + id }) }
 function goAddPet() { uni.navigateTo({ url: '/pages/pet-add/pet-add' }) }
 

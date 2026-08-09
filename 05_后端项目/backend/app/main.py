@@ -187,6 +187,7 @@ from app.routers import alarms as alarms_router
 from app.routers import social as social_router
 from app.routers import orders as orders_router
 from app.routers import points as points_router
+from app.routers import invites as invites_router
 from app.routers import admin as admin_router
 
 app.include_router(auth_router.router)
@@ -199,6 +200,7 @@ app.include_router(alarms_router.router)
 app.include_router(social_router.router)
 app.include_router(orders_router.router)
 app.include_router(points_router.router)
+app.include_router(invites_router.router)
 app.include_router(admin_router.router)
 
 

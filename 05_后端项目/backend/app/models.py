@@ -40,6 +40,8 @@ class User(Base):
     member_expire_at = Column(DateTime(timezone=True))
     points = Column(Integer, default=0, nullable=False)
     privacy_location = Column(SQLEnum(PrivacyLevel), default=PrivacyLevel.friends)
+    invite_code = Column(String(20), unique=True, index=True)  # 我的邀请码
+    invited_by = Column(BigInteger)  # 邀请人 user_id（注册时记录）
     status = Column(String(20), default="active")
     last_login_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), default=func.now())

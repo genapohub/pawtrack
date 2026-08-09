@@ -115,3 +115,58 @@ async def shop_items():
         {"id": 3, "name": "宠物保险抵扣券 50元", "points": 1000, "image": "🎫"},
         {"id": 4, "name": "宠物洗浴券", "points": 300, "image": "🛁"}
     ]}
+
+# 积分商城商品（兑换用常量表，MVP 硬编码）
+SHOP_CATALOG = {
+    1: {"name": "宠物零食大礼包", "points": 500},
+    2: {"name": "定制项圈", "points": 2000},
+    3: {"name": "宠物保险抵扣券 50元", "points": 1000},
+    4: {"name": "宠物洗浴券", "points": 300},
+}
+
+@router.post("/redeem", response_model=dict)
+async def redeem_item(
+    item_id: int,
+    user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """积分兑换商品"""
+    item = SHOP_CATALOG.get(item_id)
+    if not item:
+        raise HTTPException(400, detail={"code": 60003, "message": "商品不存在"})
+
+    result = await db.execute(select(User).where(User.id == int(user["sub"])))
+    u = result.scalar_one_or_none()
+    if not u:
+        raise HTTPException(404, detail={"code": 60002, "message": "用户不存在"})
+
+    if u.points < item["points"]:
+        raise HTTPException(400, detail={
+            "code": 60004,
+            "message": f"积分不足，需要 {item['points']}，当前 {u.points}"
+        })
+
+    # 扣积分 + 记流水
+    new_balance = u.points - item["points"]
+    u.points = new_balance
+
+    log = PointsLog(
+        user_id=int(user["sub"]),
+        change=-item["points"],
+        type=PointType.purchase,
+        related_id=f"item_{item_id}",
+        balance=new_balance
+    )
+    db.add(log)
+    await db.commit()
+
+    return {
+        "code": 0,
+        "data": {
+            "item_id": item_id,
+            "item_name": item["name"],
+            "points_spent": item["points"],
+            "balance": new_balance,
+            "note": "兑换码将在 24 小时内通过站内信发放"
+        }
+    }

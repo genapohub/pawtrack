@@ -58,7 +58,7 @@ async def _get_user_device_ids(db: AsyncSession, user_id: int) -> list:
 
 @router.post("/register", response_model=TokenResponse)
 async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
-    """手机号注册"""
+    """手机号注册（支持邀请码奖励）"""
     if not await _verify_sms_code(body.phone, body.code):
         raise HTTPException(400, detail={"code": 20001, "message": "验证码错误"})
 
@@ -67,13 +67,46 @@ async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
     if existing.scalar_one_or_none():
         raise HTTPException(400, detail={"code": 20001, "message": "手机号已注册"})
 
-    # 创建用户
+    # 处理邀请码（可选）：邀请人 +50 积分，新用户 +50 积分
+    invited_by_id = None
+    if body.invite_code:
+        inviter_result = await db.execute(
+            select(User).where(User.invite_code == body.invite_code.strip().upper())
+        )
+        inviter = inviter_result.scalar_one_or_none()
+        if inviter:
+            invited_by_id = inviter.id
+
+    # 创建用户（生成唯一邀请码）
     user = User(
         phone=body.phone,
         nickname=body.nickname or f"用户{body.phone[-4:]}",
-        member_level=MemberLevel.free
+        member_level=MemberLevel.free,
+        invited_by=invited_by_id,
+        points=50 if invited_by_id else 0  # 被邀请新用户 +50
     )
     db.add(user)
+    await db.flush()  # 拿到 user.id
+    user.invite_code = f"PT{user.id:06d}"  # 邀请码 = PT + 6位用户ID
+
+    # 邀请人奖励
+    if invited_by_id:
+        inviter_result = await db.execute(select(User).where(User.id == invited_by_id))
+        inviter = inviter_result.scalar_one_or_none()
+        if inviter:
+            inviter.points += 50
+            from app.models import PointsLog, PointType
+            db.add(PointsLog(
+                user_id=inviter.id, change=50, type=PointType.invite,
+                related_id=f"invite_{user.id}", balance=inviter.points
+            ))
+        # 新用户积分流水
+        from app.models import PointsLog, PointType
+        db.add(PointsLog(
+            user_id=user.id, change=50, type=PointType.invite,
+            related_id=f"invited_{invited_by_id}", balance=50
+        ))
+
     await db.commit()
     await db.refresh(user)
 
@@ -86,6 +119,7 @@ async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
         "phone": user.phone,
         "nickname": user.nickname,
         "member_level": user.member_level.value,
+        "invite_code": user.invite_code,
         "access_token": access,
         "refresh_token": refresh,
         "token_type": "Bearer",

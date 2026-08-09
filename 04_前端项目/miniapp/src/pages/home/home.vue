@@ -44,7 +44,7 @@
     <!-- 位置信息卡片 -->
     <view class="card info-card">
       <template v-if="selectedPet">
-        <view class="pet-head">
+        <view class="pet-head" @tap="goPetDetail">
           <view class="pet-avatar" :class="selectedPet.type === 'cat' ? 'cat-bg' : 'dog-bg'">
             {{ selectedPet.type === 'cat' ? '🐱' : '🐶' }}
           </view>
@@ -269,6 +269,11 @@ function formatTime(ts: number): string {
 
 function goAddPet() {
   uni.navigateTo({ url: '/pages/pet-add/pet-add' })
+}
+
+function goPetDetail() {
+  if (!selectedPet.value) return
+  uni.navigateTo({ url: `/pages/pet-detail/pet-detail?id=${selectedPet.value.id}` })
 }
 
 function goBindDevice() {

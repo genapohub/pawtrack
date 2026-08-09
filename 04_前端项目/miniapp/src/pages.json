@@ -48,6 +48,30 @@
       "style": {
         "navigationBarTitleText": "积分中心"
       }
+    },
+    {
+      "path": "pages/pet-detail/pet-detail",
+      "style": {
+        "navigationBarTitleText": "宠物详情"
+      }
+    },
+    {
+      "path": "pages/history/history",
+      "style": {
+        "navigationBarTitleText": "历史轨迹"
+      }
+    },
+    {
+      "path": "pages/alarm-settings/alarm-settings",
+      "style": {
+        "navigationBarTitleText": "报警设置"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
     }
   ],
   "tabBar": {
@@ -75,7 +99,7 @@
         "selectedIconPath": "static/tab/alarm-active.png"
       },
       {
-        "pagePath": "pages/points/points",
+        "pagePath": "pages/profile/profile",
         "text": "我的",
         "iconPath": "static/tab/me.png",
         "selectedIconPath": "static/tab/me-active.png"

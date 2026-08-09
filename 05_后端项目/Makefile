@@ -1,7 +1,7 @@
 # 宠迹 PawTrack — 开发命令速查
 # 用法：make <target>，例如 make dev / make prod / make test
 
-.PHONY: help infra dev dev-down prod prod-down test test-backend test-frontend test-admin lint build keys
+.PHONY: help infra dev dev-down prod prod-down test test-backend test-admin lint build keys
 
 PYTHON ?= python3
 VENV   ?= backend/.venv
@@ -30,9 +30,6 @@ dev-logs:  ## 查看后端日志
 run-backend:  ## 本地裸跑后端（需先 make infra）
 	cd backend && $(VENV)/bin/uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-run-frontend:  ## 本地裸跑前端
-	cd ../04_前端项目/frontend && npm run dev
-
 run-admin:  ## 本地裸跑 admin
 	cd ../04_前端项目/admin && npm run dev
 
@@ -44,13 +41,10 @@ prod-down:  ## 停止生产编排
 	docker compose -f docker-compose.prod.yml down
 
 # ── 测试 ─────────────────────────────
-test: test-backend test-frontend test-admin  ## 运行全部测试
+test: test-backend test-admin  ## 运行全部测试
 
 test-backend:  ## 后端 pytest（仅单测，跳过集成）
 	cd backend && $(VENV)/bin/pytest tests/ -v
-
-test-frontend:  ## 前端 vitest
-	cd ../04_前端项目/frontend && npm run test
 
 test-admin:  ## admin vitest
 	cd ../04_前端项目/admin && npm run test
@@ -74,10 +68,7 @@ lint-fix:  ## 后端 ruff 自动修复
 	cd backend && $(VENV)/bin/ruff check --fix --unsafe-fixes app/ tests/
 
 # ── 构建 ─────────────────────────────
-build: build-frontend build-admin  ## 构建前端产物
-
-build-frontend:  ## 构建 mobile 前端
-	cd ../04_前端项目/frontend && npm run build
+build: build-admin  ## 构建前端产物
 
 build-admin:  ## 构建 admin
 	cd ../04_前端项目/admin && npm run build
@@ -94,5 +85,4 @@ keys:  ## 生成 JWT RSA 密钥对到 ../keys/
 # ── 安装 ─────────────────────────────
 install:  ## 安装全部依赖（后端 venv + 前端 npm）
 	cd backend && $(PYTHON) -m venv $(VENV) && $(VENV)/bin/pip install -r requirements.txt -r requirements-dev.txt
-	cd ../04_前端项目/frontend && npm install
 	cd ../04_前端项目/admin && npm install

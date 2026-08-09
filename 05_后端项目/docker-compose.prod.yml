@@ -113,14 +113,6 @@ services:
     ports:
       - "8000:8000"
 
-  frontend:
-    image: ghcr.io/${GITHUB_OWNER:-owner}/pawtrack-frontend:latest
-    container_name: pawtrack-frontend
-    restart: unless-stopped
-    depends_on: [backend]
-    ports:
-      - "3000:80"
-
   admin:
     image: ghcr.io/${GITHUB_OWNER:-owner}/pawtrack-admin:latest
     container_name: pawtrack-admin

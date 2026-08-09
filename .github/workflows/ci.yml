@@ -45,42 +45,6 @@ jobs:
           # 仅跑纯逻辑单测，集成测试需 DB 自动跳过
           PAWTRACK_TEST_DB: "0"
 
-  # ── mobile 前端：test + build ─────────────────────────────
-  frontend:
-    name: Frontend (test + build)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 04_前端项目/frontend
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: 04_前端项目/frontend/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Run tests
-        run: npm run test
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: 04_前端项目/frontend/dist
-          retention-days: 7
-
   # ── admin 后台：test + build ─────────────────────────────
   admin:
     name: Admin (test + build)
@@ -121,6 +85,6 @@ jobs:
   ci-pass:
     name: CI Pass
     runs-on: ubuntu-latest
-    needs: [backend, frontend, admin]
+    needs: [backend, admin]
     steps:
-      - run: echo "✅ 全部 CI 检查通过（backend + frontend + admin）"
+      - run: echo "✅ 全部 CI 检查通过（backend + admin）"

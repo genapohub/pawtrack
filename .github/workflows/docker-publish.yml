@@ -34,9 +34,6 @@ jobs:
           - component: backend
             context: 05_后端项目/backend
             dockerfile: 05_后端项目/backend/Dockerfile
-          - component: frontend
-            context: 04_前端项目/frontend
-            dockerfile: 04_前端项目/frontend/Dockerfile
           - component: admin
             context: 04_前端项目/admin
             dockerfile: 04_前端项目/admin/Dockerfile

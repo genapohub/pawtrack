@@ -134,22 +134,6 @@ services:
         condition: service_healthy
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # 前端 App (React + Vite)
-  frontend:
-    build:
-      context: ../04_前端项目/frontend
-      dockerfile: Dockerfile.dev
-    container_name: pawtrack-frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ../04_前端项目/frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    environment:
-      VITE_API_BASE: http://localhost:8000
-
   # 管理后台 (React + Vite + antd)
   admin:
     build:

@@ -102,5 +102,31 @@
   ② 页面底部可上一屏/下一屏连续浏览 ③ 移动端原型为微信小程序 UI 规范（rpx 换算 px）
   ④ 本套原型由 PRD V2.1 完整版逐屏生成，与 04_前端项目/miniapp 实现一一对应，可直接作为开发与验收基准
 </div>
+
+<script>
+(function(){
+  // 检测是否在 iframe 沙箱中
+  var inIframe = (window.self !== window.top);
+  // 卡片点击：优先新标签打开，绕过 iframe 内导航限制
+  document.querySelectorAll('a.card').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return; // 保留系统默认行为
+      e.preventDefault();
+      var href = this.getAttribute('href');
+      var w = null;
+      try { w = window.open(href, '_blank'); } catch(err) {}
+      if (!w) {
+        // 弹窗也被拦截 → 提示用户用浏览器打开
+        var tip = document.createElement('div');
+        tip.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#3D6CF5;color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,.3);text-align:center;line-height:1.7';
+        tip.innerHTML = '当前预览面板拦截了页面跳转。<br>请在系统浏览器打开：<br><b style="word-break:break-all">http://127.0.0.1:50413/static-html/0f93726a13f73be1/index.html</b>';
+        document.body.appendChild(tip);
+        setTimeout(function(){ tip.remove(); }, 6000);
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

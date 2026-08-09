@@ -26,6 +26,8 @@ class PetCreateRequest(BaseModel):
     avatar: Optional[str] = None
     fence_enabled: bool = True
     fence_radius: int = Field(100, ge=20, le=5000)
+    fence_center_lat: Optional[float] = Field(None, ge=-90, le=90)
+    fence_center_lng: Optional[float] = Field(None, ge=-180, le=180)
 
 class PetUpdateRequest(BaseModel):
     name: Optional[str] = Field(None, max_length=50)

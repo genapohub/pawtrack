@@ -87,7 +87,7 @@ class Device(Base):
     id = Column(BigInteger, primary_key=True)
     sn = Column(String(32), unique=True, nullable=False, index=True)
     pet_id = Column(BigInteger, ForeignKey("pets.id", ondelete="SET NULL"))
-    user_id = Column(BigInteger, ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(BigInteger, ForeignKey("users.id"), nullable=True, index=True)  # 设备先注册后绑定用户
     hardware_type = Column(String(20), nullable=False)  # cat / dog
     firmware_version = Column(String(20), default="1.0.0")
     battery_level = Column(Integer, default=100)

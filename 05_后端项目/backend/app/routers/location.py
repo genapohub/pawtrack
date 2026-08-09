@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from app.database import get_db
 from app.models import Pet, Device, User, MemberLevel
 from app.auth import get_current_user, decode_token
-from app.main import redis_client
+from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/location", tags=["定位"])
 
@@ -68,7 +68,7 @@ async def upload_location(body: LocationUploadRequest, db: AsyncSession = Depend
         "ts": str(body.ts)
     }
 
-    await redis_client.xadd(
+    await app_main.redis_client.xadd(
         "location:stream",
         stream_data_full,
         maxlen=1000000,
@@ -76,7 +76,7 @@ async def upload_location(body: LocationUploadRequest, db: AsyncSession = Depend
     )
 
     # 2. 更新 Redis GEO（实时查询用）
-    await redis_client.geoadd("location:geo:nearby", (body.lng, body.lat, str(body.device_id)))
+    await app_main.redis_client.geoadd("location:geo:nearby", (body.lng, body.lat, str(body.device_id)))
 
     # 3. 更新设备在线状态
     device.last_online_at = datetime.now(timezone.utc)
@@ -98,7 +98,7 @@ async def upload_location(body: LocationUploadRequest, db: AsyncSession = Depend
             "battery": body.battery,
             "ts": body.ts
         }, ensure_ascii=False)
-        await redis_client.publish(f"ws:user:{device.user_id}", ws_message)
+        await app_main.redis_client.publish(f"ws:user:{device.user_id}", ws_message)
 
     return {"code": 0, "message": "success"}
 
@@ -122,7 +122,7 @@ async def get_realtime_location(
         raise HTTPException(404, detail={"code": 20003, "message": "该宠物未绑定设备"})
 
     # 从 Redis GEO 获取最新位置
-    geo_result = await redis_client.geopos("location:geo:nearby", str(device.id))
+    geo_result = await app_main.redis_client.geopos("location:geo:nearby", str(device.id))
     if geo_result and geo_result[0]:
         lng, lat = geo_result[0]
         return {"code": 0, "data": {

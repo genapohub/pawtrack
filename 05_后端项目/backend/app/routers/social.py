@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from app.database import get_db
 from app.models import Meet, Pet, Device, User, MeetStatus, PetType, PointType, PointsLog
 from app.auth import get_current_user
-from app.main import redis_client
+from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/social", tags=["社交"])
 
@@ -94,7 +94,7 @@ async def find_nearby_pets(
         return {"code": 0, "data": []}
 
     # Redis GEORADIUS 查询附近设备
-    nearby = await redis_client.georadius(
+    nearby = await app_main.redis_client.georadius(
         "location:geo:nearby",
         lng, lat, radius,
         unit="m",
@@ -196,7 +196,7 @@ async def create_meet(
             "meet_id": meet.id,
             "ts": int(time.time())
         }, ensure_ascii=False)
-        await redis_client.publish(f"ws:user:{receiver_pet.user_id}", ws_msg)
+        await app_main.redis_client.publish(f"ws:user:{receiver_pet.user_id}", ws_msg)
 
     return {"code": 0, "data": _meet_to_dict(meet)}
 

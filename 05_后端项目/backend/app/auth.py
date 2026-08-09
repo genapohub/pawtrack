@@ -112,7 +112,11 @@ async def get_current_user(request: Request, credentials: Optional[HTTPAuthoriza
     """获取当前用户（从 Authorization Header 解析 JWT）"""
     if not credentials:
         raise HTTPException(status_code=401, detail={"code": 10001, "message": "未提供 Token"})
-    return decode_token(credentials.credentials)
+    payload = decode_token(credentials.credentials)
+    # 用户 token 的 sub 为数字字符串，转为 int 以便与 BIGINT 主键比较
+    if payload.get("token_type") == "access" and payload.get("sub", "").isdigit():
+        payload["sub"] = int(payload["sub"])
+    return payload
 
 async def get_current_user_optional(request: Request) -> Optional[Dict[str, Any]]:
     """获取当前用户（可选，用于公开接口）"""
@@ -120,7 +124,10 @@ async def get_current_user_optional(request: Request) -> Optional[Dict[str, Any]
     if not auth or not auth.startswith("Bearer "):
         return None
     try:
-        return decode_token(auth[7:])
+        payload = decode_token(auth[7:])
+        if payload.get("token_type") == "access" and payload.get("sub", "").isdigit():
+            payload["sub"] = int(payload["sub"])
+        return payload
     except HTTPException:
         return None
 

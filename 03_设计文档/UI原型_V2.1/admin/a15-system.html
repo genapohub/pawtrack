@@ -138,41 +138,56 @@
 
 
 
+
 <script>
 (function(){
-  function navTo(file){
-    var ok = false;
-    try { window.location.href = file; ok = true; } catch(e){}
-    setTimeout(function(){
-      var w = null;
-      try { w = window.open(file, '_blank'); } catch(err){}
-      if(!w && !ok){ showTip('预览器拦截了跳转，请在浏览器中打开'); }
-    }, 400);
-  }
   function showTip(msg){
     var t=document.createElement('div');
-    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999';
+    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999;transition:opacity .3s';
     t.textContent=msg;document.body.appendChild(t);
     setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
   }
-  var MOD_MAP = {
-    '数据概览':'a2-dashboard.html','用户':'a3-user-list.html','设备':'a5-device-list.html',
-    '报警':'a7-alarm-rule.html','社交':'a9-social-audit.html','会员':'a11-plan-manage.html',
-    '内容':'a14-content.html','系统':'a15-system.html'
+  function navTo(file){
+    // 第一优先：自动打开新标签页
+    var w = null;
+    try { w = window.open(file, '_blank'); } catch(err){}
+    // 新标签被拦截 → 退回当前页跳转
+    if (!w) {
+      try { window.location.href = file; } catch(e2){}
+      setTimeout(function(){
+        var w2 = null;
+        try { w2 = window.open(file, '_blank'); } catch(err2){}
+        if (!w2) showTip('预览器拦截了跳转，请在浏览器中打开');
+      }, 400);
+    }
+  }
+  var NAV_MAP = {
+    '数据概览':'a2-dashboard.html',
+    '用户':'a3-user-list.html',
+    '设备':'a5-device-list.html',
+    '报警':'a7-alarm-rule.html',
+    '社交':'a9-social-audit.html',
+    '会员':'a11-plan-manage.html',
+    '内容':'a14-content.html',
+    '系统':'a15-system.html'
   };
-  document.querySelectorAll('.sb-item').forEach(function(el){
-    el.addEventListener('click',function(){
-      var txt=el.textContent||'';
-      for(var k in MOD_MAP){
-        if(txt.indexOf(k)>-1){navTo(MOD_MAP[k]);return;}
-      }
-    });
-  });
-  document.querySelectorAll('.tbl a,.btn-sm,.banner-row a,.kv a').forEach(function(el){
+  document.querySelectorAll('.sb-item,.tbl a,.btn-sm,.banner-row a,.kv a').forEach(function(el){
     el.addEventListener('click',function(e){
       e.stopPropagation();
-      var href = el.getAttribute('href');
-      if (href && href.indexOf('.html') > -1) { e.preventDefault(); navTo(href); return; }
+      var txt=el.textContent||'';
+      for(var k in NAV_MAP){
+        if(txt.indexOf(k)>-1){navTo(NAV_MAP[k]);return;}
+      }
+      showTip('原型演示：该入口暂未绑定跳转');
+    });
+  });
+  document.querySelectorAll('.primary-btn,.danger-btn,.btn-main').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var txt=el.textContent||'';
+      for(var k in NAV_MAP){
+        if(txt.indexOf(k)>-1){navTo(NAV_MAP[k]);return;}
+      }
       showTip('原型演示：操作未绑定');
     });
   });

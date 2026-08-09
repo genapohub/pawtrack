@@ -101,6 +101,8 @@
   ④ 本套原型由 PRD V2.1 完整版逐屏生成，与 04_前端项目/miniapp 实现一一对应
 </div>
 
+
+
 <script>
 (function(){
   function showTip(msg){
@@ -110,12 +112,18 @@
     setTimeout(function(){t.remove()},5000);
   }
   function jump(url){
-    try{ window.location.href = url; }catch(e){}
-    setTimeout(function(){
-      var w = null;
-      try{ w = window.open(url, '_blank'); }catch(err){}
-      if(!w){ showTip('预览器拦截了跳转，请右键卡片 → 在新标签页中打开'); }
-    }, 400);
+    // 第一优先：自动打开新标签页
+    var w = null;
+    try { w = window.open(url, '_blank'); } catch(err){}
+    // 新标签被拦截 → 退回当前页跳转
+    if (!w) {
+      try { window.location.href = url; } catch(e2){}
+      setTimeout(function(){
+        var w2 = null;
+        try { w2 = window.open(url, '_blank'); } catch(err2){}
+        if (!w2) showTip('预览器拦截了跳转，请右键卡片 → 在新标签页中打开');
+      }, 400);
+    }
   }
   document.querySelectorAll('a.card').forEach(function(a){
     a.addEventListener('click', function(e){
@@ -126,6 +134,5 @@
   });
 })();
 </script>
-
 </body>
 </html>

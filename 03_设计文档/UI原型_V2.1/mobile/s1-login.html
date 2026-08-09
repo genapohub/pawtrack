@@ -86,12 +86,24 @@
 
 
 
+
+
 <script>
 (function(){
-  var inFrame = (window.self !== window.top);
   function navTo(file){
-    if (inFrame) { try { window.parent.postMessage({type:'paw-nav', file:file}, '*'); } catch(e){} }
-    else { location.href = file; }
+    var ok = false;
+    try { window.location.href = file; ok = true; } catch(e){}
+    setTimeout(function(){
+      var w = null;
+      try { w = window.open(file, '_blank'); } catch(err){}
+      if(!w && !ok){ showTip('预览器拦截了跳转，请在浏览器中打开'); }
+    }, 400);
+  }
+  function showTip(msg){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999;transition:opacity .3s';
+    t.textContent=msg;document.body.appendChild(t);
+    setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
   }
   var NAV_MAP = {
     '会员中心':'s19-membership.html','立即开通':'s19-membership.html','升级 Pro':'s19-membership.html','Pro':'s19-membership.html',
@@ -108,12 +120,6 @@
     '好朋狗':'s14-friend-list.html','添加宠物':'s3-add-pet.html','绑定':'s4-bind-device.html',
     '宠物列表':'s5-pet-list.html','我的宠物':'s5-pet-list.html','编辑':'s6-pet-detail.html'
   };
-  function showTip(msg){
-    var t=document.createElement('div');
-    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999;transition:opacity .3s';
-    t.textContent=msg;document.body.appendChild(t);
-    setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
-  }
   document.querySelectorAll('.menu-item,.cell,.meet-btn,.nav-icon,.ex-btn,.mini-btn,.link,.plus,.edit,.outline-btn,.date-bar .date,.shop-item,.switch-row,.nearby-row,.plan-card').forEach(function(el){
     el.addEventListener('click',function(e){
       e.stopPropagation();
@@ -134,17 +140,13 @@
       showTip('原型演示：操作未绑定');
     });
   });
-  document.querySelectorAll('.nav a[href$=".html"], .navbar-sm .back, .navbar-sm a[href]').forEach(function(a){
+  document.querySelectorAll('.nav a[href$=".html"]').forEach(function(a){
     a.addEventListener('click',function(e){
-      var href = a.getAttribute('href');
-      if (href && href.indexOf('.html') > -1) {
-        e.preventDefault();
-        navTo(href);
-      }
+      e.preventDefault();
+      navTo(a.getAttribute('href'));
     });
   });
 })();
 </script>
-
 </body>
 </html>

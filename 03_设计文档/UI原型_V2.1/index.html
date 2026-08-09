@@ -6,19 +6,17 @@
 <title>宠迹 PawTrack — UI 原型导航（V2.1）</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,'PingFang SC',sans-serif; }
-  body { background:#0F1117; color:#E5E7EB; min-height:100vh; padding:40px 32px 80px; }
-  .header { max-width:1100px; margin:0 auto 28px; }
+  body { background:#0F1117; color:#E5E7EB; min-height:100vh; padding:40px 32px; }
+  .header { max-width:1100px; margin:0 auto 36px; }
   .header h1 { font-size:26px; font-weight:800; }
-  .header .sub { color:#9CA3AF; font-size:14px; margin-top:8px; line-height:1.7; }
+  .header .sub { color:#9CA3AF; font-size:14px; margin-top:8px; }
   .badge { display:inline-block; background:#3D6CF5; color:#fff; font-size:12px; padding:4px 12px; border-radius:999px; margin-left:10px; vertical-align:middle; }
-  .hint { margin-top:10px; background:#1A1D27; border:1px solid #3D6CF5; border-radius:10px; padding:10px 14px; font-size:13px; color:#93C5FD; }
-  .section { max-width:1100px; margin:0 auto 28px; }
-  .section h2 { font-size:18px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .section { max-width:1100px; margin:0 auto 32px; }
+  .section h2 { font-size:18px; margin-bottom:14px; color:#fff; display:flex; align-items:center; gap:10px; }
   .section h2 .count { font-size:12px; color:#9CA3AF; font-weight:400; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-  .card { background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; padding:14px; text-decoration:none; color:#E5E7EB; transition:.15s; display:block; cursor:pointer; }
+  .card { background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; padding:14px; text-decoration:none; color:#E5E7EB; transition:.15s; display:block; }
   .card:hover { border-color:#3D6CF5; transform:translateY(-2px); }
-  .card.on { border-color:#22C55E; background:#12221A; }
   .card .no { font-size:11px; color:#3D6CF5; font-weight:700; }
   .card .name { font-size:14px; font-weight:600; margin-top:4px; }
   .card .flow { font-size:11px; color:#9CA3AF; margin-top:3px; }
@@ -26,28 +24,17 @@
   .prio.p0 { background:#FEF2F2; color:#EF4444; } .prio.p1 { background:#FFFBEB; color:#F59E0B; } .prio.p2 { background:#F0FDF4; color:#22C55E; }
   .flow-bar { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
   .flow-chip { font-size:12px; background:#1A1D27; border:1px solid #2A2E3D; color:#9CA3AF; padding:6px 14px; border-radius:999px; }
-  .preview-wrap { max-width:1100px; margin:0 auto; }
-  .ctrl-bar { display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
-  .ctrl-btn { background:#3D6CF5; color:#fff; border:none; border-radius:8px; padding:9px 20px; font-size:13px; cursor:pointer; font-weight:600; }
-  .ctrl-btn.gray { background:#2A2E3D; color:#E5E7EB; }
-  .ctrl-btn:hover { opacity:.85; }
-  .cur-name { font-size:14px; color:#E5E7EB; flex:1; text-align:center; font-weight:600; }
-  .frame-box { position:relative; border:1px solid #2A2E3D; border-radius:14px; overflow:hidden; background:#e8eaee; }
-  .frame-box iframe { display:block; width:100%; height:800px; border:none; background:#e8eaee; }
-  .tip { max-width:1100px; margin:28px auto 0; padding:16px; background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; font-size:13px; color:#9CA3AF; line-height:1.8; }
+  .tip { max-width:1100px; margin:40px auto 0; padding:16px; background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; font-size:13px; color:#9CA3AF; line-height:1.8; }
   .tip b { color:#E5E7EB; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>🐾 宠迹 PawTrack — UI 原型导航 <span class="badge">V2.1 · 41 屏</span></h1>
-  <div class="sub">基于 PRD V2.1 完整版逐屏产出 · 移动端 26 屏 + 后台 15 屏 · 点击卡片在下方内嵌预览</div>
-  <div class="hint">💡 内置预览模式下点击卡片或原型内的入口，均在下方框架中直接切换，无需跳转页面</div>
+  <div class="sub">基于 PRD V2.1 完整版逐屏产出 · 移动端 26 屏 + 后台 15 屏 · 单击卡片跳转对应原型</div>
 </div>
 
-<!-- ═══════════ 移动端 ═══════════ -->
-<div class="section" id="grid-mobile">
+<div class="section">
   <h2>📱 移动端小程序 <span class="count">26 屏 · 6 条用户流程</span></h2>
   <div class="flow-bar">
     <span class="flow-chip">Flow1 注册激活 P0</span>
@@ -58,127 +45,87 @@
     <span class="flow-chip">Flow6 个人中心 P0/P1</span>
   </div>
   <div class="grid">
-    <div class="card" data-f="mobile/s1-login.html" onclick="openFile('mobile/s1-login.html')"><div class="no">S1 · P0</div><div class="name">注册登录</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s2-map.html" onclick="openFile('mobile/s2-map.html')"><div class="no">S2 · P0</div><div class="name">地图首页</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s3-add-pet.html" onclick="openFile('mobile/s3-add-pet.html')"><div class="no">S3 · P0</div><div class="name">添加宠物</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s4-bind-device.html" onclick="openFile('mobile/s4-bind-device.html')"><div class="no">S4 · P0</div><div class="name">绑定定位器</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s5-pet-list.html" onclick="openFile('mobile/s5-pet-list.html')"><div class="no">S5 · P0</div><div class="name">宠物列表 Tab</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s6-pet-detail.html" onclick="openFile('mobile/s6-pet-detail.html')"><div class="no">S6 · P0</div><div class="name">宠物详情</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s7-history.html" onclick="openFile('mobile/s7-history.html')"><div class="no">S7 · P0</div><div class="name">历史轨迹</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s8-nearby.html" onclick="openFile('mobile/s8-nearby.html')"><div class="no">S8 · P1</div><div class="name">附近宠物</div><div class="flow">Flow2 定位与状态</div><span class="prio p1">P1</span></div>
-    <div class="card" data-f="mobile/s9-alarm-settings.html" onclick="openFile('mobile/s9-alarm-settings.html')"><div class="no">S9 · P0</div><div class="name">报警设置</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s10-fence-custom.html" onclick="openFile('mobile/s10-fence-custom.html')"><div class="no">S10 · P0</div><div class="name">围栏自定义</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s11-alarm-notify.html" onclick="openFile('mobile/s11-alarm-notify.html')"><div class="no">S11 · P0</div><div class="name">报警通知</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s12-device-status.html" onclick="openFile('mobile/s12-device-status.html')"><div class="no">S12 · P0</div><div class="name">设备状态提醒</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s13-social-home.html" onclick="openFile('mobile/s13-social-home.html')"><div class="no">S13 · P2</div><div class="name">社交首页</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></div>
-    <div class="card" data-f="mobile/s14-friend-list.html" onclick="openFile('mobile/s14-friend-list.html')"><div class="no">S14 · P2</div><div class="name">好朋狗列表</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></div>
-    <div class="card" data-f="mobile/s15-meet-start.html" onclick="openFile('mobile/s15-meet-start.html')"><div class="no">S15 · P2</div><div class="name">碰头开始</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></div>
-    <div class="card" data-f="mobile/s16-meet-seeking.html" onclick="openFile('mobile/s16-meet-seeking.html')"><div class="no">S16 · P2</div><div class="name">碰头寻找中</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></div>
-    <div class="card" data-f="mobile/s17-meet-success.html" onclick="openFile('mobile/s17-meet-success.html')"><div class="no">S17 · P2</div><div class="name">碰头成功</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></div>
-    <div class="card" data-f="mobile/s18-pro-entry.html" onclick="openFile('mobile/s18-pro-entry.html')"><div class="no">S18 · P0</div><div class="name">Pro 入口</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s19-membership.html" onclick="openFile('mobile/s19-membership.html')"><div class="no">S19 · P0</div><div class="name">会员订阅</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s20-points-shop.html" onclick="openFile('mobile/s20-points-shop.html')"><div class="no">S20 · P1</div><div class="name">积分商城</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></div>
-    <div class="card" data-f="mobile/s21-points-detail.html" onclick="openFile('mobile/s21-points-detail.html')"><div class="no">S21 · P1</div><div class="name">积分明细</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></div>
-    <div class="card" data-f="mobile/s22-profile.html" onclick="openFile('mobile/s22-profile.html')"><div class="no">S22 · P0</div><div class="name">个人中心</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s23-notify-settings.html" onclick="openFile('mobile/s23-notify-settings.html')"><div class="no">S23 · P0</div><div class="name">通知设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s24-invite.html" onclick="openFile('mobile/s24-invite.html')"><div class="no">S24 · P1</div><div class="name">邀请好友</div><div class="flow">Flow6 个人中心</div><span class="prio p1">P1</span></div>
-    <div class="card" data-f="mobile/s25-device-manage.html" onclick="openFile('mobile/s25-device-manage.html')"><div class="no">S25 · P0</div><div class="name">设备管理</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></div>
-    <div class="card" data-f="mobile/s26-settings.html" onclick="openFile('mobile/s26-settings.html')"><div class="no">S26 · P0</div><div class="name">设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></div>
+    <a class="card" href="mobile/s1-login.html"><div class="no">S1 · P0</div><div class="name">注册登录</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s2-map.html"><div class="no">S2 · P0</div><div class="name">地图首页</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s3-add-pet.html"><div class="no">S3 · P0</div><div class="name">添加宠物</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s4-bind-device.html"><div class="no">S4 · P0</div><div class="name">绑定定位器</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s5-pet-list.html"><div class="no">S5 · P0</div><div class="name">宠物列表 Tab</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s6-pet-detail.html"><div class="no">S6 · P0</div><div class="name">宠物详情</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s7-history.html"><div class="no">S7 · P0</div><div class="name">历史轨迹</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s8-nearby.html"><div class="no">S8 · P1</div><div class="name">附近宠物</div><div class="flow">Flow2 定位与状态</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s9-alarm-settings.html"><div class="no">S9 · P0</div><div class="name">报警设置</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s10-fence-custom.html"><div class="no">S10 · P0</div><div class="name">围栏自定义</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s11-alarm-notify.html"><div class="no">S11 · P0</div><div class="name">报警通知</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s12-device-status.html"><div class="no">S12 · P0</div><div class="name">设备状态提醒</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s13-social-home.html"><div class="no">S13 · P2</div><div class="name">社交首页</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s14-friend-list.html"><div class="no">S14 · P2</div><div class="name">好朋狗列表</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s15-meet-start.html"><div class="no">S15 · P2</div><div class="name">碰头开始</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s16-meet-seeking.html"><div class="no">S16 · P2</div><div class="name">碰头寻找中</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s17-meet-success.html"><div class="no">S17 · P2</div><div class="name">碰头成功</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s18-pro-entry.html"><div class="no">S18 · P0</div><div class="name">Pro 入口</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s19-membership.html"><div class="no">S19 · P0</div><div class="name">会员订阅</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s20-points-shop.html"><div class="no">S20 · P1</div><div class="name">积分商城</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s21-points-detail.html"><div class="no">S21 · P1</div><div class="name">积分明细</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s22-profile.html"><div class="no">S22 · P0</div><div class="name">个人中心</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s23-notify-settings.html"><div class="no">S23 · P0</div><div class="name">通知设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s24-invite.html"><div class="no">S24 · P1</div><div class="name">邀请好友</div><div class="flow">Flow6 个人中心</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s25-device-manage.html"><div class="no">S25 · P0</div><div class="name">设备管理</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s26-settings.html"><div class="no">S26 · P0</div><div class="name">设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
   </div>
 </div>
 
-<!-- ═══════════ 后台 ═══════════ -->
-<div class="section" id="grid-admin">
+<div class="section">
   <h2>🖥️ 管理后台 <span class="count">15 屏 · 9 大模块</span></h2>
   <div class="grid">
-    <div class="card" data-f="admin/a1-login.html" onclick="openFile('admin/a1-login.html')"><div class="no">A1</div><div class="name">后台登录</div><div class="flow">系统</div></div>
-    <div class="card" data-f="admin/a2-dashboard.html" onclick="openFile('admin/a2-dashboard.html')"><div class="no">A2</div><div class="name">数据概览</div><div class="flow">数据概览</div></div>
-    <div class="card" data-f="admin/a3-user-list.html" onclick="openFile('admin/a3-user-list.html')"><div class="no">A3</div><div class="name">用户列表</div><div class="flow">用户管理</div></div>
-    <div class="card" data-f="admin/a4-user-detail.html" onclick="openFile('admin/a4-user-detail.html')"><div class="no">A4</div><div class="name">用户详情</div><div class="flow">用户管理</div></div>
-    <div class="card" data-f="admin/a5-device-list.html" onclick="openFile('admin/a5-device-list.html')"><div class="no">A5</div><div class="name">设备列表</div><div class="flow">设备管理</div></div>
-    <div class="card" data-f="admin/a6-device-detail.html" onclick="openFile('admin/a6-device-detail.html')"><div class="no">A6</div><div class="name">设备详情</div><div class="flow">设备管理</div></div>
-    <div class="card" data-f="admin/a7-alarm-rule.html" onclick="openFile('admin/a7-alarm-rule.html')"><div class="no">A7</div><div class="name">报警规则配置</div><div class="flow">报警管理</div></div>
-    <div class="card" data-f="admin/a8-alarm-list.html" onclick="openFile('admin/a8-alarm-list.html')"><div class="no">A8</div><div class="name">报警记录</div><div class="flow">报警管理</div></div>
-    <div class="card" data-f="admin/a9-social-audit.html" onclick="openFile('admin/a9-social-audit.html')"><div class="no">A9</div><div class="name">碰头审核</div><div class="flow">社交管理</div></div>
-    <div class="card" data-f="admin/a10-points-rule.html" onclick="openFile('admin/a10-points-rule.html')"><div class="no">A10</div><div class="name">积分规则</div><div class="flow">社交管理</div></div>
-    <div class="card" data-f="admin/a11-plan-manage.html" onclick="openFile('admin/a11-plan-manage.html')"><div class="no">A11</div><div class="name">会员方案</div><div class="flow">会员与营收</div></div>
-    <div class="card" data-f="admin/a12-order-list.html" onclick="openFile('admin/a12-order-list.html')"><div class="no">A12</div><div class="name">订单列表</div><div class="flow">会员与营收</div></div>
-    <div class="card" data-f="admin/a13-revenue.html" onclick="openFile('admin/a13-revenue.html')"><div class="no">A13</div><div class="name">收入统计</div><div class="flow">会员与营收</div></div>
-    <div class="card" data-f="admin/a14-content.html" onclick="openFile('admin/a14-content.html')"><div class="no">A14</div><div class="name">内容管理</div><div class="flow">内容管理</div></div>
-    <div class="card" data-f="admin/a15-system.html" onclick="openFile('admin/a15-system.html')"><div class="no">A15</div><div class="name">系统设置</div><div class="flow">系统设置</div></div>
-  </div>
-</div>
-
-<!-- ═══════════ 内嵌预览 ═══════════ -->
-<div class="preview-wrap" id="preview" style="display:none">
-  <div class="ctrl-bar">
-    <button class="ctrl-btn" onclick="nav(-1)">← 上一屏</button>
-    <span class="cur-name" id="curName">S1 注册登录</span>
-    <button class="ctrl-btn" onclick="nav(1)">下一屏 →</button>
-    <button class="ctrl-btn gray" onclick="hidePreview()">✕ 返回列表</button>
-  </div>
-  <div class="frame-box">
-    <iframe id="frame" src="about:blank"></iframe>
+    <a class="card" href="admin/a1-login.html"><div class="no">A1</div><div class="name">后台登录</div><div class="flow">系统</div></a>
+    <a class="card" href="admin/a2-dashboard.html"><div class="no">A2</div><div class="name">数据概览</div><div class="flow">数据概览</div></a>
+    <a class="card" href="admin/a3-user-list.html"><div class="no">A3</div><div class="name">用户列表</div><div class="flow">用户管理</div></a>
+    <a class="card" href="admin/a4-user-detail.html"><div class="no">A4</div><div class="name">用户详情</div><div class="flow">用户管理</div></a>
+    <a class="card" href="admin/a5-device-list.html"><div class="no">A5</div><div class="name">设备列表</div><div class="flow">设备管理</div></a>
+    <a class="card" href="admin/a6-device-detail.html"><div class="no">A6</div><div class="name">设备详情</div><div class="flow">设备管理</div></a>
+    <a class="card" href="admin/a7-alarm-rule.html"><div class="no">A7</div><div class="name">报警规则配置</div><div class="flow">报警管理</div></a>
+    <a class="card" href="admin/a8-alarm-list.html"><div class="no">A8</div><div class="name">报警记录</div><div class="flow">报警管理</div></a>
+    <a class="card" href="admin/a9-social-audit.html"><div class="no">A9</div><div class="name">碰头审核</div><div class="flow">社交管理</div></a>
+    <a class="card" href="admin/a10-points-rule.html"><div class="no">A10</div><div class="name">积分规则</div><div class="flow">社交管理</div></a>
+    <a class="card" href="admin/a11-plan-manage.html"><div class="no">A11</div><div class="name">会员方案</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a12-order-list.html"><div class="no">A12</div><div class="name">订单列表</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a13-revenue.html"><div class="no">A13</div><div class="name">收入统计</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a14-content.html"><div class="no">A14</div><div class="name">内容管理</div><div class="flow">内容管理</div></a>
+    <a class="card" href="admin/a15-system.html"><div class="no">A15</div><div class="name">系统设置</div><div class="flow">系统设置</div></a>
   </div>
 </div>
 
 <div class="tip">
-  <b>使用说明：</b>① 点击上方任意卡片，原型在下方框架内直接展示，全程不离开本页（兼容内置预览器）
-  ② 原型页内的入口跳转（如"会员中心"→S19）同样在框架内切换
-  ③ 工具栏支持 上一屏/下一屏 顺序浏览
+  <b>使用说明：</b>① 单击卡片跳转到对应原型页（若预览器拦截跳转，会自动尝试新标签打开）
+  ② 原型页底部有「上一屏 / 下一屏」导航 ③ 移动端原型为微信小程序 UI 规范（rpx 换算 px）
+  ④ 本套原型由 PRD V2.1 完整版逐屏生成，与 04_前端项目/miniapp 实现一一对应
 </div>
 
 <script>
-var ORDER = [
-  'mobile/s1-login.html','mobile/s2-map.html','mobile/s3-add-pet.html','mobile/s4-bind-device.html',
-  'mobile/s5-pet-list.html','mobile/s6-pet-detail.html','mobile/s7-history.html','mobile/s8-nearby.html',
-  'mobile/s9-alarm-settings.html','mobile/s10-fence-custom.html','mobile/s11-alarm-notify.html','mobile/s12-device-status.html',
-  'mobile/s13-social-home.html','mobile/s14-friend-list.html','mobile/s15-meet-start.html','mobile/s16-meet-seeking.html',
-  'mobile/s17-meet-success.html','mobile/s18-pro-entry.html','mobile/s19-membership.html','mobile/s20-points-shop.html',
-  'mobile/s21-points-detail.html','mobile/s22-profile.html','mobile/s23-notify-settings.html','mobile/s24-invite.html',
-  'mobile/s25-device-manage.html','mobile/s26-settings.html',
-  'admin/a1-login.html','admin/a2-dashboard.html','admin/a3-user-list.html','admin/a4-user-detail.html',
-  'admin/a5-device-list.html','admin/a6-device-detail.html','admin/a7-alarm-rule.html','admin/a8-alarm-list.html',
-  'admin/a9-social-audit.html','admin/a10-points-rule.html','admin/a11-plan-manage.html','admin/a12-order-list.html',
-  'admin/a13-revenue.html','admin/a14-content.html','admin/a15-system.html'
-];
-var cur = -1;
-var frame = document.getElementById('frame');
-var preview = document.getElementById('preview');
-var curName = document.getElementById('curName');
-
-function openFile(f) {
-  var idx = ORDER.indexOf(f);
-  if (idx < 0) return;
-  cur = idx;
-  frame.src = f;
-  preview.style.display = 'block';
-  curName.textContent = f;
-  document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('on'); });
-  var card = document.querySelector('.card[data-f="' + f + '"]');
-  if (card) card.classList.add('on');
-  preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  window.scrollTo(0, document.body.scrollHeight);
-}
-
-function nav(d) {
-  var n = cur + d;
-  if (n < 0) n = ORDER.length - 1;
-  if (n >= ORDER.length) n = 0;
-  openFile(ORDER[n]);
-}
-
-function hidePreview() {
-  preview.style.display = 'none';
-  document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('on'); });
-  window.scrollTo(0, 0);
-}
-
-window.addEventListener('message', function(ev) {
-  if (ev.data && ev.data.type === 'paw-nav' && ev.data.file) {
-    openFile(ev.data.file);
+(function(){
+  function showTip(msg){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#3D6CF5;color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,.3);text-align:center;line-height:1.7';
+    t.innerHTML=msg;document.body.appendChild(t);
+    setTimeout(function(){t.remove()},5000);
   }
-});
+  function jump(url){
+    try{ window.location.href = url; }catch(e){}
+    setTimeout(function(){
+      var w = null;
+      try{ w = window.open(url, '_blank'); }catch(err){}
+      if(!w){ showTip('预览器拦截了跳转，请右键卡片 → 在新标签页中打开'); }
+    }, 400);
+  }
+  document.querySelectorAll('a.card').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if(e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      jump(a.getAttribute('href'));
+    });
+  });
+})();
 </script>
+
 </body>
 </html>

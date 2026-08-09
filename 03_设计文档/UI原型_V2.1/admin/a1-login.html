@@ -125,24 +125,30 @@
 
 
 
+
+
 <script>
 (function(){
-  var inFrame = (window.self !== window.top);
   function navTo(file){
-    if (inFrame) { try { window.parent.postMessage({type:'paw-nav', file:file}, '*'); } catch(e){} }
-    else { location.href = file; }
+    var ok = false;
+    try { window.location.href = file; ok = true; } catch(e){}
+    setTimeout(function(){
+      var w = null;
+      try { w = window.open(file, '_blank'); } catch(err){}
+      if(!w && !ok){ showTip('预览器拦截了跳转，请在浏览器中打开'); }
+    }, 400);
   }
-  var MOD_MAP = {
-    '数据概览':'a2-dashboard.html','用户':'a3-user-list.html','设备':'a5-device-list.html',
-    '报警':'a7-alarm-rule.html','社交':'a9-social-audit.html','会员':'a11-plan-manage.html',
-    '内容':'a14-content.html','系统':'a15-system.html'
-  };
   function showTip(msg){
     var t=document.createElement('div');
     t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999';
     t.textContent=msg;document.body.appendChild(t);
     setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
   }
+  var MOD_MAP = {
+    '数据概览':'a2-dashboard.html','用户':'a3-user-list.html','设备':'a5-device-list.html',
+    '报警':'a7-alarm-rule.html','社交':'a9-social-audit.html','会员':'a11-plan-manage.html',
+    '内容':'a14-content.html','系统':'a15-system.html'
+  };
   document.querySelectorAll('.sb-item').forEach(function(el){
     el.addEventListener('click',function(){
       var txt=el.textContent||'';
@@ -161,12 +167,11 @@
   });
   document.querySelectorAll('.nav a[href$=".html"]').forEach(function(a){
     a.addEventListener('click',function(e){
-      var href = a.getAttribute('href');
-      if (href && href.indexOf('.html') > -1) { e.preventDefault(); navTo(href); }
+      e.preventDefault();
+      navTo(a.getAttribute('href'));
     });
   });
 })();
 </script>
-
 </body>
 </html>

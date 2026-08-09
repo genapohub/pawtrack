@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宠迹 PawTrack — UI 原型导航（V2.1）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,'PingFang SC',sans-serif; }
+  body { background:#0F1117; color:#E5E7EB; min-height:100vh; padding:40px 32px; }
+  .header { max-width:1100px; margin:0 auto 36px; }
+  .header h1 { font-size:26px; font-weight:800; }
+  .header .sub { color:#9CA3AF; font-size:14px; margin-top:8px; }
+  .badge { display:inline-block; background:#3D6CF5; color:#fff; font-size:12px; padding:4px 12px; border-radius:999px; margin-left:10px; vertical-align:middle; }
+  .section { max-width:1100px; margin:0 auto 32px; }
+  .section h2 { font-size:18px; margin-bottom:14px; color:#fff; display:flex; align-items:center; gap:10px; }
+  .section h2 .count { font-size:12px; color:#9CA3AF; font-weight:400; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+  .card { background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; padding:14px; text-decoration:none; color:#E5E7EB; transition:.15s; display:block; }
+  .card:hover { border-color:#3D6CF5; transform:translateY(-2px); }
+  .card .no { font-size:11px; color:#3D6CF5; font-weight:700; }
+  .card .name { font-size:14px; font-weight:600; margin-top:4px; }
+  .card .flow { font-size:11px; color:#9CA3AF; margin-top:3px; }
+  .card .prio { font-size:10px; padding:2px 8px; border-radius:999px; margin-top:8px; display:inline-block; }
+  .prio.p0 { background:#FEF2F2; color:#EF4444; } .prio.p1 { background:#FFFBEB; color:#F59E0B; } .prio.p2 { background:#F0FDF4; color:#22C55E; }
+  .flow-bar { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .flow-chip { font-size:12px; background:#1A1D27; border:1px solid #2A2E3D; color:#9CA3AF; padding:6px 14px; border-radius:999px; }
+  .tip { max-width:1100px; margin:40px auto 0; padding:16px; background:#1A1D27; border:1px solid #2A2E3D; border-radius:12px; font-size:13px; color:#9CA3AF; line-height:1.8; }
+  .tip b { color:#E5E7EB; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🐾 宠迹 PawTrack — UI 原型导航 <span class="badge">V2.1 · 41 屏</span></h1>
+  <div class="sub">基于 PRD V2.1 完整版逐屏产出 · 移动端 26 屏 + 后台 15 屏 · 单击卡片打开对应原型</div>
+</div>
+
+<!-- ═══════════ 移动端 ═══════════ -->
+<div class="section">
+  <h2>📱 移动端小程序 <span class="count">26 屏 · 6 条用户流程</span></h2>
+  <div class="flow-bar">
+    <span class="flow-chip">Flow1 注册激活 P0</span>
+    <span class="flow-chip">Flow2 定位与状态 P0</span>
+    <span class="flow-chip">Flow3 安全报警 P0</span>
+    <span class="flow-chip">Flow4 社交碰头 P2</span>
+    <span class="flow-chip">Flow5 商业变现 P0/P1</span>
+    <span class="flow-chip">Flow6 个人中心 P0/P1</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="mobile/s1-login.html"><div class="no">S1 · P0</div><div class="name">注册登录</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s2-map.html"><div class="no">S2 · P0</div><div class="name">地图首页</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s3-add-pet.html"><div class="no">S3 · P0</div><div class="name">添加宠物</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s4-bind-device.html"><div class="no">S4 · P0</div><div class="name">绑定定位器</div><div class="flow">Flow1 注册激活</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s5-pet-list.html"><div class="no">S5 · P0</div><div class="name">宠物列表 Tab</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s6-pet-detail.html"><div class="no">S6 · P0</div><div class="name">宠物详情</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s7-history.html"><div class="no">S7 · P0</div><div class="name">历史轨迹</div><div class="flow">Flow2 定位与状态</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s8-nearby.html"><div class="no">S8 · P1</div><div class="name">附近宠物</div><div class="flow">Flow2 定位与状态</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s9-alarm-settings.html"><div class="no">S9 · P0</div><div class="name">报警设置</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s10-fence-custom.html"><div class="no">S10 · P0</div><div class="name">围栏自定义</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s11-alarm-notify.html"><div class="no">S11 · P0</div><div class="name">报警通知</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s12-device-status.html"><div class="no">S12 · P0</div><div class="name">设备状态提醒</div><div class="flow">Flow3 安全报警</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s13-social-home.html"><div class="no">S13 · P2</div><div class="name">社交首页</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s14-friend-list.html"><div class="no">S14 · P2</div><div class="name">好朋狗列表</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s15-meet-start.html"><div class="no">S15 · P2</div><div class="name">碰头开始</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s16-meet-seeking.html"><div class="no">S16 · P2</div><div class="name">碰头寻找中</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s17-meet-success.html"><div class="no">S17 · P2</div><div class="name">碰头成功</div><div class="flow">Flow4 社交碰头</div><span class="prio p2">P2</span></a>
+    <a class="card" href="mobile/s18-pro-entry.html"><div class="no">S18 · P0</div><div class="name">Pro 入口</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s19-membership.html"><div class="no">S19 · P0</div><div class="name">会员订阅</div><div class="flow">Flow5 商业变现</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s20-points-shop.html"><div class="no">S20 · P1</div><div class="name">积分商城</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s21-points-detail.html"><div class="no">S21 · P1</div><div class="name">积分明细</div><div class="flow">Flow5 商业变现</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s22-profile.html"><div class="no">S22 · P0</div><div class="name">个人中心</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s23-notify-settings.html"><div class="no">S23 · P0</div><div class="name">通知设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s24-invite.html"><div class="no">S24 · P1</div><div class="name">邀请好友</div><div class="flow">Flow6 个人中心</div><span class="prio p1">P1</span></a>
+    <a class="card" href="mobile/s25-device-manage.html"><div class="no">S25 · P0</div><div class="name">设备管理</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+    <a class="card" href="mobile/s26-settings.html"><div class="no">S26 · P0</div><div class="name">设置</div><div class="flow">Flow6 个人中心</div><span class="prio p0">P0</span></a>
+  </div>
+</div>
+
+<!-- ═══════════ 后台 ═══════════ -->
+<div class="section">
+  <h2>🖥️ 管理后台 <span class="count">15 屏 · 9 大模块</span></h2>
+  <div class="grid">
+    <a class="card" href="admin/a1-login.html"><div class="no">A1</div><div class="name">后台登录</div><div class="flow">系统</div></a>
+    <a class="card" href="admin/a2-dashboard.html"><div class="no">A2</div><div class="name">数据概览</div><div class="flow">数据概览</div></a>
+    <a class="card" href="admin/a3-user-list.html"><div class="no">A3</div><div class="name">用户列表</div><div class="flow">用户管理</div></a>
+    <a class="card" href="admin/a4-user-detail.html"><div class="no">A4</div><div class="name">用户详情</div><div class="flow">用户管理</div></a>
+    <a class="card" href="admin/a5-device-list.html"><div class="no">A5</div><div class="name">设备列表</div><div class="flow">设备管理</div></a>
+    <a class="card" href="admin/a6-device-detail.html"><div class="no">A6</div><div class="name">设备详情</div><div class="flow">设备管理</div></a>
+    <a class="card" href="admin/a7-alarm-rule.html"><div class="no">A7</div><div class="name">报警规则配置</div><div class="flow">报警管理</div></a>
+    <a class="card" href="admin/a8-alarm-list.html"><div class="no">A8</div><div class="name">报警记录</div><div class="flow">报警管理</div></a>
+    <a class="card" href="admin/a9-social-audit.html"><div class="no">A9</div><div class="name">碰头审核</div><div class="flow">社交管理</div></a>
+    <a class="card" href="admin/a10-points-rule.html"><div class="no">A10</div><div class="name">积分规则</div><div class="flow">社交管理</div></a>
+    <a class="card" href="admin/a11-plan-manage.html"><div class="no">A11</div><div class="name">会员方案</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a12-order-list.html"><div class="no">A12</div><div class="name">订单列表</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a13-revenue.html"><div class="no">A13</div><div class="name">收入统计</div><div class="flow">会员与营收</div></a>
+    <a class="card" href="admin/a14-content.html"><div class="no">A14</div><div class="name">内容管理</div><div class="flow">内容管理</div></a>
+    <a class="card" href="admin/a15-system.html"><div class="no">A15</div><div class="name">系统设置</div><div class="flow">系统设置</div></a>
+  </div>
+</div>
+
+<div class="tip">
+  <b>使用说明：</b>① 每个原型页左侧为 PRD 需求对照说明，右侧为高保真模拟界面（手机 375px / 后台 1080px）
+  ② 页面底部可上一屏/下一屏连续浏览 ③ 移动端原型为微信小程序 UI 规范（rpx 换算 px）
+  ④ 本套原型由 PRD V2.1 完整版逐屏生成，与 04_前端项目/miniapp 实现一一对应，可直接作为开发与验收基准
+</div>
+</body>
+</html>

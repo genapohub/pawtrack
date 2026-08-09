@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 添加宠物 — 宠迹 UI 原型</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,'PingFang SC',sans-serif; }
+  body { background:#e8eaee; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  .stage { display:flex; gap:32px; align-items:center; }
+  .meta { width:300px; }
+  .meta h1 { font-size:20px; margin-bottom:12px; }
+  .meta .tag { display:inline-block; background:#3D6CF5; color:#fff; font-size:12px; padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+  .meta p { font-size:13px; color:#555; line-height:1.8; }
+  .meta .nav { margin-top:16px; font-size:13px; }
+  .meta .nav a { color:#3D6CF5; text-decoration:none; margin-right:12px; }
+  .prd-ref { margin-top:16px; background:#FFF7ED; border-left:3px solid #F59E0B; padding:12px; border-radius:6px; font-size:12px; color:#92400E; line-height:1.7; }
+  .phone { width:375px; height:780px; background:#F6F7FB; border-radius:40px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.25); position:relative; border:8px solid #1c1c1e; display:flex; flex-direction:column; }
+  .statusbar { height:40px; background:transparent; display:flex; align-items:center; justify-content:space-between; padding:0 24px; font-size:13px; font-weight:600; color:#1c1c1e; flex-shrink:0; }
+  .content { flex:1; overflow-y:auto; padding:8px 16px 24px; }
+  .logo-sm { text-align:center; font-size:19px; font-weight:700; padding:18px 0 14px; }
+  .card { background:#fff; border-radius:16px; padding:18px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.04); }
+  .card.center { text-align:center; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:12px; color:#888; margin-bottom:6px; }
+  .field input { width:100%; background:#F6F7FB; border:none; border-radius:10px; padding:13px 14px; font-size:14px; outline:none; }
+  .primary-btn { width:100%; background:linear-gradient(135deg,#5B8CFF,#3D6CF5); color:#fff; border:none; border-radius:24px; padding:14px; font-size:15px; font-weight:600; cursor:pointer; margin-top:6px; }
+  .type-row { display:flex; gap:10px; }
+  .type { flex:1; background:#F6F7FB; border:2px solid transparent; border-radius:12px; padding:14px 10px; text-align:center; font-size:14px; font-weight:600; }
+  .type span { display:block; font-size:10px; color:#999; font-weight:400; margin-top:4px; }
+  .type.active { border-color:#3D6CF5; background:#EEF2FF; color:#3D6CF5; }
+  .pill-row { display:flex; gap:10px; }
+  .pill { padding:9px 22px; background:#F6F7FB; border-radius:999px; font-size:13px; color:#666; }
+  .pill.active { background:#3D6CF5; color:#fff; font-weight:600; }
+  .switch-row { display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid #F3F4F6; }
+  .switch-row:last-child { border-bottom:none; }
+  .switch-row span { font-size:14px; font-weight:600; }
+  .switch-row i { display:block; font-size:11px; color:#999; font-style:normal; font-weight:400; margin-top:2px; }
+  .switch { width:48px; height:28px; border-radius:999px; background:#D1D5DB; position:relative; flex-shrink:0; transition:.2s; }
+  .switch::after { content:''; position:absolute; width:22px; height:22px; border-radius:50%; background:#fff; top:3px; left:3px; transition:.2s; }
+  .switch.on { background:#3D6CF5; }
+  .switch.on::after { left:23px; }
+  .slider-row { display:flex; align-items:center; gap:10px; font-size:11px; color:#999; }
+  .slider { flex:1; height:6px; background:#E5E7EB; border-radius:999px; position:relative; }
+  .slider-fill { position:absolute; height:100%; background:#3D6CF5; border-radius:999px; }
+  .knob { position:absolute; top:50%; transform:translate(-50%,-50%); width:18px; height:18px; background:#fff; border:3px solid #3D6CF5; border-radius:50%; }
+  .range-value { text-align:center; font-size:13px; color:#666; margin-top:8px; }
+  .divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+  .divider span { flex:1; height:1px; background:#E5E7EB; }
+  .divider i { font-size:12px; color:#999; font-style:normal; }
+  .scan-box { height:180px; border:2px dashed #3D6CF5; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#3D6CF5; font-size:22px; margin-bottom:6px; }
+  .scan-box span { font-size:11px; color:#999; font-weight:400; margin-top:8px; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:14px 4px 10px; font-size:18px; }
+  .plus { width:30px; height:30px; background:#3D6CF5; color:#fff; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .pet-avatar { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+  .pet-avatar.dog { background:#EFF6FF; } .pet-avatar.cat { background:#FFF7ED; }
+  .pet-card-row { display:flex; align-items:center; gap:14px; }
+  .pet-name { font-size:15px; font-weight:700; }
+  .pet-name i { font-size:12px; color:#999; font-weight:400; }
+  .pet-sub { font-size:12px; color:#888; margin-top:3px; }
+  .badge { font-size:11px; padding:4px 10px; border-radius:999px; background:#F3F4F6; color:#666; }
+  .badge.green { background:#F0FDF4; color:#22C55E; } .badge.blue { background:#EEF2FF; color:#3D6CF5; } .badge.orange { background:#FFF7ED; color:#F59E0B; }
+  .tip { text-align:center; font-size:11px; color:#aaa; padding:8px 0; }
+  .navbar-sm { display:flex; align-items:center; justify-content:space-between; padding:14px 8px; font-size:16px; font-weight:700; }
+  .navbar-sm .back { font-size:22px; font-weight:400; color:#333; }
+  .hero { text-align:center; padding:26px 16px; border-radius:0 0 24px 24px; margin-bottom:14px; }
+  .hero.dog-bg { background:linear-gradient(180deg,#EFF6FF,#fff); } .hero.cat-bg { background:linear-gradient(180deg,#FFF7ED,#fff); }
+  .big-avatar { font-size:58px; }
+  .hero-name { font-size:19px; font-weight:700; margin-top:6px; }
+  .hero-name i { font-size:12px; color:#888; font-weight:400; }
+  .hero-status { margin-top:10px; display:flex; gap:8px; justify-content:center; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cell { font-size:13px; font-weight:600; }
+  .cell span { display:block; font-size:12px; color:#888; font-weight:400; margin-top:4px; }
+  .menu { padding:6px 18px; }
+  .menu-item { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid #F3F4F6; font-size:14px; font-weight:600; }
+  .menu-item:last-child { border-bottom:none; }
+  .pro-tag { font-size:10px; color:#F59E0B; background:#FFFBEB; padding:2px 8px; border-radius:999px; margin-left:6px; }
+  .date-bar { display:flex; gap:10px; padding:4px 4px 14px; }
+  .date { font-size:13px; padding:8px 16px; background:#F0F1F5; border-radius:999px; color:#666; }
+  .date.active { background:#3D6CF5; color:#fff; font-weight:600; }
+  .date.pro { color:#F59E0B; }
+  .map-mini { position:relative; height:200px; background:#EAF2EA; border-radius:16px; margin-bottom:14px; overflow:hidden; }
+  .map-mini.wide { height:180px; }
+  .track { position:absolute; height:4px; background:#3D6CF5; border-radius:4px; transform:rotate(0deg); }
+  .dot { position:absolute; width:10px; height:10px; border-radius:50%; }
+  .dot.start { background:#22C55E; } .dot.end { background:#EF4444; }
+  .stat-row { display:flex; text-align:center; }
+  .stat-row div { flex:1; font-size:12px; color:#888; }
+  .stat-row .num { display:block; font-size:18px; font-weight:700; color:#1F2329; margin-top:4px; }
+  .upgrade-banner { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#fff; border-radius:16px; padding:18px; text-align:center; font-size:14px; font-weight:600; }
+  .mini-btn { background:#fff; color:#F59E0B; border:none; border-radius:999px; padding:8px 20px; font-size:13px; font-weight:600; margin-top:10px; }
+  .filter { font-size:13px; color:#666; }
+  .nearby-row { display:flex; align-items:center; gap:14px; }
+  .meet-btn { font-size:13px; font-weight:600; color:#fff; background:#3D6CF5; padding:8px 18px; border-radius:999px; }
+  .meet-btn.gray { background:#F3F4F6; color:#999; }
+  .pin-sm { position:absolute; transform:translate(-50%,-100%); font-size:24px; }
+  .pin-sm.me { font-size:20px; }
+  .slider2 { flex:1; }
+  .battery-row { display:flex; align-items:center; gap:10px; margin-top:14px; font-size:13px; }
+  .battery-bar { flex:1; height:10px; background:#F0F1F5; border-radius:999px; overflow:hidden; }
+  .battery-fill { height:100%; border-radius:999px; }
+  .battery-fill.ok { background:#22C55E; } .battery-fill.warn { background:#F59E0B; } .battery-fill.low { background:#EF4444; }
+  .warn-item { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid #F3F4F6; font-size:13px; }
+  .warn-item:last-child { border-bottom:none; }
+  .warn-item span { font-weight:600; flex:1; }
+  .warn-item i { font-size:11px; color:#999; flex:1; font-style:normal; }
+  .warn-item b { font-size:12px; }
+  .warn-item.orange b { color:#F59E0B; } .warn-item.red b { color:#EF4444; } .warn-item.gray b { color:#999; }
+  .dev-head { display:flex; align-items:center; gap:12px; }
+  .dev-icon { width:46px; height:46px; border-radius:12px; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .fence-editor { position:relative; }
+  .fence-circle { position:absolute; transform:translate(-50%,-50%); width:160px; height:160px; border:2px dashed rgba(61,108,245,.6); border-radius:50%; }
+  .fence-handle { position:absolute; width:18px; height:18px; border-radius:50%; background:#3D6CF5; border:3px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+  .fence-handle.c { top:50%; left:50%; transform:translate(-50%,-50%); }
+  .fence-handle.e { top:50%; right:-9px; transform:translateY(-50%); }
+  .edit-hint { text-align:center; font-size:11px; color:#999; padding:8px 0; }
+  .rule-title { font-size:13px; font-weight:700; margin:10px 0 4px; }
+  .rule-note p { font-size:12px; color:#666; line-height:1.6; }
+  .demo-title { font-size:14px; font-weight:700; margin-bottom:12px; }
+  .demo-bubble { background:#F0FDF4; border:1px solid #D1FAE5; border-radius:12px; padding:12px 14px; font-size:13px; line-height:1.7; margin-bottom:10px; }
+  .demo-bubble.blue { background:#EEF2FF; border-color:#C7D2FE; }
+  .demo-link { color:#3D6CF5; font-weight:600; }
+  .filter-bar { display:flex; gap:8px; padding:4px 4px 14px; }
+  .f { font-size:13px; padding:8px 18px; background:#F0F1F5; border-radius:999px; color:#666; }
+  .f.active { background:#3D6CF5; color:#fff; font-weight:600; }
+  .match-bar { width:120px; height:6px; background:#F0F1F5; border-radius:999px; margin-top:6px; overflow:hidden; }
+  .match-fill { height:100%; background:linear-gradient(90deg,#22C55E,#3D6CF5); border-radius:999px; }
+  .match-num { font-size:16px; font-weight:700; color:#3D6CF5; text-align:center; margin-bottom:6px; }
+  .check { display:inline-block; margin-top:12px; font-size:12px; color:#22C55E; background:#F0FDF4; padding:6px 14px; border-radius:999px; font-weight:600; }
+  .meet-line { position:absolute; top:50%; left:32%; width:36%; height:3px; background:linear-gradient(90deg,#3D6CF5,#22C55E); border-radius:3px; }
+  .dist-badge { position:absolute; top:16px; right:16px; background:#fff; border-radius:999px; padding:6px 14px; font-size:13px; font-weight:700; color:#3D6CF5; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+  .countdown { font-size:14px; color:#666; }
+  .dist-num { font-size:56px; font-weight:800; color:#3D6CF5; }
+  .dist-num b { font-size:20px; font-weight:600; }
+  .success-circle { width:96px; height:96px; border-radius:50%; background:#F0FDF4; display:flex; align-items:center; justify-content:center; font-size:44px; margin:0 auto; }
+  .points-gain { margin-top:12px; font-size:32px; font-weight:800; color:#F59E0B; }
+  .points-gain span { font-size:14px; font-weight:400; color:#999; }
+  .record-card { background:#F6F7FB; border-radius:12px; padding:14px; margin-top:16px; font-size:14px; font-weight:600; text-align:left; }
+  .lock-icon { font-size:44px; }
+  .link { font-size:13px; color:#3D6CF5; font-weight:600; }
+  .cmp-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .cmp-table th { background:#F8F9FB; padding:10px 8px; font-size:12px; color:#666; text-align:center; }
+  .cmp-table td { padding:10px 8px; text-align:center; border-bottom:1px solid #F3F4F6; }
+  .cmp-table .hi { color:#3D6CF5; font-weight:700; }
+  .plan-card { display:flex; align-items:center; justify-content:space-between; background:#fff; border-radius:16px; padding:18px; margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,.04); }
+  .plan-card.plan-pro { border:2px solid #F59E0B; }
+  .plan-name { font-size:16px; font-weight:700; }
+  .plan-price { font-size:24px; font-weight:800; color:#1F2329; }
+  .plan-price span { font-size:12px; font-weight:400; color:#999; }
+  .plan-price.red { color:#EF4444; }
+  .hot { font-size:10px; background:#F59E0B; color:#fff; padding:2px 8px; border-radius:999px; vertical-align:middle; }
+  .save { font-size:10px; background:#F0FDF4; color:#22C55E; padding:2px 8px; border-radius:999px; vertical-align:middle; }
+  .shop-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .shop-item { background:#fff; border-radius:16px; padding:16px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.04); }
+  .shop-icon { font-size:38px; }
+  .shop-name { font-size:13px; font-weight:600; margin-top:8px; }
+  .shop-pts { font-size:12px; color:#F59E0B; margin-top:4px; }
+  .ex-btn { margin-top:10px; width:100%; background:#EEF2FF; color:#3D6CF5; border:none; border-radius:999px; padding:8px; font-size:13px; font-weight:600; }
+  .pts-total { font-size:44px; font-weight:800; color:#F59E0B; }
+  .log-row { display:flex; align-items:center; gap:10px; padding:13px 0; border-bottom:1px solid #F3F4F6; font-size:14px; }
+  .log-row:last-child { border-bottom:none; }
+  .log-row span { flex:1; font-weight:600; }
+  .log-row i { font-size:11px; color:#999; font-style:normal; }
+  .log-row b { font-size:14px; }
+  .log-row b.plus { color:#3D6CF5; } .log-row b.minus { color:#9CA3AF; }
+  .profile-card { display:flex; align-items:center; gap:14px; }
+  .avatar-lg { width:64px; height:64px; border-radius:50%; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:30px; }
+  .vip-card { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#fff; font-size:12px; font-weight:600; padding:8px 16px; border-radius:999px; }
+  .invite-code { background:#F6F7FB; border:2px dashed #3D6CF5; border-radius:12px; padding:14px 30px; font-size:20px; letter-spacing:3px; color:#3D6CF5; margin:16px 0; font-weight:700; }
+  .btn-row { display:flex; gap:10px; margin-top:16px; }
+  .outline-btn { flex:1; border:1.5px solid #3D6CF5; color:#3D6CF5; background:#fff; border-radius:10px; padding:10px; font-size:13px; font-weight:600; }
+  .outline-btn.red { border-color:#EF4444; color:#EF4444; }
+  .danger-btn { width:100%; background:#FEF2F2; color:#EF4444; border:none; border-radius:24px; padding:14px; font-size:15px; font-weight:600; }
+  .dev-icon.cat { background:#FFF7ED; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta">
+    <span class="tag">P0 · Flow 1 注册激活</span>
+    <h1>S3 添加宠物</h1>
+    <div class="prd-ref">📋 PRD 参考：S3 添加宠物（P0）— 选择猫/狗 + 品种 + 名称；猫/狗选择影响默认设置（猫默认开报警）</div>
+    <div class="nav"><a href="s2-map.html">← 上一屏</a><a href="s4-bind-device.html">下一屏 →</a></div>
+  </div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+    <div class="content">
+<div class="logo-sm">🐾 添加宠物</div>
+  <div class="card">
+    <div class="field"><label>宠物名称</label><input placeholder="如：旺财" value="旺财"></div>
+    <div class="field"><label>宠物类型</label>
+      <div class="type-row">
+        <div class="type active">🐱 猫咪<span>BLE+WiFi 室内定位</span></div>
+        <div class="type">🐶 狗狗<span>GPS+4G 户外定位</span></div>
+      </div>
+    </div>
+    <div class="field"><label>品种</label><input placeholder="如：金毛" value="金毛"></div>
+    <div class="field"><label>性别</label>
+      <div class="pill-row"><span class="pill">未知</span><span class="pill active">男孩</span><span class="pill">女孩</span></div>
+    </div>
+    <div class="field"><label>体重 (kg)</label><input placeholder="如：25.5" value="25.5"></div>
+    <div class="field"><label>安全围栏</label>
+      <div class="switch-row"><span>开启电子围栏 <i>默认：猫100m / 狗300m</i></span><div class="switch on"></div></div>
+    </div>
+    <button class="primary-btn">下一步：绑定定位器</button>
+  </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -216,5 +216,52 @@
     </div>
   </div>
 </div>
+
+<script>
+(function(){
+  var NAV_MAP = {
+    '会员中心':'s19-membership.html','立即开通':'s19-membership.html','升级 Pro':'s19-membership.html','Pro':'s19-membership.html',
+    '积分商城':'s20-points-shop.html','我的积分':'s20-points-shop.html',
+    '积分明细':'s21-points-detail.html','邀请好友':'s24-invite.html',
+    '设备管理':'s25-device-manage.html','查找设备':'s25-device-manage.html','固件':'s25-device-manage.html',
+    '通知设置':'s23-notify-settings.html','免打扰':'s23-notify-settings.html',
+    '设置':'s26-settings.html','退出登录':'s26-settings.html',
+    '历史轨迹':'s7-history.html','附近宠物':'s8-nearby.html',
+    '报警设置':'s9-alarm-settings.html','电子围栏报警':'s9-alarm-settings.html',
+    '自定义围栏':'s10-fence-custom.html','围栏':'s10-fence-custom.html',
+    '报警通知':'s11-alarm-notify.html','设备状态':'s12-device-status.html',
+    '宠物社交':'s13-social-home.html','发起碰头':'s15-meet-start.html','碰头记录':'s13-social-home.html',
+    '好朋狗':'s14-friend-list.html','添加宠物':'s3-add-pet.html','绑定':'s4-bind-device.html',
+    '宠物列表':'s5-pet-list.html','我的宠物':'s5-pet-list.html','编辑':'s6-pet-detail.html'
+  };
+  function showTip(msg){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999;transition:opacity .3s';
+    t.textContent=msg;document.body.appendChild(t);
+    setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
+  }
+  document.querySelectorAll('.menu-item,.cell,.meet-btn,.nav-icon,.ex-btn,.mini-btn,.link,.plus,.edit,.outline-btn,.date-bar .date,.shop-item,.switch-row,.nearby-row,.plan-card').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var txt=el.textContent||'';
+      for(var k in NAV_MAP){
+        if(txt.indexOf(k)>-1){location.href=NAV_MAP[k];return;}
+      }
+      showTip('原型演示：该入口暂未绑定跳转');
+    });
+  });
+  document.querySelectorAll('.primary-btn,.danger-btn,.btn-main').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var txt=el.textContent||'';
+      for(var k in NAV_MAP){
+        if(txt.indexOf(k)>-1){location.href=NAV_MAP[k];return;}
+      }
+      showTip('原型演示：操作未绑定');
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

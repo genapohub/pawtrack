@@ -132,5 +132,37 @@
     </div>
   </div>
 </div>
+
+<script>
+(function(){
+  var MOD_MAP = {
+    '数据概览':'a2-dashboard.html','用户':'a3-user-list.html','设备':'a5-device-list.html',
+    '报警':'a7-alarm-rule.html','社交':'a9-social-audit.html','会员':'a11-plan-manage.html',
+    '内容':'a14-content.html','系统':'a15-system.html'
+  };
+  function showTip(msg){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(31,35,41,.92);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;z-index:9999';
+    t.textContent=msg;document.body.appendChild(t);
+    setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove()},300)},1600);
+  }
+  document.querySelectorAll('.sb-item').forEach(function(el){
+    el.addEventListener('click',function(){
+      var txt=el.textContent||'';
+      for(var k in MOD_MAP){
+        if(txt.indexOf(k)>-1){location.href=MOD_MAP[k];return;}
+      }
+    });
+  });
+  document.querySelectorAll('.tbl a,.btn-sm,.banner-row a,.kv a,.seg span,.tabs span,.filter-bar .inp,.filter-bar .sel').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var tag=el.tagName;
+      if(tag==='A'){showTip('原型演示：操作未绑定');}
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

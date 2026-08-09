@@ -129,7 +129,7 @@ WebSocket 连接：
 |------|------|
 | 单设备登录（默认） | 新设备登录 → 旧设备 refresh_token 失效 → 旧设备下次请求时 401 |
 | 多设备登录（Pro） | 允许同时 3 台设备在线，超出后踢出最早登录的设备 |
-| 强制下线 | `DELETE /api/v1/auth/sessions` 清除所有 refresh_token |
+| 强制下线 | `DELETE /api/v1/auth/sessions` 清除所有 refresh_token（⚠️ 规划 V2） |
 
 ---
 
@@ -375,7 +375,7 @@ GET /api/v1/location/history/67890?start=1721532000&end=1721535600&interval=60
 | POST | `/orders` | 创建订单 | 是 |
 | GET | `/orders/{order_no}` | 订单详情 | 是 |
 | POST | `/orders/{order_no}/pay` | 发起支付 | 是 |
-| GET | `/orders/callback` | 支付回调（微信/支付宝） | 否 |
+| POST | `/orders/pay-callback` | 支付回调（微信/支付宝） | 否 |
 | GET | `/subscriptions/current` | 当前订阅信息 | 是 |
 | POST | `/subscriptions/renew` | 续费 | 是 |
 | DELETE | `/subscriptions/cancel` | 取消自动续费 | 是 |
@@ -620,7 +620,7 @@ Authorization: Bearer <access_token>
 ### 9.1 支付回调
 
 ```
-POST /api/v1/orders/callback/wechat
+POST /api/v1/orders/pay-callback
 Content-Type: application/json
 X-Signature: sha256=<signature>    // 微信支付签名验证
 

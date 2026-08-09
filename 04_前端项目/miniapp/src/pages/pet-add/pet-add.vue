@@ -14,14 +14,14 @@
           <view
             class="type-option"
             :class="{ active: form.pet_type === 'cat' }"
-            @tap="form.pet_type = 'cat'"
+            @tap="selectType('cat')"
           >
             🐱 猫咪
           </view>
           <view
             class="type-option"
             :class="{ active: form.pet_type === 'dog' }"
-            @tap="form.pet_type = 'dog'"
+            @tap="selectType('dog')"
           >
             🐶 狗狗
           </view>
@@ -112,6 +112,12 @@ const form = reactive({
 })
 
 const loading = ref(false)
+
+function selectType(t: 'cat' | 'dog') {
+  form.pet_type = t
+  // 切换类型时同步默认围栏半径（猫 100m / 狗 300m）
+  form.fence_radius = t === 'cat' ? 100 : 300
+}
 
 async function handleSubmit() {
   if (!form.name.trim()) {

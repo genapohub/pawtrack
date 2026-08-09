@@ -1,8 +1,8 @@
 # 宠迹 PawTrack — API 接口设计文档
 
-> 版本：V1.0 | 日期：2026-07-21  
-> 适用：前端 App + 后台管理系统 + 设备服务  
-> 状态：待评审
+> 版本：V2.0 | 首次：2026-07-21 | **更新：2026-08-09（对齐 PRD V2.1 与代码）**
+> 适用：微信小程序 + 后台管理系统 + 设备服务
+> 状态：✅ 已落地（与 `05_后端项目/backend/app/routers/` 代码一致，74 个端点）
 
 ---
 
@@ -248,14 +248,15 @@ WebSocket 连接：
 
 ### 5.1 认证模块
 
-| 方法 | 路径 | 说明 | 鉴权 |
-|------|------|------|------|
-| POST | `/auth/register` | 手机号注册 | 否 |
-| POST | `/auth/login` | 手机号/微信/Apple登录 | 否 |
-| POST | `/auth/refresh` | 刷新 Token | 否（需 refresh_token） |
-| DELETE | `/auth/logout` | 退出登录 | 是 |
-| DELETE | `/auth/sessions` | 清除所有会话 | 是 |
-| GET | `/auth/.well-known/jwks.json` | 获取公钥 | 否 |
+| 方法 | 路径 | 说明 | 鉴权 | 状态 |
+|------|------|------|------|:---:|
+| POST | `/auth/register` | 手机号注册 | 否 | ✅ 已落地 |
+| POST | `/auth/login` | 手机号登录 | 否 | ✅ 已落地 |
+| POST | `/auth/wechat-login` | 微信登录（code 换 token） | 否 | ✅ 已落地（openid mock，待接微信） |
+| POST | `/auth/refresh` | 刷新 Token | 否（需 refresh_token） | ✅ 已落地 |
+| DELETE | `/auth/logout` | 退出登录 | 是 | ✅ 已落地 |
+| DELETE | `/auth/sessions` | 清除所有会话 | 是 | ⚠️ 规划（V2） |
+| GET | `/auth/.well-known/jwks.json` | 获取公钥 | 否 | ✅ 已落地 |
 
 ---
 

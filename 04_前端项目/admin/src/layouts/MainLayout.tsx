@@ -19,11 +19,26 @@ const MENU_ITEMS: { key: string; label: string; icon: React.ReactNode }[] = [
   { key: 'pets', label: '宠物管理', icon: <PetIcon /> },
   { key: 'devices', label: '设备管理', icon: <ApiOutlined /> },
   { key: 'alarms', label: '报警管理', icon: <BellOutlined /> },
-  { key: 'orders', label: '订单管理', icon: <ShoppingCartOutlined /> }
+  { key: 'social', label: '社交管理', icon: <TeamIcon /> },
+  { key: 'orders', label: '会员与营收', icon: <ShoppingCartOutlined /> },
+  { key: 'content', label: '内容管理', icon: <FileIcon /> },
+  { key: 'system', label: '系统设置', icon: <SettingIcon /> }
 ]
 
 function PetIcon() {
   return <span style={{ fontSize: 14 }}>🐾</span>
+}
+
+function TeamIcon() {
+  return <span style={{ fontSize: 14 }}>🐕</span>
+}
+
+function FileIcon() {
+  return <span style={{ fontSize: 14 }}>📢</span>
+}
+
+function SettingIcon() {
+  return <span style={{ fontSize: 14 }}>⚙️</span>
 }
 
 export default function MainLayout({

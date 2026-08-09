@@ -12,14 +12,32 @@ import PetsPage from './pages/Pets'
 import DevicesPage from './pages/Devices'
 import AlarmsPage from './pages/Alarms'
 import OrdersPage from './pages/Orders'
+import UserDetailPage from './pages/UserDetail'
+import DeviceDetailPage from './pages/DeviceDetail'
+import AlarmRulesPage from './pages/AlarmRules'
+import SocialAuditPage from './pages/SocialAudit'
+import PointsRulePage from './pages/PointsRule'
+import PlansPage from './pages/Plans'
+import RevenuePage from './pages/Revenue'
+import ContentPage from './pages/Content'
+import SystemSettingsPage from './pages/SystemSettings'
 
 const PAGE_MAP: Record<string, React.ReactNode> = {
   dashboard: <DashboardPage />,
   users: <UsersPage />,
+  userDetail: <UserDetailPage />,
   pets: <PetsPage />,
   devices: <DevicesPage />,
+  deviceDetail: <DeviceDetailPage />,
   alarms: <AlarmsPage />,
-  orders: <OrdersPage />
+  alarmRules: <AlarmRulesPage />,
+  social: <SocialAuditPage />,
+  pointsRule: <PointsRulePage />,
+  plans: <PlansPage />,
+  orders: <OrdersPage />,
+  revenue: <RevenuePage />,
+  content: <ContentPage />,
+  system: <SystemSettingsPage />
 }
 
 export default function App() {

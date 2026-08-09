@@ -133,8 +133,16 @@
   </div>
 </div>
 
+
+
+
 <script>
 (function(){
+  var inFrame = (window.self !== window.top);
+  function navTo(file){
+    if (inFrame) { try { window.parent.postMessage({type:'paw-nav', file:file}, '*'); } catch(e){} }
+    else { location.href = file; }
+  }
   var MOD_MAP = {
     '数据概览':'a2-dashboard.html','用户':'a3-user-list.html','设备':'a5-device-list.html',
     '报警':'a7-alarm-rule.html','社交':'a9-social-audit.html','会员':'a11-plan-manage.html',
@@ -150,15 +158,22 @@
     el.addEventListener('click',function(){
       var txt=el.textContent||'';
       for(var k in MOD_MAP){
-        if(txt.indexOf(k)>-1){location.href=MOD_MAP[k];return;}
+        if(txt.indexOf(k)>-1){navTo(MOD_MAP[k]);return;}
       }
     });
   });
-  document.querySelectorAll('.tbl a,.btn-sm,.banner-row a,.kv a,.seg span,.tabs span,.filter-bar .inp,.filter-bar .sel').forEach(function(el){
+  document.querySelectorAll('.tbl a,.btn-sm,.banner-row a,.kv a').forEach(function(el){
     el.addEventListener('click',function(e){
       e.stopPropagation();
-      var tag=el.tagName;
-      if(tag==='A'){showTip('原型演示：操作未绑定');}
+      var href = el.getAttribute('href');
+      if (href && href.indexOf('.html') > -1) { e.preventDefault(); navTo(href); return; }
+      showTip('原型演示：操作未绑定');
+    });
+  });
+  document.querySelectorAll('.nav a[href$=".html"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var href = a.getAttribute('href');
+      if (href && href.indexOf('.html') > -1) { e.preventDefault(); navTo(href); }
     });
   });
 })();

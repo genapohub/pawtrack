@@ -207,8 +207,16 @@
   </div>
 </div>
 
+
+
+
 <script>
 (function(){
+  var inFrame = (window.self !== window.top);
+  function navTo(file){
+    if (inFrame) { try { window.parent.postMessage({type:'paw-nav', file:file}, '*'); } catch(e){} }
+    else { location.href = file; }
+  }
   var NAV_MAP = {
     '会员中心':'s19-membership.html','立即开通':'s19-membership.html','升级 Pro':'s19-membership.html','Pro':'s19-membership.html',
     '积分商城':'s20-points-shop.html','我的积分':'s20-points-shop.html',
@@ -235,7 +243,7 @@
       e.stopPropagation();
       var txt=el.textContent||'';
       for(var k in NAV_MAP){
-        if(txt.indexOf(k)>-1){location.href=NAV_MAP[k];return;}
+        if(txt.indexOf(k)>-1){navTo(NAV_MAP[k]);return;}
       }
       showTip('原型演示：该入口暂未绑定跳转');
     });
@@ -245,9 +253,18 @@
       e.stopPropagation();
       var txt=el.textContent||'';
       for(var k in NAV_MAP){
-        if(txt.indexOf(k)>-1){location.href=NAV_MAP[k];return;}
+        if(txt.indexOf(k)>-1){navTo(NAV_MAP[k]);return;}
       }
       showTip('原型演示：操作未绑定');
+    });
+  });
+  document.querySelectorAll('.nav a[href$=".html"], .navbar-sm .back, .navbar-sm a[href]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var href = a.getAttribute('href');
+      if (href && href.indexOf('.html') > -1) {
+        e.preventDefault();
+        navTo(href);
+      }
     });
   });
 })();

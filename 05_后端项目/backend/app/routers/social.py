@@ -1,15 +1,16 @@
 """
-宠迹 PawTrack — 社交碰头路由（Sprint 2）
+宠迹 PawTrack — 社交碰头路由（Sprint 2 / V2.0 社交阶段）
 
 功能：
-1. 发起碰头（发现附近宠物 → 发起碰头请求）
+1. 发起碰头（发现附近宠物 → 距离>50m 校验 → 发起碰头请求）
 2. 确认碰头
-3. 完成碰头（双方到场 → 积分奖励）
+3. 完成碰头（双方到场 → 各得 100 积分）
 4. 取消碰头
 5. 碰头记录列表
-6. 附近宠物查询（Redis GEO）
+6. 附近宠物查询（Redis GEO + 匹配度）
 """
 import json
+import math
 import time
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,6 +22,7 @@ from datetime import datetime, timezone
 from app.database import get_db
 from app.models import Meet, Pet, Device, User, MeetStatus, PetType, PointType, PointsLog
 from app.auth import get_current_user
+from app.social_rules import MEET_MIN_DISTANCE, MEET_POINTS, DAILY_MEET_LIMIT, haversine as _haversine
 from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/social", tags=["社交"])
@@ -41,6 +43,38 @@ class MeetCompleteRequest(BaseModel):
     pass
 
 # ── 工具函数 ──────────────────────────────────────────────
+
+async def _get_pet_location(device_id: int) -> Optional[tuple]:
+    """从 Redis GEO 查询设备最新坐标 (lat, lng)"""
+    try:
+        pos = await app_main.redis_client.geopos("location:geo:nearby", str(device_id))
+        if pos and pos[0]:
+            lng, lat = pos[0]
+            return float(lat), float(lng)
+    except Exception:
+        pass
+    return None
+
+def _calc_match_score(pet: Pet, distance: float, device: Device) -> int:
+    """匹配度（PRD S14：品种/距离/活跃度三维度，满分100）"""
+    score = 0
+    # 距离维度（满分40）：<200m 40分 / <500m 30分 / <1000m 20分 / 其他 10分
+    if distance < 200:
+        score += 40
+    elif distance < 500:
+        score += 30
+    elif distance < 1000:
+        score += 20
+    else:
+        score += 10
+    # 活跃度维度（满分30）：电量正常 30分 / 低电量 20分
+    if device.battery_level is not None and device.battery_level >= 20:
+        score += 30
+    else:
+        score += 20
+    # 品种维度（满分30）：基础分 15 分，同品种加分由前端按发起方品种计算
+    score += 15
+    return min(score, 100)
 
 def _meet_to_dict(meet: Meet) -> dict:
     return {
@@ -125,17 +159,24 @@ async def find_nearby_pets(
         if pet.user_id == int(user["sub"]):
             continue
 
+        # 匹配度计算（PRD S14：品种/距离/活跃度三维度）
+        match_score = _calc_match_score(pet, dist, device)
+
         results.append({
             "device_id": device.id,
             "pet_id": pet.id,
             "pet_name": pet.name,
             "pet_type": pet.type.value,
             "pet_avatar": pet.avatar,
+            "breed": pet.breed,
             "distance": round(dist, 1),
+            "match_score": match_score,
             "lat": lat_val,
             "lng": lng_val
         })
 
+    # 按匹配度降序
+    results.sort(key=lambda r: r["match_score"], reverse=True)
     return {"code": 0, "data": results}
 
 @router.post("/meets", response_model=dict)
@@ -163,6 +204,37 @@ async def create_meet(
 
     if my_pet.id == body.receiver_pet_id:
         raise HTTPException(400, detail={"code": 40003, "message": "不能和自己碰头"})
+
+    # ── 距离校验（PRD 11.2/16.1：距离>50m 才可发起）──
+    receiver_device_result = await db.execute(
+        select(Device).where(Device.pet_id == body.receiver_pet_id).limit(1)
+    )
+    receiver_device = receiver_device_result.scalar_one_or_none()
+    if receiver_device:
+        rloc = await _get_pet_location(receiver_device.id)
+        if rloc:
+            dist = _haversine(body.start_lat, body.start_lng, rloc[0], rloc[1])
+            if dist <= MEET_MIN_DISTANCE:
+                raise HTTPException(400, detail={
+                    "code": 40010,
+                    "message": f"双方距离 {round(dist)}m 太近（需 >{MEET_MIN_DISTANCE}m），附近遛弯即可遇到，无需发起碰头"
+                })
+
+    # ── 同一对手每日限次（PRD 16.1 碰头防作弊）──
+    today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    daily_count = await db.execute(
+        select(func.count()).where(
+            Meet.initiator_pet_id == my_pet.id,
+            Meet.receiver_pet_id == body.receiver_pet_id,
+            Meet.status.in_([MeetStatus.pending, MeetStatus.confirmed, MeetStatus.success]),
+            Meet.created_at >= today_start
+        )
+    )
+    if daily_count.scalar() >= DAILY_MEET_LIMIT:
+        raise HTTPException(400, detail={
+            "code": 40011,
+            "message": "同一宠物每天只能碰头 1 次，明天再来吧"
+        })
 
     # 检查是否已有进行中的碰头
     existing = await db.execute(
@@ -250,14 +322,13 @@ async def complete_meet(
     meet.status = MeetStatus.success
     meet.completed_at = datetime.now(timezone.utc)
 
-    # 积分奖励：狗狗碰头 10 分，猫咪碰头 5 分
-    initiator_pet = (await db.execute(select(Pet).where(Pet.id == meet.initiator_pet_id))).scalar_one()
-    receiver_pet = (await db.execute(select(Pet).where(Pet.id == meet.receiver_pet_id))).scalar_one()
-
-    points = 10 if initiator_pet.type == PetType.dog else 5
+    # 积分奖励：碰头成功双方各得 100 积分（PRD 11.2/16.3）
+    points = MEET_POINTS
     meet.points_awarded = points
 
     # 双方各得积分
+    initiator_pet = (await db.execute(select(Pet).where(Pet.id == meet.initiator_pet_id))).scalar_one()
+    receiver_pet = (await db.execute(select(Pet).where(Pet.id == meet.receiver_pet_id))).scalar_one()
     await _award_points(db, initiator_pet.user_id, points, PointType.meet, str(meet.id))
     await _award_points(db, receiver_pet.user_id, points, PointType.meet, str(meet.id))
 

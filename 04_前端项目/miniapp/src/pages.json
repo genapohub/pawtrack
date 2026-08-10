@@ -105,14 +105,14 @@
     },
     {
       "path": "pages/meet-success/meet-success",
+      "style": {
+        "navigationBarTitleText": "碰头成功"
+      }
+    },
     {
       "path": "pages/alarm-notify/alarm-notify",
       "style": {
         "navigationBarTitleText": "报警通知"
-      }
-    },
-      "style": {
-        "navigationBarTitleText": "碰头成功"
       }
     }
   ],

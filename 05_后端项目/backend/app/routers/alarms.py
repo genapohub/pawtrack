@@ -291,35 +291,51 @@ async def check_battery(
 # ── 报警设置 ──────────────────────────────────────────────
 
 class AlarmSettingsRequest(BaseModel):
-    """报警设置（按用户级，存 Redis）"""
+    """报警设置（按用户级）"""
     leave_fence_notify: bool = True       # 离开围栏推送
     enter_fence_notify: bool = False      # 进入围栏推送
     low_battery_threshold: int = Field(20, ge=5, le=50)  # 低电量阈值
     quiet_hours_start: Optional[str] = None  # 免打扰开始 HH:MM
     quiet_hours_end: Optional[str] = None    # 免打扰结束 HH:MM
-
-ALARM_SETTINGS_KEY = "alarm:settings:user:{user_id}"
+    emergency_contacts: list = []          # [{name, phone}] 紧急联系人
+    notify_push: bool = True               # Push 通知
+    notify_sms: bool = False               # 短信通知（Pro 权益）
 
 
 @router.get("/settings", response_model=dict)
-async def get_alarm_settings(user: dict = Depends(get_current_user)):
+async def get_alarm_settings(user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """获取报警设置"""
-    from app.main import redis_client
-    key = ALARM_SETTINGS_KEY.format(user_id=user["sub"])
-    if redis_client:
-        raw = await redis_client.get(key)
-        if raw:
-            return {"code": 0, "data": json.loads(raw)}
-    # 默认设置
-    return {"code": 0, "data": AlarmSettingsRequest().model_dump()}
+    uid = int(user["sub"])
+    # 从 DB 取紧急联系人和通知开关
+    u = (await db.execute(select(User).where(User.id == uid))).scalar_one_or_none()
+    contacts = u.emergency_contacts if u else []
+    push = u.notify_push if u else True
+    sms = u.notify_sms if u else False
+    quiet = (await app_main.redis_client.get(ALARM_SETTINGS_KEY.format(user_id=uid))) if app_main.redis_client else None
+    base = AlarmSettingsRequest().model_dump()
+    if quiet:
+        base.update(json.loads(quiet))
+    base["emergency_contacts"] = contacts
+    base["notify_push"] = push
+    base["notify_sms"] = sms
+    return {"code": 0, "data": base}
 
 
 @router.put("/settings", response_model=dict)
-async def update_alarm_settings(body: AlarmSettingsRequest, user: dict = Depends(get_current_user)):
+async def update_alarm_settings(body: AlarmSettingsRequest, user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """更新报警设置"""
-    from app.main import redis_client
-    key = ALARM_SETTINGS_KEY.format(user_id=user["sub"])
-    data = body.model_dump()
-    if redis_client:
-        await redis_client.set(key, json.dumps(data, ensure_ascii=False))
-    return {"code": 0, "message": "报警设置已更新", "data": data}
+    uid = int(user["sub"])
+    # 紧急联系人 + 通知渠道 存 DB
+    u_result = await db.execute(select(User).where(User.id == uid))
+    u = u_result.scalar_one_or_none()
+    if u:
+        u.emergency_contacts = body.emergency_contacts
+        u.notify_push = body.notify_push
+        u.notify_sms = body.notify_sms
+        await db.commit()
+    # 其他设置存 Redis
+    key = ALARM_SETTINGS_KEY.format(user_id=uid)
+    redis_data = {k: v for k, v in body.model_dump().items() if k not in ("emergency_contacts", "notify_push", "notify_sms")}
+    if app_main.redis_client:
+        await app_main.redis_client.set(key, json.dumps(redis_data, ensure_ascii=False))
+    return {"code": 0, "message": "报警设置已更新", "data": body.model_dump()}

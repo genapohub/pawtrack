@@ -124,7 +124,7 @@ async def find_nearby_pets(
     db: AsyncSession = Depends(get_db)
 ):
     """查找附近宠物（Redis GEO 查询）"""
-    if not redis_client:
+    if not app_main.redis_client:
         return {"code": 0, "data": []}
 
     # Redis GEORADIUS 查询附近设备
@@ -143,7 +143,8 @@ async def find_nearby_pets(
 
     results = []
     for item in nearby:
-        device_id_str, (lng_val, lat_val), dist = item
+        # redis-py 新版返回格式: [name, dist, (lng, lat)]
+        device_id_str, dist, (lng_val, lat_val) = item
         device_id = int(device_id_str)
 
         # 查询设备→宠物信息
@@ -260,7 +261,7 @@ async def create_meet(
     await db.refresh(meet)
 
     # 推送通知给对方宠物主人
-    if redis_client:
+    if app_main.redis_client:
         ws_msg = json.dumps({
             "type": "alarm",
             "alarm_type": "meet_request",

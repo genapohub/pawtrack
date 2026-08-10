@@ -2,7 +2,7 @@
   <view class="home-page">
     <!-- 顶部导航 -->
     <view class="nav-bar">
-      <view class="nav-title">🐾 宠迹</view>
+      <view class="nav-title">🐾 宠迹<text class="pro-chip" @tap="goPro">Pro</text></view>
       <view v-if="isDev" class="dev-badge">DEV</view>
       <view class="nav-right">
         <view class="ws-dot" :class="{ online: wsConnected }"></view>
@@ -267,6 +267,7 @@ function formatTime(ts: number): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
+function goPro() { uni.navigateTo({ url: "/pages/member/member" }) }
 function goAddPet() {
   uni.navigateTo({ url: '/pages/pet-add/pet-add' })
 }
@@ -574,4 +575,6 @@ onUnmounted(() => {
   background: #3d6cf5;
   color: #fff;
 }
+.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
+.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
 </style>

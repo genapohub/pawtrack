@@ -2,7 +2,7 @@
   <view class="page">
     <!-- 用户信息卡 -->
     <view class="card profile-card">
-      <view class="avatar-lg">🐾</view>
+      <view class="avatar-lg">🐾<text class="pro-chip" style="float:right;margin-top:10rpx" @tap="goPro">升级Pro</text></view>
       <view class="profile-info">
         <view class="profile-name">{{ user.nickname || '宠友' }}</view>
         <view class="profile-phone">{{ user.phone || '未绑定手机号' }}</view>
@@ -175,4 +175,6 @@ function logout() {
 .pet-sub { font-size: 22rpx; color: #9aa0a6; margin-top: 2rpx; }
 .empty-tip { text-align: center; color: #3d6cf5; padding: 30rpx 0; font-size: 26rpx; font-weight: 600; }
 .logout-btn { margin: 30rpx 24rpx; text-align: center; background: #fef2f2; color: #ef4444; border-radius: 999rpx; padding: 22rpx 0; font-size: 28rpx; font-weight: 600; }
+.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
+.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
 </style>

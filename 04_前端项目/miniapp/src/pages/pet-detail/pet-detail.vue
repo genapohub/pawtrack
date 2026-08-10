@@ -3,6 +3,7 @@
     <!-- 顶部信息 -->
     <view class="hero" :class="pet?.type === 'cat' ? 'cat-bg' : 'dog-bg'">
       <view class="back" @tap="goBack">‹</view>
+      <text class="pro-chip" style="position:absolute;right:24rpx;top:24rpx" @tap="goPro">Pro</text>
       <view class="big-avatar">{{ pet?.type === 'cat' ? '🐱' : '🐶' }}</view>
       <view class="hero-name">{{ pet?.name || '宠物详情' }}</view>
       <view class="hero-sub">{{ breedText }}</view>
@@ -115,6 +116,7 @@ function formatTime(ts: number): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
+function goPro() { uni.navigateTo({ url: "/pages/member/member" }) }
 function goBack() { uni.navigateBack() }
 function goHistory() { uni.navigateTo({ url: '/pages/history/history?id=' + petId.value }) }
 function goAlarmSettings() { uni.navigateTo({ url: '/pages/alarm-settings/alarm-settings?id=' + petId.value }) }
@@ -150,4 +152,6 @@ function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1px solid #f3f4f6; font-size: 28rpx; font-weight: 600; }
 .menu-item:last-child { border-bottom: none; }
 .pro-tag { font-size: 20rpx; color: #f59e0b; background: #fffbeb; padding: 4rpx 12rpx; border-radius: 999rpx; }
+.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
+.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
 </style>

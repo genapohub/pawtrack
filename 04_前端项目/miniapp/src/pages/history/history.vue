@@ -1,6 +1,7 @@
 <template>
   <view class="page">
     <view class="navbar-sm">
+      <text class="pro-chip right" @tap="goPro">Pro</text>
       <view class="back" @tap="goBack">‹</view>
       历史轨迹
       <view class="placeholder"></view>
@@ -144,4 +145,6 @@ function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 .point-time { color: #3d6cf5; font-weight: 600; width: 100rpx; }
 .point-addr { color: #6b7280; flex: 1; }
 .empty-tip { text-align: center; color: #9aa0a6; padding: 40rpx 0; font-size: 26rpx; }
+.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
+.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
 </style>

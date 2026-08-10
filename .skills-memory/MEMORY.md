@@ -13,6 +13,11 @@
 ## 关键决策记录
 
 - 坐标存储：PostGIS GEOGRAPHY → 因本地无 Docker 改用 DECIMAL(10,7) 双字段 + Haversine 围栏
+
+## 用户偏好与工作纪律
+
+- **分阶段任务文档同步**（2026-08-10 确立）：每完成一个阶段性任务后，必须回头同步项目里所有相关文档，做到颗粒度对齐（接口路径/常量值/里程碑状态/屏数细化/优先级标注），不存文档与代码脱节。
+- **不生成 README 目录索引**：目录文档只放实质内容，不用索引文件
 - 前端重构：React Web → uni-app (Vue3+Vite) 微信小程序，位于 04_前端项目/miniapp/
 - 认证：RS256 JWT 双 Token（access 2h + refresh 30d）+ admin 独立 scope
 - 实时链路：设备→MQTT→Redis Stream→MongoDB + Redis GEO→Pub/Sub→WebSocket

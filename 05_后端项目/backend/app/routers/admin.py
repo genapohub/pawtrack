@@ -393,3 +393,111 @@ async def admin_deep_health(admin: dict = Depends(get_admin_user)):
     """后台查看深度健康检查（需 admin 鉴权）"""
     from app.monitoring import deep_health
     return await deep_health()
+
+
+# ── V2.0 碰头审核 ─────────────────────────────────────────────
+
+@router.get("/meets", response_model=dict)
+async def admin_list_meets(
+    page: int = Query(1, ge=1),
+    size: int = Query(20, ge=1, le=100),
+    status: Optional[str] = None,
+    admin: dict = Depends(get_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """后台碰头记录列表（含异常标记）"""
+    conditions = []
+    if status:
+        conditions.append(Meet.status == status)
+
+    count_result = await db.execute(
+        select(func.count()).where(*conditions).select_from(Meet)
+    )
+    total = count_result.scalar()
+
+    result = await db.execute(
+        select(Meet).where(*conditions).order_by(Meet.created_at.desc()).offset((page - 1) * size).limit(size)
+    )
+    meets = result.scalars().all()
+
+    items = []
+    for m in meets:
+        abnormal = ""
+        abnormal_color = "green"
+        # 距离反常：发起-到达距离 <5m
+        if m.start_lat and m.start_lng and m.end_lat and m.end_lng:
+            from app.social_rules import haversine
+            d = haversine(float(m.start_lat), float(m.start_lng), float(m.end_lat), float(m.end_lng))
+            if d < 5:
+                abnormal = f"距离异常 {round(d,1)}m"
+                abnormal_color = "red"
+        # 频繁碰头：同一对 24h ≥3 次
+        today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        freq = await db.execute(
+            select(func.count()).where(
+                Meet.initiator_pet_id == m.initiator_pet_id,
+                Meet.receiver_pet_id == m.receiver_pet_id,
+                Meet.created_at >= today,
+                Meet.status == "success"
+            )
+        )
+        if freq.scalar() >= 3:
+            abnormal = "频繁碰头（≥3次/天）" if not abnormal else abnormal + " + 频繁"
+            abnormal_color = "red"
+
+        initiator = (await db.execute(select(Pet).where(Pet.id == m.initiator_pet_id))).scalar_one_or_none()
+        receiver = (await db.execute(select(Pet).where(Pet.id == m.receiver_pet_id))).scalar_one_or_none()
+
+        items.append({
+            "id": m.id,
+            "from_pet": initiator.name if initiator else "-",
+            "to_pet": receiver.name if receiver else "-",
+            "status": m.status.value if hasattr(m.status, 'value') else str(m.status),
+            "distance": round(d, 1) if (m.start_lat and m.end_lat and 'd' in dir()) else None,
+            "points": m.points_awarded or 0,
+            "abnormal": abnormal,
+            "color": abnormal_color,
+            "created_at": m.created_at.isoformat() if m.created_at else "",
+            "completed_at": m.completed_at.isoformat() if m.completed_at else None
+        })
+
+    return {
+        "code": 0,
+        "data": {"items": items, "pagination": {"page": page, "size": size, "total": total}}
+    }
+
+
+@router.put("/meets/{meet_id}/audit", response_model=dict)
+async def admin_audit_meet(
+    meet_id: int,
+    action: str = Query(..., regex="^(approve|reject)$"),
+    admin: dict = Depends(get_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """碰头审核：通过 / 驳回+扣回积分"""
+    result = await db.execute(select(Meet).where(Meet.id == meet_id))
+    meet = result.scalar_one_or_none()
+    if not meet:
+        raise HTTPException(404, detail={"code": 40005, "message": "碰头记录不存在"})
+
+    if action == "reject":
+        if meet.points_awarded:
+            from app.models import PointsLog, PointType
+            for pid in [meet.initiator_pet_id, meet.receiver_pet_id]:
+                pet = (await db.execute(select(Pet).where(Pet.id == pid))).scalar_one_or_none()
+                if not pet:
+                    continue
+                user_result = await db.execute(select(User).where(User.id == pet.user_id))
+                user = user_result.scalar_one_or_none()
+                if user:
+                    user.points = max(0, user.points - meet.points_awarded)
+                    db.add(PointsLog(
+                        user_id=user.id, change=-meet.points_awarded,
+                        type=PointType.meet, related_id=f"audit_reject_{meet.id}", balance=user.points
+                    ))
+        meet.points_awarded = 0
+        meet.status = "failed"
+        await db.commit()
+        return {"code": 0, "message": "已驳回并扣回积分"}
+    else:
+        return {"code": 0, "message": "已通过"}

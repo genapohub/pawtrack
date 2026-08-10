@@ -113,5 +113,17 @@ export const api = {
       return request('GET', `/admin/orders?${qs.toString()}`)
     },
     refund: (orderNo: string) => request('PUT', `/admin/orders/${orderNo}/refund`)
+  },
+
+  meets: {
+    list: (params: { status?: string; page: number; size: number }) => {
+      const qs = new URLSearchParams()
+      if (params.status) qs.set('status', params.status)
+      qs.set('page', String(params.page))
+      qs.set('size', String(params.size))
+      return request('GET', `/admin/meets?${qs.toString()}`)
+    },
+    audit: (meetId: number, action: 'approve' | 'reject') =>
+      request('PUT', `/admin/meets/${meetId}/audit?action=${action}`)
   }
 }

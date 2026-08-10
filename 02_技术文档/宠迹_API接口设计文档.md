@@ -355,16 +355,19 @@ GET /api/v1/location/history/67890?start=1721532000&end=1721535600&interval=60
 
 ---
 
-### 5.7 社交模块
+### 5.7 社交模块（V2.0 已实现）
 
 | 方法 | 路径 | 说明 | 鉴权 |
 |------|------|------|------|
-| GET | `/social/nearby-dogs` | 附近狗狗列表 | 是 |
-| POST | `/social/meet` | 发起碰头 | 是 |
-| PUT | `/social/meet/{meet_id}/confirm` | 确认碰头 | 是 |
-| PUT | `/social/meet/{meet_id}/complete` | 完成碰头 | 是 |
-| PUT | `/social/meet/{meet_id}/cancel` | 取消碰头 | 是 |
-| GET | `/social/meet/history` | 碰头历史 | 是 |
+| GET | `/social/nearby?lat&lng&radius` | 附近宠物列表（含匹配度） | 是 |
+| POST | `/social/meets` | 发起碰头（>50m 校验 + 每日限次） | 是 |
+| PUT | `/social/meets/{meet_id}/confirm` | 确认碰头 | 是 |
+| GET | `/social/meets/{meet_id}/distance` | 碰头双方实时距离（S16 寻找中轮询） | 是 |
+| PUT | `/social/meets/{meet_id}/complete` | 完成碰头（各 +100 积分） | 是 |
+| PUT | `/social/meets/{meet_id}/cancel` | 取消碰头 | 是 |
+| GET | `/social/meets` | 碰头记录列表（支持 status 筛选） | 是 |
+| GET | `/admin/meets` | 后台碰头审核列表（异常自动标记） | 是（admin） |
+| PUT | `/admin/meets/{id}/audit?action=` | 审核通过/驳回（驳回扣回积分） | 是（admin） |
 
 ---
 

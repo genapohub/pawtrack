@@ -12,7 +12,10 @@
           {{ p.type === 'cat' ? '🐱' : '🐶' }}
         </view>
         <view class="pet-info">
-          <view class="pet-name">{{ p.name }}</view>
+          <view class="pet-name">
+            {{ p.name }}
+            <text class="match-badge" :class="matchClass(p.match_score)">{{ p.match_score || '--' }}% 匹配</text>
+          </view>
           <view class="pet-detail">
             {{ p.breed || (p.type === 'cat' ? '猫咪' : '狗狗') }} · 距离 {{ p.distance }}m
           </view>
@@ -48,6 +51,11 @@
           <view class="act-btn ok" @tap="confirmMeet(m)">✓ 接受</view>
           <view class="act-btn no" @tap="cancelMeet(m)">✗ 拒绝</view>
         </view>
+        <!-- 已确认 → 前往碰头（S16 寻找中） -->
+        <view v-if="m.status === 'confirmed'" class="meet-actions">
+          <view class="act-btn ok" @tap="goSeeking(m)">📍 前往碰头</view>
+          <view class="act-btn no" @tap="cancelMeet(m)">取消</view>
+        </view>
       </view>
     </view>
 
@@ -80,6 +88,13 @@ function meetEmoji(status: string): string {
 
 function meetStatusLabel(status: string): string {
   return STATUS_LABEL[status] || status
+}
+
+/** 匹配度颜色分级 */
+function matchClass(score: number): string {
+  if (score >= 80) return 'high'
+  if (score >= 60) return 'mid'
+  return 'low'
 }
 
 function meetTitle(m: any): string {
@@ -175,7 +190,9 @@ async function confirmMeet(m: any) {
       end_lng: res.longitude,
     })
     uni.showToast({ title: '已确认碰头！', icon: 'success' })
-    loadMeets()
+    setTimeout(() => {
+      uni.navigateTo({ url: `/pages/meet-seeking/meet-seeking?id=${m.id}` })
+    }, 600)
   } catch (e: any) {
     uni.showToast({ title: e.message || '操作失败', icon: 'none' })
   }
@@ -190,6 +207,11 @@ async function cancelMeet(m: any) {
   } catch (e: any) {
     uni.showToast({ title: e.message || '操作失败', icon: 'none' })
   }
+}
+
+/** 前往碰头（S16 寻找中页） */
+function goSeeking(m: any) {
+  uni.navigateTo({ url: `/pages/meet-seeking/meet-seeking?id=${m.id}` })
 }
 
 onShow(() => {
@@ -253,6 +275,30 @@ onShow(() => {
 .pet-name {
   font-size: 30rpx;
   font-weight: 700;
+}
+
+.match-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  margin-left: 8rpx;
+  vertical-align: middle;
+}
+
+.match-badge.high {
+  background: #f0fdf4;
+  color: #22c55e;
+}
+
+.match-badge.mid {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+.match-badge.low {
+  background: #f3f4f6;
+  color: #9ca3af;
 }
 
 .pet-detail {

@@ -337,6 +337,49 @@ async def complete_meet(
 
     return {"code": 0, "data": _meet_to_dict(meet)}
 
+@router.get("/meets/{meet_id}/distance", response_model=dict)
+async def meet_distance(
+    meet_id: int,
+    user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """查询碰头双方实时距离（S16 寻找中页轮询）"""
+    result = await db.execute(select(Meet).where(Meet.id == meet_id))
+    meet = result.scalar_one_or_none()
+    if not meet:
+        raise HTTPException(404, detail={"code": 40005, "message": "碰头记录不存在"})
+
+    # 双方设备
+    devices = await db.execute(
+        select(Device).where(Device.pet_id.in_([meet.initiator_pet_id, meet.receiver_pet_id]))
+    )
+    dev_list = devices.scalars().all()
+    if len(dev_list) < 2:
+        return {"code": 0, "data": {"distance": None, "message": "等待双方设备上线"}}
+
+    locs = []
+    for dev in dev_list:
+        loc = await _get_pet_location(dev.id)
+        if loc:
+            locs.append((dev.pet_id, loc))
+
+    if len(locs) < 2:
+        return {"code": 0, "data": {"distance": None, "message": "等待双方设备上线"}}
+
+    (_, (lat1, lng1)) = locs[0]
+    (_, (lat2, lng2)) = locs[1]
+    dist = _haversine(lat1, lng1, lat2, lng2)
+    # 双方碰头成功距离 <5m（PRD 11.2）
+    reached = dist < 5
+    return {
+        "code": 0,
+        "data": {
+            "distance": round(dist, 1),
+            "reached": reached,
+            "elapsed_min": (datetime.now(timezone.utc) - meet.confirmed_at).total_seconds() / 60 if meet.confirmed_at else 0
+        }
+    }
+
 @router.put("/meets/{meet_id}/cancel", response_model=dict)
 async def cancel_meet(
     meet_id: int,

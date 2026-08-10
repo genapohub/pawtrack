@@ -96,6 +96,18 @@
       "style": {
         "navigationBarTitleText": "设置"
       }
+    },
+    {
+      "path": "pages/meet-seeking/meet-seeking",
+      "style": {
+        "navigationBarTitleText": "碰头进行中"
+      }
+    },
+    {
+      "path": "pages/meet-success/meet-success",
+      "style": {
+        "navigationBarTitleText": "碰头成功"
+      }
     }
   ],
   "tabBar": {

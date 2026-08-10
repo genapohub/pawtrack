@@ -17,6 +17,18 @@
       </view>
 
       <view v-if="settings.fence_enabled" class="field">
+        <!-- 地图拖拽圆心 -->
+        <view class="label">围栏圆心（拖拽地图调整）</view>
+        <map
+          style="width:100%;height:400rpx;border-radius:16rpx;margin-bottom:24rpx"
+          :latitude="fenceCenter.lat"
+          :longitude="fenceCenter.lng"
+          :markers="[fenceMarker]"
+          scale="16"
+          @tap="onMapTap"
+        />
+        <view class="range-value">圆心：{{ fenceCenter.lat.toFixed(6) }}, {{ fenceCenter.lng.toFixed(6) }}</view>
+
         <view class="label">围栏半径</view>
         <view class="slider-row">
           <text>50m</text>
@@ -107,6 +119,12 @@ const settings = ref({
   app_notify: true,
 })
 const saving = ref(false)
+const fenceCenter = ref({ lat: 34.7466, lng: 113.6253 })
+const fenceMarker = computed(() => ({
+  id: 1, latitude: fenceCenter.value.lat, longitude: fenceCenter.value.lng,
+  iconPath: '/static/marker-dog.png', width: 32, height: 32
+}))
+function onMapTap(e: any) { fenceCenter.value = { lat: e.detail.latitude, lng: e.detail.longitude } }
 
 const radiusPct = computed(() => {
   const v = settings.value.fence_radius
@@ -125,6 +143,7 @@ async function loadPet() {
     if (pet) {
       settings.value.fence_enabled = pet.fence_enabled
       settings.value.fence_radius = pet.fence_radius || (pet.type === 'cat' ? 100 : 300)
+      if (pet.fence_center_lat) fenceCenter.value = { lat: pet.fence_center_lat, lng: pet.fence_center_lng || fenceCenter.value.lng }
     }
   } catch (e) { /* 静默 */ }
 }
@@ -148,6 +167,8 @@ async function save() {
     await http.put(`/pets/${petId.value}/fence`, {
       fence_enabled: settings.value.fence_enabled,
       fence_radius: settings.value.fence_radius,
+      fence_center_lat: fenceCenter.value.lat,
+      fence_center_lng: fenceCenter.value.lng,
     })
     // 2. 保存报警设置
     await http.put('/alarms/settings', {

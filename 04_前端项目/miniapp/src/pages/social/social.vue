@@ -1,12 +1,33 @@
 <template>
   <view class="page">
-    <!-- 附近宠物 -->
+    <!-- 附近宠物（Tab 切换列表/地图） -->
     <view class="section-title">
       <text>🐾 附近的宠物</text>
-      <text class="refresh" @tap="loadNearby">刷新</text>
+      <view class="view-tabs">
+        <text :class="{ active: viewMode === 'list' }" @tap="viewMode = 'list'">列表</text>
+        <text :class="{ active: viewMode === 'map' }" @tap="viewMode = 'map'">地图</text>
+        <text class="refresh" @tap="loadNearby">刷新</text>
+      </view>
     </view>
 
-    <view v-if="nearby.length > 0" class="nearby-list">
+    <!-- 地图模式 -->
+    <view v-if="viewMode === 'map'" class="map-wrap">
+      <map
+        style="width: 100%; height: 400rpx"
+        :latitude="myLat"
+        :longitude="myLng"
+        :markers="mapMarkers"
+        scale="14"
+        show-location
+      />
+      <view class="map-legend">
+        <text class="leg-item"><text class="dot dog"></text> 狗狗</text>
+        <text class="leg-item"><text class="dot cat"></text> 猫咪</text>
+      </view>
+    </view>
+
+    <!-- 列表模式 -->
+    <view v-if="viewMode === 'list' && nearby.length > 0" class="nearby-list">
       <view v-for="p in nearby" :key="p.pet_id || p.id" class="card nearby-card">
         <view class="pet-avatar" :class="p.type === 'cat' ? 'cat-bg' : 'dog-bg'">
           {{ p.type === 'cat' ? '🐱' : '🐶' }}
@@ -66,13 +87,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { http } from '@/utils/request'
 
 const nearby = ref<any[]>([])
 const meets = ref<any[]>([])
 const myPetId = ref(0)
+const viewMode = ref<'list' | 'map'>('list')
+const myLat = ref(34.7466)
+const myLng = ref(113.6253)
 
 const STATUS_LABEL: Record<string, string> = {
   pending: '待确认',
@@ -130,6 +154,8 @@ async function loadNearby() {
     })
     const lat = res.latitude
     const lng = res.longitude
+    myLat.value = lat
+    myLng.value = lng
     const data = await http.get<any[]>(`/social/nearby?lat=${lat}&lng=${lng}&radius=2000`)
     nearby.value = data || []
   } catch (e: any) {
@@ -174,6 +200,25 @@ async function startMeet(p: any) {
     uni.showToast({ title: e.message || '发起失败', icon: 'none' })
   }
 }
+
+/** 地图标记点（从 nearby 数据生成） */
+const mapMarkers = computed(() => {
+  return nearby.value.map((p: any) => ({
+    id: p.pet_id || p.id,
+    latitude: p.lat || myLat.value,
+    longitude: p.lng || myLng.value,
+    iconPath: p.pet_type === 'cat' ? '/static/marker-cat.png' : '/static/marker-dog.png',
+    width: 32,
+    height: 32,
+    callout: {
+      content: `${p.pet_name || p.name} ${p.distance}m · ${p.match_score || '--'}%`,
+      fontSize: 12,
+      borderRadius: 8,
+      padding: 6,
+      display: 'ALWAYS'
+    }
+  }))
+})
 
 /** 确认碰头 */
 async function confirmMeet(m: any) {
@@ -241,7 +286,64 @@ onShow(() => {
   font-size: 24rpx;
   color: #3d6cf5;
   font-weight: 400;
+  margin-left: 16rpx;
 }
+
+.view-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.view-tabs text {
+  font-size: 24rpx;
+  color: #9aa0a6;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #f3f4f6;
+}
+
+.view-tabs text.active {
+  background: #3d6cf5;
+  color: #fff;
+}
+
+/* 地图 */
+.map-wrap {
+  position: relative;
+  margin: 0 24rpx 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.map-legend {
+  position: absolute;
+  bottom: 12rpx;
+  right: 12rpx;
+  background: rgba(255,255,255,.92);
+  border-radius: 10rpx;
+  padding: 8rpx 16rpx;
+  display: flex;
+  gap: 16rpx;
+  font-size: 20rpx;
+}
+
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  color: #4b5563;
+}
+
+.dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.dog { background: #1677ff; }
+.dot.cat { background: #f59e0b; }
 
 /* 附近宠物 */
 .nearby-card {

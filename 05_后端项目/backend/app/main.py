@@ -38,8 +38,18 @@ async def lifespan(app: FastAPI):
     app.state.redis_client = redis_client
     await init_websocket()
     logger.info("✅ 依赖服务连接就绪")
+
+    # V2.0: 碰头超时扫描后台任务（每 60 秒扫描 confirmed 超过 30 分钟的 meet → failed）
+    timeout_task = asyncio.create_task(_meet_timeout_worker(), name="meet-timeout")
+
     yield
+
     # 关闭时执行
+    timeout_task.cancel()
+    try:
+        await timeout_task
+    except asyncio.CancelledError:
+        pass
     await ws_manager.stop()
     await engine.dispose()
     logger.info("🛑 宠迹后端服务关闭")
@@ -202,6 +212,39 @@ app.include_router(orders_router.router)
 app.include_router(points_router.router)
 app.include_router(invites_router.router)
 app.include_router(admin_router.router)
+
+
+# ── V2.0 碰头超时扫描 ─────────────────────────────────────────
+
+async def _meet_timeout_worker():
+    """后台任务：每 60 秒扫描 confirmed 超过 30 分钟的 meet → failed"""
+    # 延迟导入，避免循环
+    from datetime import datetime, timedelta, timezone
+    from app.models import Meet, MeetStatus
+    from app.database import SessionLocal
+    from sqlalchemy import select, update
+
+    await asyncio.sleep(10)  # 启动缓冲，等所有组件就绪
+
+    while True:
+        try:
+            async with SessionLocal() as db:
+                cutoff = datetime.now(timezone.utc) - timedelta(minutes=30)
+                result = await db.execute(
+                    update(Meet)
+                    .where(
+                        Meet.status == MeetStatus.confirmed,
+                        Meet.confirmed_at < cutoff
+                    )
+                    .values(status=MeetStatus.failed)
+                )
+                await db.commit()
+                affected = result.rowcount
+                if affected:
+                    logger.info(f"⏱ 碰头超时扫描：标记 {affected} 条超时记录")
+        except Exception as e:
+            logger.warning(f"碰头超时扫描异常（下次重试）: {e}")
+        await asyncio.sleep(60)
 
 
 # ── 启动入口 ──────────────────────────────────────────────────

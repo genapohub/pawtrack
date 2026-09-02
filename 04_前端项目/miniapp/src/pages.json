@@ -114,6 +114,12 @@
       "style": {
         "navigationBarTitleText": "报警通知"
       }
+    },
+    {
+      "path": "pages/pet-list/pet-list",
+      "style": {
+        "navigationBarTitleText": "我的宠物"
+      }
     }
   ],
   "tabBar": {

@@ -100,6 +100,30 @@ async def my_devices(user: dict = Depends(get_current_user), db: AsyncSession = 
     return {"code": 0, "data": [_device_to_dict(d) for d in devices]}
 
 
+# ── S11 紧急联系人 ──────────────────────────────────────────
+
+@router.get("/me/contacts", response_model=dict)
+async def get_contacts(user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """获取紧急联系人列表"""
+    result = await db.execute(select(User).where(User.id == int(user["sub"])))
+    u = result.scalar_one_or_none()
+    return {"code": 0, "data": u.emergency_contacts or []}
+
+@router.put("/me/contacts", response_model=dict)
+async def save_contacts(body: dict, user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """保存紧急联系人列表 [{phone, name, relation}]"""
+    result = await db.execute(select(User).where(User.id == int(user["sub"])))
+    u = result.scalar_one_or_none()
+    contacts = body.get("contacts", [])
+    # 简单校验
+    for c in contacts:
+        if not c.get("phone") or not c.get("name"):
+            raise HTTPException(400, detail={"code": 40001, "message": "联系人姓名为空或手机号为空"})
+    u.emergency_contacts = contacts
+    await db.commit()
+    return {"code": 0, "data": contacts}
+
+
 @router.delete("/me", response_model=dict)
 async def delete_me(user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """注销账号（软删除：status=deleted，清除敏感字段）"""
@@ -148,3 +172,18 @@ def _device_to_dict(d: Device) -> dict:
         "status": d.status.value if d.status else DeviceStatus.offline.value,
         "last_online_at": d.last_online_at.isoformat() if d.last_online_at else None,
     }
+
+# ── 家人共享 ──────────────────────────────────────────────
+
+@router.get("/me/family", response_model=dict)
+async def get_family(user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    u = (await db.execute(select(User).where(User.id == int(user["sub"])))).scalar_one_or_none()
+    return {"code": 0, "data": u.family_members if u else []}
+
+@router.put("/me/family", response_model=dict)
+async def update_family(body: dict, user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    u = (await db.execute(select(User).where(User.id == int(user["sub"])))).scalar_one_or_none()
+    if u:
+        u.family_members = body.get("members", [])
+        await db.commit()
+    return {"code": 0, "message": "已更新"}

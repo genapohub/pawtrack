@@ -2,7 +2,7 @@
 宠迹 PawTrack — 数据库模型（SQLAlchemy ORM）
 """
 from sqlalchemy import (
-    Column, Integer, BigInteger, String, Text, Boolean, DateTime, ForeignKey,
+    Column, Integer, BigInteger, String, Text, Boolean, DateTime, ForeignKey, JSON,
     Numeric, Enum as SQLEnum, Index, UniqueConstraint, func
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
@@ -42,6 +42,7 @@ class User(Base):
     privacy_location = Column(SQLEnum(PrivacyLevel), default=PrivacyLevel.friends)
     invite_code = Column(String(20), unique=True, index=True)  # 我的邀请码
     invited_by = Column(BigInteger)  # 邀请人 user_id（注册时记录）
+    family_members = Column(JSON, default=list)  # [{name,phone,role}]
     emergency_contacts = Column(JSON, default=list)  # [{name, phone}]
     notify_push = Column(Boolean, default=True)  # Push 通知开关
     notify_sms = Column(Boolean, default=False)  # 短信通知开关（Pro 权益）

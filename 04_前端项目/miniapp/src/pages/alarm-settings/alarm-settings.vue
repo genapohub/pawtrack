@@ -98,6 +98,34 @@
       </view>
     </view>
 
+    <!-- S11 紧急联系人 -->
+    <view class="card">
+      <view class="card-title">📞 紧急联系人</view>
+      <view class="card-sub">报警时同步通知紧急联系人</view>
+
+      <view v-for="(c, i) in contacts" :key="i" class="contact-item">
+        <view class="contact-info">
+          <view class="contact-name">{{ c.name }} · {{ relationLabel(c.relation) }}</view>
+          <view class="contact-phone">{{ c.phone }}</view>
+        </view>
+        <view class="contact-del" @tap="delContact(i)">删除</view>
+      </view>
+
+      <view v-if="contacts.length < 3" class="add-contact-form">
+        <view class="form-row">
+          <input v-model="newContact.name" placeholder="姓名" maxlength="10" class="input-half" />
+          <input v-model="newContact.phone" placeholder="手机号" type="number" maxlength="11" class="input-half" />
+        </view>
+        <view class="form-row">
+          <picker :range="relationOptions" @change="newContact.relation = relationOptions[$event.detail.value]">
+            <view class="picker">{{ newContact.relation || '选择关系' }}</view>
+          </picker>
+          <view class="btn-sm" @tap="addContact">+ 添加</view>
+        </view>
+      </view>
+      <view v-if="contacts.length >= 3" class="hint-text">最多添加 3 位紧急联系人</view>
+    </view>
+
     <view class="save-btn" :class="{ saving }" @tap="save">保存设置</view>
   </view>
 </template>
@@ -120,6 +148,11 @@ const settings = ref({
 })
 const saving = ref(false)
 const fenceCenter = ref({ lat: 34.7466, lng: 113.6253 })
+
+// 紧急联系人
+const contacts = ref<{ phone: string; name: string; relation: string }[]>([])
+const newContact = ref({ name: '', phone: '', relation: '家人' })
+const relationOptions = ['家人', '配偶', '子女', '父母', '朋友']
 const fenceMarker = computed(() => ({
   id: 1, latitude: fenceCenter.value.lat, longitude: fenceCenter.value.lng,
   iconPath: '/static/marker-dog.png', width: 32, height: 32
@@ -135,6 +168,7 @@ onLoad(async (options: any) => {
   petId.value = Number(options.id || 0)
   await loadPet()
   await loadSettings()
+  await loadContacts()
 })
 
 async function loadPet() {
@@ -160,6 +194,28 @@ async function loadSettings() {
   } catch (e) { /* 静默 */ }
 }
 
+async function loadContacts() {
+  try {
+    const data = await http.get<any[]>('/users/me/contacts')
+    contacts.value = data || []
+  } catch (e) { /* 静默 */ }
+}
+
+function relationLabel(r: string) { return r }
+function addContact() {
+  if (!newContact.value.name.trim() || !newContact.value.phone.trim()) {
+    uni.showToast({ title: '姓名和手机号必填', icon: 'none' })
+    return
+  }
+  if (!/^1\d{10}$/.test(newContact.value.phone.trim())) {
+    uni.showToast({ title: '手机号格式不正确', icon: 'none' })
+    return
+  }
+  contacts.value.push({ ...newContact.value })
+  newContact.value = { name: '', phone: '', relation: '家人' }
+}
+function delContact(i: number) { contacts.value.splice(i, 1) }
+
 async function save() {
   saving.value = true
   try {
@@ -176,6 +232,8 @@ async function save() {
       low_battery_threshold: settings.value.low_battery ? 20 : null,
       leave_fence_notify: settings.value.fence_enabled,
     })
+    // 3. 保存紧急联系人
+    await http.put('/users/me/contacts', { contacts: contacts.value })
     uni.showToast({ title: '保存成功！', icon: 'success' })
     setTimeout(() => uni.navigateBack(), 800)
   } catch (e: any) {
@@ -215,4 +273,18 @@ function goBack() { uni.navigateBack() }
 .rule-note { margin-top: 14rpx; font-size: 22rpx; color: #9aa0a6; background: #f8f9fb; border-radius: 12rpx; padding: 14rpx; }
 .save-btn { margin: 30rpx 24rpx 0; text-align: center; background: linear-gradient(135deg, #5b8cff, #3d6cf5); color: #fff; border-radius: 999rpx; padding: 24rpx 0; font-size: 30rpx; font-weight: 600; }
 .save-btn.saving { opacity: .6; }
+
+/* 紧急联系人 */
+.card-sub { font-size: 22rpx; color: #9aa0a6; margin: -4rpx 0 16rpx; }
+.contact-item { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.contact-info { flex: 1; }
+.contact-name { font-size: 28rpx; font-weight: 600; }
+.contact-phone { font-size: 22rpx; color: #9aa0a6; margin-top: 4rpx; }
+.contact-del { font-size: 24rpx; color: #ef4444; }
+.add-contact-form { margin-top: 20rpx; }
+.form-row { display: flex; gap: 12rpx; margin-bottom: 12rpx; align-items: center; }
+.input-half { flex: 1; border: 1rpx solid #e5e7eb; border-radius: 10rpx; padding: 12rpx 16rpx; font-size: 26rpx; }
+.picker { flex: 1; border: 1rpx solid #e5e7eb; border-radius: 10rpx; padding: 12rpx 16rpx; font-size: 26rpx; color: #6b7280; }
+.btn-sm { background: #3d6cf5; color: #fff; padding: 10rpx 24rpx; border-radius: 10rpx; font-size: 24rpx; font-weight: 600; white-space: nowrap; }
+.hint-text { font-size: 22rpx; color: #9aa0a6; margin-top: 12rpx; }
 </style>

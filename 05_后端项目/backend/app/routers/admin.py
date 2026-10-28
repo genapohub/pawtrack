@@ -123,7 +123,7 @@ async def list_users(
     if status:
         conditions.append(User.status == status)
 
-    where = conditions if conditions else [func.true()]
+    where = conditions
     total = (await db.execute(select(func.count()).select_from(User).where(*where))).scalar()
     rows = (await db.execute(
         select(User).where(*where).order_by(User.created_at.desc())
@@ -235,7 +235,7 @@ async def list_devices(
         conditions.append(Device.sn.contains(keyword))
     if status:
         conditions.append(Device.status == status)
-    where = conditions if conditions else [func.true()]
+    where = conditions
 
     total = (await db.execute(select(func.count()).select_from(Device).where(*where))).scalar()
     rows = (await db.execute(
@@ -269,7 +269,7 @@ async def list_alarms(
     conditions = []
     if status:
         conditions.append(Alarm.status == status)
-    where = conditions if conditions else [func.true()]
+    where = conditions
 
     total = (await db.execute(select(func.count()).select_from(Alarm).where(*where))).scalar()
     rows = (await db.execute(
@@ -338,7 +338,7 @@ async def list_orders(
     conditions = []
     if status:
         conditions.append(Order.status == status)
-    where = conditions if conditions else [func.true()]
+    where = conditions
 
     total = (await db.execute(select(func.count()).select_from(Order).where(*where))).scalar()
     rows = (await db.execute(

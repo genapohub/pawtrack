@@ -20,7 +20,7 @@ from typing import Optional
 from datetime import datetime, timezone
 
 from app.database import get_db
-from app.models import Meet, Pet, Device, User, MeetStatus, PetType, PointType, PointsLog
+from app.models import Meet, Pet, Device, User, MeetStatus, PetType, PointType, PointsLog, PrivacyLevel
 from app.auth import get_current_user
 from app.social_rules import MEET_MIN_DISTANCE, MEET_POINTS, DAILY_MEET_LIMIT, haversine as _haversine
 from app import main as app_main
@@ -95,7 +95,6 @@ def _meet_to_dict(meet: Meet) -> dict:
 
 async def _award_points(db: AsyncSession, user_id: int, change: int, point_type: PointType, related_id: str = ""):
     """发放积分并记录"""
-    # 查询当前余额
     user_result = await db.execute(select(User).where(User.id == user_id))
     user = user_result.scalar_one_or_none()
     if not user:
@@ -112,6 +111,35 @@ async def _award_points(db: AsyncSession, user_id: int, change: int, point_type:
         balance=new_balance
     )
     db.add(log)
+
+
+async def _meet_owner_ids(db: AsyncSession, meet: Meet) -> set[int]:
+    pets = (await db.execute(
+        select(Pet.user_id).where(Pet.id.in_([meet.initiator_pet_id, meet.receiver_pet_id]))
+    )).scalars().all()
+    return {int(owner_id) for owner_id in pets}
+
+
+async def _assert_meet_participant(db: AsyncSession, meet: Meet, user_id: int) -> None:
+    if user_id not in await _meet_owner_ids(db, meet):
+        raise HTTPException(403, detail={"code": 40007, "message": "无权操作"})
+
+
+async def _meet_current_distance(db: AsyncSession, meet: Meet) -> Optional[float]:
+    devices = (await db.execute(
+        select(Device).where(Device.pet_id.in_([meet.initiator_pet_id, meet.receiver_pet_id]))
+    )).scalars().all()
+    if len(devices) < 2:
+        return None
+    locs = []
+    for device in devices:
+        loc = await _get_pet_location(device.id)
+        if loc:
+            locs.append(loc)
+    if len(locs) < 2:
+        return None
+    return _haversine(locs[0][0], locs[0][1], locs[1][0], locs[1][1])
+
 
 # ── 接口实现 ──────────────────────────────────────────────
 
@@ -147,15 +175,22 @@ async def find_nearby_pets(
         device_id_str, dist, (lng_val, lat_val) = item
         device_id = int(device_id_str)
 
-        # 查询设备→宠物信息
+        # 查询设备→宠物与主人隐私；猫咪与隐私关闭的用户不参与社交匹配
         dev_result = await db.execute(
-            select(Device, Pet).join(Pet, Device.pet_id == Pet.id).where(Device.id == device_id)
+            select(Device, Pet, User)
+            .join(Pet, Device.pet_id == Pet.id)
+            .join(User, Pet.user_id == User.id)
+            .where(
+                Device.id == device_id,
+                Pet.type == PetType.dog,
+                User.privacy_location != PrivacyLevel.private,
+            )
         )
         row = dev_result.first()
         if not row:
             continue
 
-        device, pet = row
+        device, pet, _owner = row
         # 排除自己的宠物
         if pet.user_id == int(user["sub"]):
             continue
@@ -194,6 +229,8 @@ async def create_meet(
     receiver_pet = initiator_result.scalar_one_or_none()
     if not receiver_pet:
         raise HTTPException(404, detail={"code": 40001, "message": "目标宠物不存在"})
+    if receiver_pet.type != PetType.dog:
+        raise HTTPException(400, detail={"code": 40013, "message": "猫咪不参与碰头匹配"})
 
     # 查询当前用户的第一只宠物作为发起方
     my_pet_result = await db.execute(
@@ -202,6 +239,8 @@ async def create_meet(
     my_pet = my_pet_result.scalar_one_or_none()
     if not my_pet:
         raise HTTPException(400, detail={"code": 40002, "message": "请先添加宠物"})
+    if my_pet.type != PetType.dog:
+        raise HTTPException(400, detail={"code": 40013, "message": "猫咪不参与碰头匹配"})
 
     if my_pet.id == body.receiver_pet_id:
         raise HTTPException(400, detail={"code": 40003, "message": "不能和自己碰头"})
@@ -319,6 +358,13 @@ async def complete_meet(
 
     if meet.status != MeetStatus.confirmed:
         raise HTTPException(400, detail={"code": 40008, "message": "请先确认碰头"})
+    await _assert_meet_participant(db, meet, int(user["sub"]))
+    current_distance = await _meet_current_distance(db, meet)
+    if current_distance is None or current_distance >= 5:
+        raise HTTPException(400, detail={
+            "code": 40012,
+            "message": "双方距离未达到 5m 内，暂不能确认碰头成功"
+        })
 
     meet.status = MeetStatus.success
     meet.completed_at = datetime.now(timezone.utc)
@@ -349,6 +395,7 @@ async def meet_distance(
     meet = result.scalar_one_or_none()
     if not meet:
         raise HTTPException(404, detail={"code": 40005, "message": "碰头记录不存在"})
+    await _assert_meet_participant(db, meet, int(user["sub"]))
 
     # 双方设备
     devices = await db.execute(
@@ -395,6 +442,7 @@ async def cancel_meet(
 
     if meet.status not in [MeetStatus.pending, MeetStatus.confirmed]:
         raise HTTPException(400, detail={"code": 40009, "message": "该碰头已结束"})
+    await _assert_meet_participant(db, meet, int(user["sub"]))
 
     meet.status = MeetStatus.cancelled
     await db.commit()

@@ -19,11 +19,13 @@ from typing import Optional
 from datetime import datetime, timezone
 
 from app.database import get_db
-from app.models import Alarm, Pet, Device, AlarmType, AlarmSeverity, AlarmStatus
+from app.models import Alarm, Pet, Device, User, AlarmType, AlarmSeverity, AlarmStatus
 from app.auth import get_current_user
 from app.main import redis_client
+from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/alarms", tags=["报警"])
+ALARM_SETTINGS_KEY = "alarm:settings:{user_id}"
 
 # ── 请求模型 ──────────────────────────────────────────────
 
@@ -136,7 +138,7 @@ async def list_alarms(
         "pagination": {"page": page, "size": size, "total": total}
     }
 
-@router.get("/{alarm_id}", response_model=dict)
+@router.get("/{alarm_id:int}", response_model=dict)
 async def get_alarm(alarm_id: int, user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """报警详情"""
     result = await db.execute(

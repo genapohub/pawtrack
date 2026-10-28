@@ -10,7 +10,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone
 
 from app.database import get_db
 from app.models import User, PointsLog, PointType
@@ -71,7 +71,7 @@ async def daily_signin(
     db: AsyncSession = Depends(get_db)
 ):
     """每日签到（每天一次，+5 积分）"""
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
     today_start = datetime.combine(today, datetime.min.time(), tzinfo=timezone.utc)
 
     # 检查今天是否已签到

@@ -24,8 +24,8 @@ class PetCreateRequest(BaseModel):
     birthday: Optional[str] = None  # "2024-03-15"
     weight: Optional[float] = Field(None, ge=0, le=100)
     avatar: Optional[str] = None
-    fence_enabled: bool = True
-    fence_radius: int = Field(100, ge=20, le=5000)
+    fence_enabled: Optional[bool] = None
+    fence_radius: Optional[int] = Field(None, ge=20, le=5000)
     fence_center_lat: Optional[float] = Field(None, ge=-90, le=90)
     fence_center_lng: Optional[float] = Field(None, ge=-180, le=180)
 
@@ -99,15 +99,15 @@ async def create_pet(body: PetCreateRequest, user: dict = Depends(get_current_us
         raise HTTPException(400, detail={"code": 20006, "message": "免费版最多添加3只宠物，请升级会员"})
 
     from decimal import Decimal
+    if body.pet_type == PetType.cat and body.fence_enabled is False:
+        raise HTTPException(400, detail={"code": 20009, "message": "猫咪离家报警不可关闭"})
+    fence_enabled = body.fence_enabled if body.fence_enabled is not None else body.pet_type == PetType.cat
+    fence_radius = body.fence_radius or (100 if body.pet_type == PetType.cat else 300)
     fence_center_lat = None
     fence_center_lng = None
     if body.fence_center_lat and body.fence_center_lng:
         fence_center_lat = Decimal(str(body.fence_center_lat))
         fence_center_lng = Decimal(str(body.fence_center_lng))
-    elif body.fence_enabled:
-        # 默认围栏：猫咪100m，狗狗300m
-        default_radius = 100 if body.pet_type == PetType.cat else 300
-        body.fence_radius = default_radius
 
     pet = Pet(
         user_id=int(user["sub"]),
@@ -118,10 +118,10 @@ async def create_pet(body: PetCreateRequest, user: dict = Depends(get_current_us
         birthday=datetime.fromisoformat(body.birthday) if body.birthday else None,
         weight=body.weight,
         avatar=body.avatar,
-        fence_enabled=body.fence_enabled,
+        fence_enabled=fence_enabled,
         fence_center_lat=fence_center_lat,
         fence_center_lng=fence_center_lng,
-        fence_radius=body.fence_radius
+        fence_radius=fence_radius
     )
     db.add(pet)
     await db.commit()
@@ -151,7 +151,10 @@ async def update_pet(pet_id: int, body: PetUpdateRequest, user: dict = Depends(g
     if body.birthday is not None: pet.birthday = datetime.fromisoformat(body.birthday)
     if body.weight is not None: pet.weight = body.weight
     if body.avatar is not None: pet.avatar = body.avatar
-    if body.fence_enabled is not None: pet.fence_enabled = body.fence_enabled
+    if body.fence_enabled is not None:
+        if pet.type == PetType.cat and body.fence_enabled is False:
+            raise HTTPException(400, detail={"code": 20009, "message": "猫咪离家报警不可关闭"})
+        pet.fence_enabled = body.fence_enabled
     if body.fence_radius is not None: pet.fence_radius = body.fence_radius
 
     await db.commit()
@@ -188,6 +191,8 @@ async def update_fence(pet_id: int, body: PetFenceRequest, user: dict = Depends(
     pet = result.scalar_one_or_none()
     if not pet:
         raise HTTPException(404, detail={"code": 20002, "message": "宠物不存在"})
+    if pet.type == PetType.cat and body.fence_enabled is False:
+        raise HTTPException(400, detail={"code": 20009, "message": "猫咪离家报警不可关闭"})
 
     pet.fence_enabled = body.fence_enabled
     if body.fence_radius is not None:

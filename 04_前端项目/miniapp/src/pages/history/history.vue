@@ -117,6 +117,7 @@ function formatTime(ts: number): string {
 
 function goBack() { uni.navigateBack() }
 function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
+function goPro() { goMember() }
 </script>
 
 <style scoped>

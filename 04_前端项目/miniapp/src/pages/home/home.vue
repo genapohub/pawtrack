@@ -24,7 +24,7 @@
       ></map>
       <!-- 坐标浮标 -->
       <view class="coord-badge">
-        {{ location.lat ? location.lat.toFixed(4) + ', ' + location.lng.toFixed(4) : '等待定位...' }}
+        {{ location.lat !== null && location.lng !== null ? location.lat.toFixed(4) + ', ' + location.lng.toFixed(4) : '等待定位...' }}
       </view>
     </view>
 

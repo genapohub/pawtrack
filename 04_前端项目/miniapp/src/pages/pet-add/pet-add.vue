@@ -64,7 +64,7 @@
           <switch
             :checked="form.fence_enabled"
             color="#3D6CF5"
-            @change="form.fence_enabled = $event.detail.value"
+            @change="form.fence_enabled = eventValue($event)"
           />
         </view>
         <view v-if="form.fence_enabled" class="slider-row">
@@ -99,7 +99,7 @@ const genders = [
   { label: '未知', value: 'unknown' },
   { label: '男孩', value: 'male' },
   { label: '女孩', value: 'female' },
-]
+] as const
 
 const form = reactive({
   name: '',
@@ -107,7 +107,7 @@ const form = reactive({
   breed: '',
   gender: 'unknown' as 'unknown' | 'male' | 'female',
   weight: '',
-  fence_enabled: true,
+  fence_enabled: false,
   fence_radius: 300,
 })
 
@@ -115,8 +115,13 @@ const loading = ref(false)
 
 function selectType(t: 'cat' | 'dog') {
   form.pet_type = t
-  // 切换类型时同步默认围栏半径（猫 100m / 狗 300m）
+  // 猫咪默认开启 100m，狗狗默认关闭、开启后为 300m
+  form.fence_enabled = t === 'cat'
   form.fence_radius = t === 'cat' ? 100 : 300
+}
+
+function eventValue(event: unknown): boolean {
+  return Boolean((event as { detail?: { value?: boolean } }).detail?.value)
 }
 
 async function handleSubmit() {

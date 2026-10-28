@@ -1,10 +1,10 @@
 <template>
   <view class="page">
     <!-- 当前会员状态 -->
-    <view class="member-hero" :class="'lv-' + (sub?.level || 'free')">
-      <view class="hero-icon">{{ levelIcon(sub?.level) }}</view>
+    <view class="member-hero" :class="'lv-' + currentLevel()">
+      <view class="hero-icon">{{ levelIcon(currentLevel()) }}</view>
       <view class="hero-info">
-        <view class="hero-level">{{ levelLabel(sub?.level) }}</view>
+        <view class="hero-level">{{ levelLabel(currentLevel()) }}</view>
         <view class="hero-expire" v-if="sub?.expire_at">
           有效期至 {{ formatDate(sub.expire_at) }}
           <text v-if="sub?.auto_renew" class="renew-tag">自动续费</text>
@@ -88,6 +88,13 @@ const benefits = [
   { level: 'basic', items: ['定位 5 秒/次', '轨迹无限', '围栏报警', '3 台设备', '附近宠物'] },
   { level: 'pro', items: ['定位 5 秒/次', '轨迹无限', '围栏报警', '10 台设备', '家人共享 5 人', '优先客服'] },
 ]
+
+function currentLevel(): 'free' | 'basic' | 'pro' {
+  const plan = sub.value?.plan || 'free'
+  if (plan.startsWith('basic')) return 'basic'
+  if (plan.startsWith('pro')) return 'pro'
+  return 'free'
+}
 
 function levelIcon(level: string | undefined): string {
   return LEVEL_META[level || 'free'].icon

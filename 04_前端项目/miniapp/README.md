@@ -56,7 +56,7 @@ npm run dev:mp-weixin
 
 | 页面 | 路由 | 说明 |
 |------|------|------|
-| 登录注册 | /pages/login/login | 手机号+验证码（MVP 任意码）或微信一键登录 |
+| 登录注册 | /pages/login/login | 手机号+验证码（开发环境固定码 123456）或微信一键登录 |
 | 地图首页 | /pages/home/home（tabBar） | 宠物实时位置、围栏、模拟定位上报 |
 | 添加宠物 | /pages/pet-add/pet-add | 猫狗类型差异化围栏 |
 | 绑定设备 | /pages/device-bind/device-bind | SN+激活码注册，可选绑定宠物 |

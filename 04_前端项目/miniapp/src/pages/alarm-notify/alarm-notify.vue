@@ -5,14 +5,14 @@
       <view class="section-title">🔔 通知渠道</view>
       <view class="switch-row">
         <text>App Push 推送</text>
-        <switch :checked="form.notify_push" color="#3D6CF5" @change="form.notify_push = $event.detail.value" />
+        <switch :checked="form.notify_push" color="#3D6CF5" @change="form.notify_push = eventValue($event)" />
       </view>
       <view class="switch-row">
         <view class="switch-label">
           <text>短信通知</text>
           <text class="pro-tag">Pro</text>
         </view>
-        <switch :checked="form.notify_sms" color="#3D6CF5" @change="form.notify_sms = $event.detail.value" />
+        <switch :checked="form.notify_sms" color="#3D6CF5" @change="form.notify_sms = eventValue($event)" />
       </view>
     </view>
 
@@ -77,6 +77,10 @@ onShow(async () => {
     if (data) Object.assign(form, data)
   } catch (e) { /* 默认值 */ }
 })
+
+function eventValue(event: unknown): boolean {
+  return Boolean((event as { detail?: { value?: boolean } }).detail?.value)
+}
 
 function addContact() {
   if (!newName.value.trim() || !newPhone.value.trim()) {

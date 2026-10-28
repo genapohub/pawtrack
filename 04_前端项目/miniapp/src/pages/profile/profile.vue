@@ -120,6 +120,7 @@ async function loadStats() {
 }
 
 function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
+function goPro() { goMember() }
 function goPoints() { uni.switchTab({ url: '/pages/points/points' }) }
 function goInvite() { uni.navigateTo({ url: '/pages/invite/invite' }) }
 function goDevices() { uni.navigateTo({ url: '/pages/device-manage/device-manage' }) }

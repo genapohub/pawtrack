@@ -113,7 +113,7 @@ function sendCode() {
     uni.showToast({ title: '请输入正确的手机号', icon: 'none' })
     return
   }
-  uni.showToast({ title: '验证码已发送（MVP：任意数字即可）', icon: 'none' })
+  uni.showToast({ title: '开发环境验证码：123456', icon: 'none' })
   countdown.value = 60
   const timer = setInterval(() => {
     countdown.value--

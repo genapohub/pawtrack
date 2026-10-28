@@ -29,7 +29,6 @@ def setup_metrics(app: Any) -> None:
         return
 
     _metrics_instrumentator = Instrumentator(
-        should_gzip=True,
         should_round_latency_decimals=True,
         excluded_handlers=["/health", "/metrics"],
     )

@@ -29,8 +29,12 @@ class TestSystem:
         resp = client.get("/health")
         assert resp.status_code == 200
         body = resp.json()
-        assert body["status"] == "ok"
-        assert body["version"] == "0.4.0"
+        assert body["status"] == "healthy"
+        assert {name: check["status"] for name, check in body["checks"].items()} == {
+            "postgres": "up",
+            "redis": "up",
+            "mongodb": "up",
+        }
 
     def test_root(self, client):
         resp = client.get("/")

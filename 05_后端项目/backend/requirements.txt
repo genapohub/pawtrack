@@ -6,6 +6,7 @@ asyncpg==0.29.0
 geoalchemy2==0.15.0
 redis[hiredis]==5.0.7
 motor==3.5.1            # MongoDB async driver
+pymongo==4.8.0          # Motor 3.5.1 兼容版本，避免新版 _QUERY_OPTIONS 破坏健康检查
 aio-pika==9.4.1         # RabbitMQ async driver
 paho-mqtt==2.0.0        # MQTT client
 PyJWT[crypto]==2.8.0    # JWT with RSA support

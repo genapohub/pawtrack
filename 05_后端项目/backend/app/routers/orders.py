@@ -9,21 +9,24 @@
 5. 会员权益检查
 6. Outbox Pattern 保证支付-订阅最终一致性
 """
+import hashlib
+import hmac
 import uuid
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 
+from app.config import settings
 from app.database import get_db
 from app.models import (
     Order, Subscription, User, MemberLevel,
     OrderStatus, PayChannel, SubscriptionPlan, SubscriptionStatus,
     EventOutbox
 )
-from app.auth import get_current_user
+from app.auth import get_current_user, get_current_user_optional
 from app.plans import PLAN_CONFIG
 
 router = APIRouter(prefix="/api/v1/orders", tags=["订单订阅"])
@@ -123,7 +126,9 @@ async def create_order(
 @router.post("/pay-callback", response_model=dict)
 async def pay_callback(
     body: PayCallbackRequest,
-    db: AsyncSession = Depends(get_db)
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    user: Optional[dict] = Depends(get_current_user_optional)
 ):
     """
     支付回调（MVP：模拟支付成功）
@@ -134,6 +139,19 @@ async def pay_callback(
     order = result.scalar_one_or_none()
     if not order:
         raise HTTPException(404, detail={"code": 50001, "message": "订单不存在"})
+
+    signature = request.headers.get("x-pay-signature", "")
+    valid_signature = False
+    if settings.PAY_CALLBACK_SECRET and signature:
+        expected = hmac.new(
+            settings.PAY_CALLBACK_SECRET.encode(),
+            f"{body.order_no}:{body.transaction_id}".encode(),
+            hashlib.sha256,
+        ).hexdigest()
+        valid_signature = hmac.compare_digest(expected, signature)
+    owner_allowed = settings.is_dev and user and int(user["sub"]) == order.user_id
+    if not valid_signature and not owner_allowed:
+        raise HTTPException(401, detail={"code": 50004, "message": "支付回调验签失败"})
 
     if order.status != OrderStatus.pending:
         raise HTTPException(400, detail={"code": 50002, "message": "订单状态异常"})

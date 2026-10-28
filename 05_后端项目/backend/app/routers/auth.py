@@ -7,8 +7,9 @@ from sqlalchemy import select, text
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 from typing import Optional
-import uuid
+import hashlib
 
+from app.config import settings
 from app.database import get_db
 from app.models import User, MemberLevel
 from app.auth import (
@@ -46,9 +47,8 @@ class RefreshRequest(BaseModel):
 # ── 工具函数 ──────────────────────────────────────────────
 
 async def _verify_sms_code(phone: str, code: str) -> bool:
-    """验证短信验证码（MVP阶段：跳过验证，直接返回 True）"""
-    # TODO: 接入短信服务后实现
-    return True
+    """验证短信验证码；开发环境使用固定码，生产等待真实短信服务接入"""
+    return settings.is_dev and code == settings.DEV_SMS_CODE
 
 async def _get_user_device_ids(db: AsyncSession, user_id: int) -> list:
     # MVP 阶段返回空列表，后续从 devices 表查询
@@ -136,6 +136,8 @@ async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(404, detail={"code": 20001, "message": "用户不存在，请先注册"})
+    if user.status != "active":
+        raise HTTPException(403, detail={"code": 10009, "message": "账号已被限制，请联系客服"})
 
     # 更新最后登录时间
     user.last_login_at = datetime.now(timezone.utc)
@@ -159,8 +161,8 @@ async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
 @router.post("/wechat-login", response_model=TokenResponse)
 async def wechat_login(body: WechatLoginRequest, db: AsyncSession = Depends(get_db)):
     """微信登录（MVP：模拟实现）"""
-    # TODO: 用 code 换 openid（接入微信开放平台）
-    wechat_openid = f"mock_openid_{uuid.uuid4().hex[:8]}"
+    # TODO: 接入微信开放平台后用 code 换正式 openid
+    wechat_openid = f"mock_openid_{hashlib.sha256(body.code.encode()).hexdigest()[:24]}"
 
     result = await db.execute(select(User).where(User.wechat_openid == wechat_openid))
     user = result.scalar_one_or_none()
@@ -189,11 +191,11 @@ async def wechat_login(body: WechatLoginRequest, db: AsyncSession = Depends(get_
         "access_token": access,
         "refresh_token": refresh,
         "token_type": "Bearer",
-        "expires_in": 7202
+        "expires_in": 7200
     })
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh_token(body: RefreshRequest):
+async def refresh_token(body: RefreshRequest, db: AsyncSession = Depends(get_db)):
     """刷新 Token"""
     try:
         payload = decode_token(body.refresh_token)
@@ -203,6 +205,9 @@ async def refresh_token(body: RefreshRequest):
         raise HTTPException(401, detail={"code": 10007, "message": "Refresh Token 已过期，请重新登录"})
 
     user_id = int(payload["sub"])
+    user_result = await db.execute(select(User.status).where(User.id == user_id))
+    if user_result.scalar_one_or_none() != "active":
+        raise HTTPException(403, detail={"code": 10009, "message": "账号已被限制，请联系客服"})
 
     # TODO: 从数据库验证 refresh_token 是否已被吊销
 

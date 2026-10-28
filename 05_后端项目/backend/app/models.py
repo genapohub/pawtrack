@@ -30,7 +30,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(BigInteger, primary_key=True)
-    phone = Column(String(20), unique=True, nullable=False, index=True)
+    phone = Column(String(20), unique=True, nullable=True, index=True)
     nickname = Column(String(50))
     avatar = Column(String(255))
     wechat_openid = Column(String(64), unique=True)

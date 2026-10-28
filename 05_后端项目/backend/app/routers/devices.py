@@ -8,6 +8,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 
+from app.config import settings
 from app.database import get_db
 from app.models import Device, User
 from app.auth import get_current_user
@@ -41,7 +42,11 @@ class DeviceResponse(BaseModel):
 @router.post("/register", response_model=dict)
 async def register_device(body: DeviceRegisterRequest, db: AsyncSession = Depends(get_db)):
     """设备注册（获取 JWT Token，无需用户登录）"""
-    # TODO: 验证 activation_code（MVP 阶段跳过）
+    allowed_codes = {code.strip() for code in settings.DEVICE_ACTIVATION_CODES.split(",") if code.strip()}
+    if settings.is_dev and not allowed_codes:
+        allowed_codes = {"PT-TEST-0001"}
+    if body.activation_code not in allowed_codes:
+        raise HTTPException(400, detail={"code": 20007, "message": "设备激活码无效"})
 
     result = await db.execute(select(Device).where(Device.sn == body.sn))
     existing = result.scalar_one_or_none()
@@ -80,6 +85,8 @@ async def bind_device(body: DeviceBindRequest, user: dict = Depends(get_current_
     device = result.scalar_one_or_none()
     if not device:
         raise HTTPException(404, detail={"code": 20003, "message": "设备不存在"})
+    if device.user_id is not None and device.user_id != int(user["sub"]):
+        raise HTTPException(409, detail={"code": 40901, "message": "设备已被其他用户绑定"})
 
     # 验证宠物属于当前用户
     from app.models import Pet

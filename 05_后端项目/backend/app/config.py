@@ -52,6 +52,11 @@ class Settings(BaseSettings):
     WECHAT_APP_ID: Optional[str] = None
     WECHAT_APP_SECRET: Optional[str] = None
 
+    # ── 开发与安全验收 ─────────────────────────────
+    DEV_SMS_CODE: str = "123456"
+    PAY_CALLBACK_SECRET: Optional[str] = None
+    DEVICE_ACTIVATION_CODES: str = ""
+
     # ── 后台管理系统 ─────────────────────────────
     ADMIN_USERNAME: str = "admin"
     ADMIN_PASSWORD: str = "pawtrack_admin_2026"

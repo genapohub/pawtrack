@@ -9,6 +9,7 @@ from typing import Optional, Dict, Any
 from fastapi import HTTPException, status, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.config import settings
+from app.database import SessionLocal
 
 # ── 加载密钥 ──────────────────────────────────────────────
 
@@ -108,15 +109,29 @@ def decode_token(token: str) -> Dict[str, Any]:
 
 security = HTTPBearer(auto_error=False)
 
+async def _ensure_account_active(payload: Dict[str, Any]) -> None:
+    if payload.get("member_level") == "device":
+        return
+    from sqlalchemy import select
+    from app.models import User
+
+    async with SessionLocal() as db:
+        result = await db.execute(select(User.status).where(User.id == int(payload["sub"])))
+        status_value = result.scalar_one_or_none()
+    if status_value != "active":
+        raise HTTPException(status_code=403, detail={"code": 10009, "message": "账号已被限制，请联系客服"})
+
+
 async def get_current_user(request: Request, credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> Dict[str, Any]:
     """获取当前用户（从 Authorization Header 解析 JWT）"""
     if not credentials:
         raise HTTPException(status_code=401, detail={"code": 10001, "message": "未提供 Token"})
     payload = decode_token(credentials.credentials)
-    # 用户 token 的 sub 为数字字符串，转为 int 以便与 BIGINT 主键比较
     if payload.get("token_type") == "access" and payload.get("sub", "").isdigit():
         payload["sub"] = int(payload["sub"])
+    await _ensure_account_active(payload)
     return payload
+
 
 async def get_current_user_optional(request: Request) -> Optional[Dict[str, Any]]:
     """获取当前用户（可选，用于公开接口）"""
@@ -127,6 +142,7 @@ async def get_current_user_optional(request: Request) -> Optional[Dict[str, Any]
         payload = decode_token(auth[7:])
         if payload.get("token_type") == "access" and payload.get("sub", "").isdigit():
             payload["sub"] = int(payload["sub"])
+        await _ensure_account_active(payload)
         return payload
     except HTTPException:
         return None

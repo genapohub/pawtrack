@@ -7,11 +7,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from typing import Optional
 from pydantic import BaseModel, Field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+from motor.motor_asyncio import AsyncIOMotorClient
 
+from app.config import settings
 from app.database import get_db
 from app.models import Pet, Device, User, MemberLevel
-from app.auth import get_current_user, decode_token
+from app.auth import get_current_user
 from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/location", tags=["定位"])
@@ -41,16 +43,34 @@ class RealtimeLocationResponse(BaseModel):
     battery: int
     ts: int
 
+_mongo_client: Optional[AsyncIOMotorClient] = None
+
+
+def _locations_collection():
+    global _mongo_client
+    if _mongo_client is None:
+        _mongo_client = AsyncIOMotorClient(settings.MONGODB_URL)
+    return _mongo_client.get_default_database()["locations"]
+
+
 # ── 接口实现 ──────────────────────────────────────────────
 
 @router.post("/upload", response_model=dict)
-async def upload_location(body: LocationUploadRequest, db: AsyncSession = Depends(get_db)):
-    """设备定位数据上报（设备 JWT 或内网调用）"""
-    # 验证设备是否存在
+async def upload_location(
+    body: LocationUploadRequest,
+    user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """设备定位数据上报；生产要求设备 JWT，开发允许归属用户模拟上报"""
     result = await db.execute(select(Device).where(Device.id == body.device_id))
     device = result.scalar_one_or_none()
     if not device:
         raise HTTPException(404, detail={"code": 20003, "message": "设备不存在"})
+
+    is_device_token = user.get("member_level") == "device" and int(user["sub"]) == body.device_id
+    is_owner_simulation = settings.is_dev and device.user_id == int(user["sub"])
+    if not is_device_token and not is_owner_simulation:
+        raise HTTPException(403, detail={"code": 20008, "message": "无权上报该设备定位"})
 
     # 1. 写入 Redis Stream（缓冲层，所有字段 string）
     stream_data_full = {
@@ -77,6 +97,22 @@ async def upload_location(body: LocationUploadRequest, db: AsyncSession = Depend
 
     # 2. 更新 Redis GEO（实时查询用）
     await app_main.redis_client.geoadd("location:geo:nearby", (body.lng, body.lat, str(body.device_id)))
+
+    await _locations_collection().insert_one({
+        "device_id": body.device_id,
+        "pet_id": device.pet_id,
+        "user_id": device.user_id,
+        "lat": body.lat,
+        "lng": body.lng,
+        "accuracy": body.accuracy,
+        "altitude": body.altitude,
+        "speed": body.speed,
+        "source": body.source,
+        "is_indoor": body.is_indoor,
+        "battery": body.battery,
+        "ts": body.ts,
+        "created_at": datetime.now(timezone.utc),
+    })
 
     # 3. 更新设备在线状态
     device.last_online_at = datetime.now(timezone.utc)
@@ -160,5 +196,28 @@ async def get_location_history(
     if not pet:
         raise HTTPException(404, detail={"code": 20002, "message": "宠物不存在"})
 
-    # TODO: 从 MongoDB 查询（后续消费者实现后补充）
-    return {"code": 0, "data": [], "pagination": {"total": 0}}
+    device_result = await db.execute(select(Device).where(Device.pet_id == pet_id))
+    device = device_result.scalar_one_or_none()
+    if not device:
+        raise HTTPException(404, detail={"code": 20003, "message": "该宠物未绑定设备"})
+
+    owner_result = await db.execute(select(User).where(User.id == int(user["sub"])))
+    owner = owner_result.scalar_one_or_none()
+    if owner and owner.member_level == MemberLevel.free:
+        retention_start = int((datetime.now(timezone.utc) - timedelta(days=7)).timestamp())
+        start = max(start or 0, retention_start)
+
+    query = {"device_id": device.id}
+    if start is not None:
+        query["ts"] = {"$gte": start}
+    if end is not None:
+        query.setdefault("ts", {})["$lte"] = end
+
+    collection = _locations_collection()
+    total = await collection.count_documents(query)
+    cursor = collection.find(
+        query,
+        {"_id": 0, "ts": 1, "lat": 1, "lng": 1, "accuracy": 1, "source": 1, "battery": 1},
+    ).sort("ts", 1).limit(500)
+    items = await cursor.to_list(length=500)
+    return {"code": 0, "data": items, "pagination": {"total": total}}

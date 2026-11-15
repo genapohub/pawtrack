@@ -21,22 +21,23 @@ export default function DashboardPage() {
   if (!data) return null
 
   const cards = [
-    { title: '注册用户', value: data.users, icon: <UserOutlined />, color: '#3B82F6' },
-    { title: '宠物档案', value: data.pets, icon: <span>🐾</span>, color: '#F59E0B' },
-    { title: '设备总数', value: data.devices, icon: <ApiOutlined />, color: '#8B5CF6' },
-    { title: '在线设备', value: data.online_devices, icon: <ThunderboltOutlined />, color: '#10B981' },
-    { title: '待处理报警', value: data.active_alarms, icon: <BellOutlined />, color: '#EF4444' },
-    { title: '今日报警', value: data.today_alarms, icon: <BellOutlined />, color: '#F59E0B' },
-    { title: '已支付订单', value: data.paid_orders, icon: <ShoppingCartOutlined />, color: '#06B6D4' },
-    { title: '累计营收', value: data.revenue, prefix: '¥', precision: 2, icon: <DollarOutlined />, color: '#10B981' },
-    { title: '碰头总数', value: data.meets, icon: <CheckCircleOutlined />, color: '#3B82F6' },
-    { title: '成功碰头', value: data.success_meets, icon: <CheckCircleOutlined />, color: '#10B981' },
-    { title: '活跃订阅', value: data.active_subs, icon: <ShoppingCartOutlined />, color: '#8B5CF6' }
+    { title: '注册用户', value: data.users, icon: <UserOutlined />, color: 'var(--pt-accent)' },
+    { title: '宠物档案', value: data.pets, icon: <UserOutlined />, color: 'var(--pt-warning)' },
+    { title: '设备总数', value: data.devices, icon: <ApiOutlined />, color: 'var(--pt-accent)' },
+    { title: '在线设备', value: data.online_devices, icon: <ThunderboltOutlined />, color: 'var(--pt-success)' },
+    { title: '待处理报警', value: data.active_alarms, icon: <BellOutlined />, color: 'var(--pt-danger)' },
+    { title: '今日报警', value: data.today_alarms, icon: <BellOutlined />, color: 'var(--pt-warning)' },
+    { title: '已支付订单', value: data.paid_orders, icon: <ShoppingCartOutlined />, color: 'var(--pt-accent)' },
+    { title: '累计营收', value: data.revenue, prefix: '¥', precision: 2, icon: <DollarOutlined />, color: 'var(--pt-success)' },
+    { title: '碰头总数', value: data.meets, icon: <CheckCircleOutlined />, color: 'var(--pt-accent)' },
+    { title: '成功碰头', value: data.success_meets, icon: <CheckCircleOutlined />, color: 'var(--pt-success)' },
+    { title: '活跃订阅', value: data.active_subs, icon: <ShoppingCartOutlined />, color: 'var(--pt-accent)' }
   ]
 
   return (
     <>
-      <h2 style={{ marginBottom: 16 }}>数据概览</h2>
+      <h2 style={{ marginBottom: 8 }}>数据概览</h2>
+      <p className="pt-page-note">数据概览中的订单与营收来自本地 Mock，不得理解为真实营收或已到账。</p>
       <Row gutter={[16, 16]}>
         {cards.map((c, i) => (
           <Col xs={12} sm={8} md={6} key={i}>

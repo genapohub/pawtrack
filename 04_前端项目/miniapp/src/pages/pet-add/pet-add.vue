@@ -1,6 +1,7 @@
 <template>
   <view class="page">
-    <view class="card">
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<view class="card">
       <!-- 宠物名称 -->
       <view class="form-item">
         <view class="label">宠物名称 <text class="required">*</text></view>
@@ -16,14 +17,14 @@
             :class="{ active: form.pet_type === 'cat' }"
             @tap="selectType('cat')"
           >
-            🐱 猫咪
+            猫
           </view>
           <view
             class="type-option"
             :class="{ active: form.pet_type === 'dog' }"
             @tap="selectType('dog')"
           >
-            🐶 狗狗
+            狗
           </view>
         </view>
         <view class="type-hint">
@@ -63,7 +64,7 @@
           <view class="label">安全围栏</view>
           <switch
             :checked="form.fence_enabled"
-            color="#3D6CF5"
+            color="var(--pt-accent)"
             @change="form.fence_enabled = eventValue($event)"
           />
         </view>
@@ -74,11 +75,11 @@
             min="20"
             max="5000"
             step="10"
-            activeColor="#3D6CF5"
+            activeColor="var(--pt-accent)"
             @change="form.fence_radius = $event.detail.value"
           />
           <view class="slider-hint">
-            默认：猫咪 100m · 狗狗 300m（{{ form.pet_type === 'cat' ? '🐱' : '🐶' }}）
+            默认：猫 100m 锁定、狗 300m 默关
           </view>
         </view>
       </view>
@@ -160,7 +161,7 @@ async function handleSubmit() {
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding: 24rpx 0 60rpx;
 }
 
@@ -170,12 +171,12 @@ async function handleSubmit() {
 
 .label {
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
   margin-bottom: 14rpx;
 }
 
 .required {
-  color: #ef4444;
+  color: var(--pt-danger);
 }
 
 .label-row {
@@ -185,7 +186,7 @@ async function handleSubmit() {
 }
 
 .input {
-  background: #f6f7fb;
+  background: var(--pt-bg);
   border-radius: 16rpx;
   padding: 20rpx 24rpx;
   font-size: 28rpx;
@@ -202,17 +203,17 @@ async function handleSubmit() {
   text-align: center;
   padding: 28rpx 0;
   border-radius: 16rpx;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   border: 3rpx solid transparent;
   font-size: 28rpx;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 .type-option.active {
-  background: #eef2ff;
-  border-color: #3d6cf5;
-  color: #3d6cf5;
+  background: var(--pt-accent-subtle);
+  border-color: var(--pt-accent);
+  color: var(--pt-accent);
 }
 
 .type-option.small {
@@ -223,7 +224,7 @@ async function handleSubmit() {
 .type-hint {
   margin-top: 14rpx;
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
 }
 
 /* 围栏滑块 */
@@ -233,13 +234,13 @@ async function handleSubmit() {
 
 .slider-label {
   font-size: 26rpx;
-  color: #3d6cf5;
+  color: var(--pt-accent);
   font-weight: 600;
 }
 
 .slider-hint {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 8rpx;
 }
 

@@ -1,58 +1,36 @@
 <template>
   <view class="page">
-    <view class="navbar-sm">
-      <view class="back" @tap="goBack">‹</view>
-      设备管理
-      <view class="plus" @tap="goBind">＋</view>
+    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+
+    <view v-if="loadError" class="pt-card">
+      <view class="err-box">设备列表加载失败，请重试。失败不会把列表清空成「暂无设备」。</view>
+      <view class="btn-primary" @tap="loadDevices">重新加载</view>
     </view>
 
-    <!-- 设备列表 -->
-    <view v-if="devices.length > 0" class="device-list">
-      <view v-for="d in devices" :key="d.id" class="card device-card">
-        <view class="dev-head">
-          <view class="dev-icon" :class="d.hardware_type === 'cat' ? 'cat' : 'dog'">
-            {{ d.hardware_type === 'cat' ? '🐱' : '🐶' }}
-          </view>
-          <view class="dev-info">
-            <view class="dev-name">{{ d.sn }}</view>
-            <view class="dev-sub">
-              {{ d.hardware_type === 'cat' ? '猫咪定位器' : '狗狗定位器' }}
-              · 固件 {{ d.firmware_version || 'v1.0.0' }}
-            </view>
-          </view>
-          <view class="badge" :class="statusClass(d.status)">{{ statusText(d.status) }}</view>
-        </view>
+    <view v-else-if="!devices.length" class="pt-card">
+      <view class="empty-title">还没有定位器</view>
+      <view class="empty-desc">添加宠物后可绑定定位器。绑定是示意，不是真机配对。</view>
+      <view class="btn-primary" @tap="goBind">绑定定位器</view>
+    </view>
 
-        <!-- 电量 -->
-        <view class="battery-row">
-          <text>🔋 电量</text>
-          <view class="battery-bar">
-            <view class="battery-fill" :class="batteryClass(d.battery_level)" :style="{ width: (d.battery_level || 0) + '%' }"></view>
+    <view v-else class="list">
+      <view v-for="d in devices" :key="d.id" class="pt-card device-card">
+        <view class="dev-row">
+          <view class="dev-meta">
+            <view class="sn">{{ d.sn }}</view>
+            <view class="sub">绑定宠物：{{ petLabel(d) }}</view>
           </view>
-          <text class="battery-num">{{ d.battery_level || 0 }}%</text>
-        </view>
-
-        <!-- 绑定宠物 -->
-        <view v-if="d.pet_id" class="bound-row">🐾 已绑定宠物 #{{ d.pet_id }}</view>
-        <view v-else class="bound-row gray">未绑定宠物</view>
-
-        <!-- 操作 -->
-        <view class="btn-row">
-          <view class="outline-btn" @tap="findDevice(d)">🔔 查找设备</view>
-          <view class="outline-btn" @tap="checkUpdate(d)">🔄 检查固件</view>
-          <view class="outline-btn red" @tap="unbind(d)">解绑</view>
+          <text class="tag" :class="statusClass(d)">{{ statusLabel(d) }}</text>
         </view>
       </view>
-    </view>
 
-    <!-- 空状态 -->
-    <view v-else class="empty-state">
-      <view class="empty-icon">📡</view>
-      <view class="empty-text">还没有绑定设备</view>
-      <view class="empty-action" @tap="goBind">+ 绑定新设备</view>
+      <view v-if="unbindError" class="err-box unbind-err">{{ unbindError }}</view>
+      <view
+        v-if="devices.length"
+        class="btn-danger unbind-btn"
+        @tap="unbind(devices[0])"
+      >{{ unbindError ? '再次尝试解绑' : '解绑设备' }}</view>
     </view>
-
-    <view class="tip">💡 免费版最多绑定 1 台设备，升级会员可绑定更多</view>
   </view>
 </template>
 
@@ -60,112 +38,77 @@
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { http } from '@/utils/request'
+import { PT } from '@/styles/tokens'
 
 const devices = ref<any[]>([])
+const loadError = ref(false)
+const unbindError = ref('')
 
 onShow(loadDevices)
 
 async function loadDevices() {
+  loadError.value = false
   try {
     devices.value = (await http.get<any[]>('/devices')) || []
   } catch (e) {
-    uni.showToast({ title: '加载设备失败', icon: 'none' })
+    loadError.value = true
   }
 }
 
-function statusText(status: string): string {
-  return { online: '● 在线', offline: '○ 离线', low_battery: '⚠ 低电量' }[status] || status
-}
-
-function statusClass(status: string): string {
-  return { online: 'green', offline: 'gray', low_battery: 'orange' }[status] || 'gray'
-}
-
-function batteryClass(level: number): string {
-  if (level == null) return 'warn'
-  if (level < 20) return 'low'
-  if (level < 50) return 'warn'
-  return 'ok'
-}
-
-async function findDevice(d: any) {
-  try {
-    await http.post(`/devices/${d.id}/find`)
-    uni.showToast({ title: '已发送查找指令，设备将响铃', icon: 'none' })
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '发送失败', icon: 'none' })
+function petLabel(d: any) {
+  if (d.pet_name) {
+    const kind = d.hardware_type === 'cat' || d.pet_type === 'cat' ? '猫' : (d.hardware_type === 'dog' || d.pet_type === 'dog' ? '狗' : '')
+    return kind ? `${d.pet_name}（${kind}）` : d.pet_name
   }
+  if (!d.pet_id) return '未绑定'
+  return d.hardware_type === 'cat' ? '已绑定（猫）' : d.hardware_type === 'dog' ? '已绑定（狗）' : '已绑定'
 }
 
-async function checkUpdate(d: any) {
-  try {
-    const data = await http.get<any>(`/devices/${d.id}/ota/progress`)
-    uni.showModal({
-      title: '固件信息',
-      content: `当前版本：${d.firmware_version || 'v1.0.0'}\n${data?.latest ? '有可用更新' : '已是最新版本'}`,
-      showCancel: !!data?.latest,
-      confirmText: data?.latest ? '立即升级' : '知道了',
-    })
-  } catch (e) {
-    uni.showToast({ title: '已是最新版本', icon: 'none' })
-  }
+function statusLabel(d: any) {
+  if (d.status === 'online') return '已绑定 · 在线'
+  if (d.status === 'low_battery') return '已绑定 · 低电'
+  if (!d.pet_id) return '未绑定 · 离线'
+  return '离线'
+}
+
+function statusClass(d: any) {
+  if (d.status === 'online') return 'tag-success'
+  if (d.status === 'low_battery') return 'tag-warning'
+  return 'tag-muted'
 }
 
 function unbind(d: any) {
   uni.showModal({
-    title: '解绑设备',
-    content: `确定解绑 ${d.sn} 吗？解绑后将无法接收该设备的定位数据。`,
-    confirmColor: '#EF4444',
+    title: '解绑确认',
+    content: '解绑后该定位器仍会留在示意列表，直到解绑成功。这不是真机已断开。',
+    confirmColor: PT.danger,
     success: async (res) => {
       if (!res.confirm) return
+      const snapshot = devices.value.slice()
       try {
         await http.post('/devices/unbind', { sn: d.sn })
-        uni.showToast({ title: '已解绑', icon: 'success' })
+        unbindError.value = ''
+        uni.showToast({ title: '已解绑（示意）', icon: 'none' })
         loadDevices()
       } catch (e: any) {
-        uni.showToast({ title: e.message || '解绑失败', icon: 'none' })
+        devices.value = snapshot
+        unbindError.value = '解绑未完成，设备仍留在列表中。请稍后重试。失败不会清除列表项，也不是真机已断开。'
       }
     },
   })
 }
 
 function goBind() { uni.navigateTo({ url: '/pages/device-bind/device-bind' }) }
-function goBack() { uni.navigateBack() }
 </script>
 
 <style scoped>
-.page { min-height: 100vh; background: #f6f7fb; padding-bottom: 60rpx; }
-.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 700; }
-.back { font-size: 44rpx; font-weight: 400; color: #333; }
-.placeholder { width: 44rpx; }
-.plus { width: 56rpx; height: 56rpx; background: #3d6cf5; color: #fff; border-radius: 16rpx; display: flex; align-items: center; justify-content: center; font-size: 36rpx; font-weight: 400; }
-.card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.04); }
-.dev-head { display: flex; align-items: center; gap: 16rpx; }
-.dev-icon { width: 72rpx; height: 72rpx; border-radius: 16rpx; background: #eef2ff; display: flex; align-items: center; justify-content: center; font-size: 36rpx; }
-.dev-icon.cat { background: #fff7ed; }
-.dev-icon.dog { background: #eff6ff; }
-.dev-info { flex: 1; }
-.dev-name { font-size: 28rpx; font-weight: 700; }
-.dev-sub { font-size: 22rpx; color: #9aa0a6; margin-top: 4rpx; }
-.badge { font-size: 20rpx; padding: 6rpx 14rpx; border-radius: 999rpx; }
-.badge.green { background: #f0fdf4; color: #22c55e; }
-.badge.orange { background: #fff7ed; color: #f59e0b; }
-.badge.gray { background: #f3f4f6; color: #9ca3af; }
-.battery-row { display: flex; align-items: center; gap: 12rpx; margin-top: 20rpx; font-size: 24rpx; color: #6b7280; }
-.battery-bar { flex: 1; height: 14rpx; background: #f0f1f5; border-radius: 999rpx; overflow: hidden; }
-.battery-fill { height: 100%; border-radius: 999rpx; }
-.battery-fill.ok { background: #22c55e; }
-.battery-fill.warn { background: #f59e0b; }
-.battery-fill.low { background: #ef4444; }
-.battery-num { font-size: 24rpx; font-weight: 700; color: #1f2329; }
-.bound-row { margin-top: 16rpx; font-size: 24rpx; color: #3d6cf5; background: #eef2ff; border-radius: 12rpx; padding: 12rpx 16rpx; }
-.bound-row.gray { color: #9ca3af; background: #f6f7fb; }
-.btn-row { display: flex; gap: 12rpx; margin-top: 20rpx; }
-.outline-btn { flex: 1; border: 2rpx solid #3d6cf5; color: #3d6cf5; background: #fff; border-radius: 14rpx; padding: 16rpx 0; font-size: 24rpx; font-weight: 600; text-align: center; }
-.outline-btn.red { border-color: #ef4444; color: #ef4444; }
-.empty-state { display: flex; flex-direction: column; align-items: center; padding: 120rpx 0; }
-.empty-icon { font-size: 80rpx; }
-.empty-text { margin-top: 16rpx; color: #9aa0a6; font-size: 28rpx; }
-.empty-action { margin-top: 20rpx; color: #3d6cf5; font-weight: 600; font-size: 28rpx; }
-.tip { text-align: center; font-size: 22rpx; color: #aaa; padding: 8rpx 24rpx; }
+.page { min-height: 100vh; background: var(--pt-bg); padding-bottom: 80rpx; }
+.list { padding-top: 24rpx; }
+.dev-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16rpx; }
+.sn { font-size: 30rpx; font-weight: 500; color: var(--pt-fg); }
+.sub { margin-top: 8rpx; font-size: 24rpx; color: var(--pt-fg-2); font-weight: 400; }
+.unbind-err { margin: 0 32rpx 16rpx; }
+.unbind-btn { margin: 0 32rpx; }
+.empty-title { font-size: 30rpx; font-weight: 500; margin-bottom: 8rpx; }
+.empty-desc { font-size: 24rpx; color: var(--pt-fg-2); margin-bottom: 24rpx; line-height: 1.5; }
 </style>

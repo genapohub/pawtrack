@@ -16,18 +16,18 @@ export default function AlarmRulesPage() {
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-        <Card title="🐱 猫咪默认规则">
+        <Card title="猫 猫咪默认规则">
           <Descriptions column={1} size="small">
             <Descriptions.Item label="围栏半径">100m（楼栋范围）</Descriptions.Item>
-            <Descriptions.Item label="离开报警"><Tag color="red">立即报警 · 高优先级</Tag></Descriptions.Item>
+            <Descriptions.Item label="离开报警"><Tag style={{ background: "var(--pt-danger-subtle)", color: "var(--pt-danger)", border: 0 }}>立即报警 · 高优先级</Tag></Descriptions.Item>
             <Descriptions.Item label="进入提醒"><Switch checked size="small" /></Descriptions.Item>
             <Descriptions.Item label="低电量阈值">20%</Descriptions.Item>
           </Descriptions>
         </Card>
-        <Card title="🐶 狗狗默认规则">
+        <Card title="狗 狗狗默认规则">
           <Descriptions column={1} size="small">
             <Descriptions.Item label="围栏半径">300m（小区范围）</Descriptions.Item>
-            <Descriptions.Item label="离开报警"><Tag color="orange">可选开启 · 中优先级</Tag></Descriptions.Item>
+            <Descriptions.Item label="离开报警"><Tag style={{ background: "var(--pt-warning-subtle)", color: "var(--pt-warning)", border: 0 }}>可选开启 · 中优先级</Tag></Descriptions.Item>
             <Descriptions.Item label="进入提醒"><Switch size="small" /></Descriptions.Item>
             <Descriptions.Item label="低电量阈值">20%</Descriptions.Item>
           </Descriptions>

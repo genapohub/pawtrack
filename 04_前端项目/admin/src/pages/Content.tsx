@@ -15,7 +15,7 @@ export default function ContentPage() {
   ]
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-      <Card title="📢 公告管理" extra={<Button size="small" type="primary">新建公告</Button>}>
+      <Card title=" 公告管理" extra={<Button size="small" type="primary">新建公告</Button>}>
         <Table size="small" rowKey="key"
           columns={[
             { title: '标题', dataIndex: 'title' },
@@ -25,7 +25,7 @@ export default function ContentPage() {
           ]}
           dataSource={notices} pagination={false} />
       </Card>
-      <Card title="🖼️ Banner 管理" extra={<Button size="small" type="primary">新增 Banner</Button>}>
+      <Card title="️ Banner 管理" extra={<Button size="small" type="primary">新增 Banner</Button>}>
         <Table size="small" rowKey="key"
           columns={[
             { title: 'Banner', dataIndex: 'name' },

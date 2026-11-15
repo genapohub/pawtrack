@@ -1,8 +1,9 @@
 <template>
   <view class="page">
-    <!-- 顶部状态 -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 顶部状态 -->
     <view class="hero" :class="{ arrived: distance !== null && distance < 5 }">
-      <view class="hero-emoji">{{ distance !== null && distance < 5 ? '🎉' : '🐾' }}</view>
+      <view class="hero-emoji">{{ distance !== null && distance < 5 ? '' : '' }}</view>
       <view class="hero-title">
         {{ distance !== null && distance < 5 ? '对方就在眼前！' : '正在寻找碰头对象…' }}
       </view>
@@ -31,13 +32,13 @@
 
     <!-- 操作按钮 -->
     <view v-if="distance !== null && distance < 5" class="action-area">
-      <view class="confirm-btn" @tap="confirmArrive">✓ 我已到达，确认碰头</view>
+      <view class="confirm-btn" @tap="confirmArrive"> 我已到达，确认碰头</view>
     </view>
     <view v-else class="action-area">
       <view class="hint-card">
-        <view class="hint-row">📍 实时更新双方距离</view>
-        <view class="hint-row">📡 设备每 5 秒上报一次位置</view>
-        <view class="hint-row">🤝 距离 &lt; 5m 即可确认成功</view>
+        <view class="hint-row"> 实时更新双方距离</view>
+        <view class="hint-row"> 设备每 5 秒上报一次位置</view>
+        <view class="hint-row"> 距离 &lt; 5m 即可确认成功</view>
       </view>
     </view>
 
@@ -151,12 +152,12 @@ onUnmounted(clearAll)
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding-bottom: 60rpx;
 }
 
 .hero {
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
   padding: 60rpx 40rpx 80rpx;
   border-radius: 0 0 40rpx 40rpx;
@@ -164,7 +165,7 @@ onUnmounted(clearAll)
 }
 
 .hero.arrived {
-  background: #22c55e;
+  background: var(--pt-success);
 }
 
 .hero-emoji {
@@ -231,13 +232,13 @@ onUnmounted(clearAll)
 
 .timer-label {
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 .timer-num {
   font-size: 30rpx;
   font-weight: 700;
-  color: #f59e0b;
+  color: var(--pt-warning);
   font-variant-numeric: tabular-nums;
 }
 
@@ -246,7 +247,7 @@ onUnmounted(clearAll)
 }
 
 .confirm-btn {
-  background: #22c55e;
+  background: var(--pt-success);
   color: #fff;
   text-align: center;
   padding: 28rpx 0;
@@ -263,9 +264,9 @@ onUnmounted(clearAll)
 
 .hint-row {
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
   padding: 12rpx 0;
-  border-bottom: 1rpx solid #f3f4f6;
+  border-bottom: 1rpx solid var(--pt-bg-muted);
 }
 
 .hint-row:last-child {
@@ -274,7 +275,7 @@ onUnmounted(clearAll)
 
 .cancel-link {
   text-align: center;
-  color: #ef4444;
+  color: var(--pt-danger);
   font-size: 26rpx;
   margin-top: 48rpx;
 }

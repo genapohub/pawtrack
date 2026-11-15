@@ -12,7 +12,7 @@ export default function RevenuePage() {
   return (
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
-        <Col span={6}><Card><Statistic title="MRR" value={128.6} precision={1} suffix="万" valueStyle={{ color: '#1677ff' }} /></Card></Col>
+        <Col span={6}><Card><Statistic title="MRR" value={128.6} precision={1} suffix="万" valueStyle={{ color: 'var(--pt-accent)' }} /></Card></Col>
         <Col span={6}><Card><Statistic title="ARR" value={1543} suffix="万" /></Card></Col>
         <Col span={6}><Card><Statistic title="ARPU" value={14.9} suffix="元" /></Card></Col>
         <Col span={6}><Card><Statistic title="付费转化率" value={8.2} suffix="%" /></Card></Col>
@@ -26,8 +26,8 @@ export default function RevenuePage() {
         <Col span={12}>
           <Card title="收入趋势（近 7 个月）">
             {['25%', '40%', '35%', '58%', '50%', '75%', '100%'].map((h, i) => (
-              <div key={i} style={{ display: 'inline-block', width: 40, height: 160, marginRight: 8, background: '#f0f1f5', borderRadius: 4, position: 'relative', verticalAlign: 'bottom' }}>
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: h, background: '#1677ff', borderRadius: 4 }} />
+              <div key={i} style={{ display: 'inline-block', width: 40, height: 160, marginRight: 8, background: 'var(--pt-bg-muted)', borderRadius: 4, position: 'relative', verticalAlign: 'bottom' }}>
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: h, background: 'var(--pt-accent)', borderRadius: 4 }} />
               </div>
             ))}
           </Card>

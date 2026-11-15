@@ -1,0 +1,42 @@
+/* Pawtrack Tokens — official collection on Ardot file 747621516726578 (2:87, 2026-11-15)
+   Hex values are defined only in this token file. UI must use var(--pt-*).
+   Do not copy off-by-one fills from unbound canvas layers. Do not use 宠宝树绿 #4A8C5C. */
+:root, page, .pt-root {
+  --pt-bg: #F6F3EE;
+  --pt-surface: #FFFCF8;
+  --pt-bg-muted: #EFEBE6;
+  --pt-border: #E4DFD8;
+  --pt-border-strong: #C9C2B8;
+  --pt-fg: #2A2622;
+  --pt-fg-2: #6B645C;
+  --pt-fg-3: #746C64;
+  --pt-fg-inv: #F6F3EE;
+  --pt-accent: #3E5470;
+  --pt-accent-hover: #32445C;
+  --pt-accent-subtle: #E8EDF1;
+  --pt-mock: #6F6250;
+  --pt-mock-bg: #F3EEE6;
+  --pt-mock-border: #E4D9C8;
+  --pt-success: #4A635E;
+  --pt-success-subtle: #E8EEEC;
+  --pt-warning: #8F6240;
+  --pt-warning-subtle: #F4EDE4;
+  --pt-danger: #9A5848;
+  --pt-danger-subtle: #F3E8E4;
+  --pt-map: #E6E4DE;
+  --pt-map-line: #C2BDB4;
+  --pt-pin: #3E5470;
+  --pt-sidebar: #2A2724;
+  --pt-sidebar-line: #3A3531;
+  --pt-sidebar-muted: #A39A90;
+  --pt-sidebar-link: #D8D2CA;
+  --pt-sidebar-off: #7A736C;
+  --pt-dog-tag-bg: #EDE6DC;
+  --pt-dog-tag-fg: #6A5240;
+  --pt-stage: #E8E4DE;
+  --pt-radius-md: 14px;
+  --pt-radius-sm: 12px;
+  --pt-accent-soft: rgba(62, 84, 112, 0.10);
+  --pt-fg-scrim: rgba(42, 38, 34, 0.72);
+  --pt-font: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}

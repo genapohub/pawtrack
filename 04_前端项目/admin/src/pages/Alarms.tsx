@@ -1,16 +1,17 @@
 /**
- * 管理后台 — 报警管理（列表/批量处理/导出）
+ * 管理后台 — 报警列表（对齐 209:1 / 210:1 / 211:1）
  */
 import { useEffect, useState } from 'react'
-import { Table, Select, Space, Button, Tag, message, Popconfirm } from 'antd'
+import { Table, Button, Tag } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { api } from '../api/client'
 import { exportCSV } from '../utils/export'
+import { PT } from '../styles/tokens'
 import dayjs from 'dayjs'
 
 const TYPE_LABEL: Record<string, string> = {
-  leave_fence: '离开围栏', leave_fence_cat: '猫咪离开围栏', enter_fence: '进入围栏',
-  low_battery: '电量偏低', low_battery_critical: '电量严重不足',
+  leave_fence: '离开围栏', leave_fence_cat: '离开围栏', enter_fence: '进入围栏',
+  low_battery: '低电量', low_battery_critical: '低电量',
   offline_warning: '设备离线', tamper_detected: '设备拆卸', fall_detected: '跌落检测'
 }
 
@@ -18,113 +19,77 @@ export default function AlarmsPage() {
   const [data, setData] = useState<any[]>([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState<string>('')
   const [page, setPage] = useState(1)
-  const [selectedKeys, setSelectedKeys] = useState<number[]>([])
+  const [error, setError] = useState('')
 
   const load = async () => {
     setLoading(true)
+    setError('')
     try {
-      const resp: any = await api.alarms.list({ status: status || undefined, page, size: 10 })
+      const resp: any = await api.alarms.list({ page, size: 10 })
       setData(resp.data || [])
       setTotal(resp.pagination?.total || 0)
     } catch (e: any) {
-      message.error(e.message)
+      setData([])
+      setError('报警列表拉取失败，请重试。不可用空列表代替失败态。')
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => { load() }, [page, status])
+  useEffect(() => { load() }, [page])
 
-  const sevTag = (s: string) => s === 'high' ? <Tag color="red">高</Tag> : s === 'medium' ? <Tag color="orange">中</Tag> : <Tag>低</Tag>
-  const statusTag = (s: string) => s === 'active' ? <Tag color="orange">待处理</Tag> : s === 'false_positive' ? <Tag>误报</Tag> : <Tag color="green">已处理</Tag>
-
-  const batchHandle = async (newStatus: 'handled' | 'false_positive') => {
-    if (!selectedKeys.length) {
-      message.warning('请先选择报警记录')
-      return
-    }
-    try {
-      await api.alarms.handle(selectedKeys, newStatus)
-      message.success(`已${newStatus === 'handled' ? '处理' : '标记误报'} ${selectedKeys.length} 条`)
-      setSelectedKeys([])
-      load()
-    } catch (e: any) {
-      message.error(e.message)
-    }
-  }
-
-  const handleExport = () => {
-    if (!data.length) {
-      message.warning('当前无数据可导出')
-      return
-    }
-    exportCSV('报警列表', [
-      { title: 'ID', dataIndex: 'id' },
-      { title: '宠物ID', dataIndex: 'pet_id' },
-      { title: '用户ID', dataIndex: 'user_id' },
-      { title: '类型', dataIndex: 'type' },
-      { title: '严重程度', dataIndex: 'severity' },
-      { title: '状态', dataIndex: 'status' },
-      { title: '地址', dataIndex: 'address' },
-      { title: '触发时间', dataIndex: 'created_at' },
-    ], data)
-    message.success('已导出 CSV')
+  const statusTag = (s: string) => {
+    if (s === 'active') return <Tag style={{ background: PT.warningSubtle, color: PT.warning, border: 0 }}>未处理</Tag>
+    if (s === 'false_positive') return <Tag style={{ background: PT.bgMuted, color: PT.fg3, border: 0 }}>误报</Tag>
+    return <Tag style={{ background: PT.successSubtle, color: PT.success, border: 0 }}>已处理</Tag>
   }
 
   const columns: ColumnsType<any> = [
-    { title: 'ID', dataIndex: 'id', width: 70 },
-    { title: '宠物ID', dataIndex: 'pet_id', width: 80 },
-    { title: '用户ID', dataIndex: 'user_id', width: 80 },
-    { title: '类型', dataIndex: 'type', width: 130, render: (v: string) => TYPE_LABEL[v] || v },
-    { title: '严重程度', dataIndex: 'severity', width: 90, render: (v: string) => sevTag(v) },
-    { title: '状态', dataIndex: 'status', width: 90, render: (v: string) => statusTag(v) },
     {
-      title: '位置', width: 180,
-      render: (_, r) => r.lat ? `${Number(r.lat).toFixed(5)}, ${Number(r.lng).toFixed(5)}` : '—'
+      title: '时间', dataIndex: 'created_at', width: 140,
+      render: (v: string) => v ? dayjs(v).format('MM-DD HH:mm') : '—',
     },
-    { title: '处理时间', dataIndex: 'handled_at', width: 160, render: (v: string) => v ? dayjs(v).format('YYYY-MM-DD HH:mm') : '—' },
-    { title: '触发时间', dataIndex: 'created_at', width: 160, render: (v: string) => v ? dayjs(v).format('YYYY-MM-DD HH:mm') : '—' }
+    {
+      title: '宠物 / 设备',
+      render: (_, r) => `${r.pet_name || '宠物'}${r.device_sn ? ' / ' + r.device_sn : ''}`,
+    },
+    { title: '类型', dataIndex: 'type', render: (v: string) => TYPE_LABEL[v] || v },
+    { title: '状态', dataIndex: 'status', width: 100, render: (v: string) => statusTag(v) },
+    { title: '示意地址', dataIndex: 'address', render: (v: string) => v || '—' },
   ]
 
   return (
     <>
-      <h2 style={{ marginBottom: 16 }}>报警管理</h2>
-      <Space style={{ marginBottom: 16 }} wrap>
-        <Select
-          placeholder="状态筛选"
-          allowClear
-          style={{ width: 140 }}
-          value={status || undefined}
-          onChange={v => { setStatus(v || ''); setPage(1) }}
-          options={[{ value: 'active', label: '待处理' }, { value: 'handled', label: '已处理' }, { value: 'false_positive', label: '误报' }]}
+      <p className="pt-page-note">状态用词与小程序一致：离开围栏、进入围栏、低电量、设备离线、设备拆卸。地址为示意。</p>
+      <div style={{ marginBottom: 16 }}>
+        <Button onClick={load} style={{ marginRight: 8 }}>刷新</Button>
+        <Button onClick={() => {
+          if (!data.length) return
+          exportCSV('报警列表（Mock 示意）', [
+            { title: '时间', dataIndex: 'created_at' },
+            { title: '宠物', dataIndex: 'pet_name' },
+            { title: '类型', dataIndex: 'type' },
+            { title: '状态', dataIndex: 'status' },
+            { title: '示意地址', dataIndex: 'address' },
+          ], data)
+        }}>导出 CSV（示意）</Button>
+      </div>
+      {error ? (
+        <div style={{ background: PT.dangerSubtle, color: PT.danger, borderRadius: 14, padding: 16, marginBottom: 16 }}>
+          <div style={{ marginBottom: 12 }}>{error}</div>
+          <Button type="primary" onClick={load}>重新加载</Button>
+        </div>
+      ) : (
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          locale={{ emptyText: '暂无报警。这是空列表，不是加载失败。' }}
+          pagination={{ current: page, total, pageSize: 10, showSizeChanger: false, onChange: (p) => setPage(p) }}
         />
-        <Button onClick={load}>刷新</Button>
-        <Button onClick={handleExport}>导出 CSV</Button>
-        {selectedKeys.length > 0 && (
-          <>
-            <Popconfirm title={`确认批量处理 ${selectedKeys.length} 条报警？`} onConfirm={() => batchHandle('handled')}>
-              <Button type="primary" size="small">批量处理 ({selectedKeys.length})</Button>
-            </Popconfirm>
-            <Popconfirm title={`确认批量标记 ${selectedKeys.length} 条为误报？`} onConfirm={() => batchHandle('false_positive')}>
-              <Button size="small">标记误报 ({selectedKeys.length})</Button>
-            </Popconfirm>
-          </>
-        )}
-      </Space>
-      <Table
-        rowKey="id"
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        scroll={{ x: 1100 }}
-        rowSelection={{
-          selectedRowKeys: selectedKeys,
-          onChange: (keys) => setSelectedKeys(keys as number[]),
-        }}
-        pagination={{ current: page, total, pageSize: 10, showSizeChanger: false, onChange: (p) => setPage(p) }}
-      />
+      )}
     </>
   )
 }

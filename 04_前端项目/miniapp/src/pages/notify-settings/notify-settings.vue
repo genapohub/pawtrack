@@ -1,6 +1,7 @@
 <template>
   <view class="page">
-    <view class="navbar-sm">
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<view class="navbar-sm">
       <view class="back" @tap="goBack">‹</view>
       通知设置
       <view class="placeholder"></view>
@@ -51,11 +52,11 @@
       </view>
       <view v-if="settings.quiet" class="time-row">
         <picker mode="time" :value="settings.quiet_start" @change="settings.quiet_start = $event.detail.value">
-          <view class="time-box">🕐 开始 {{ settings.quiet_start }}</view>
+          <view class="time-box"> 开始 {{ settings.quiet_start }}</view>
         </picker>
         <text class="time-arrow">→</text>
         <picker mode="time" :value="settings.quiet_end" @change="settings.quiet_end = $event.detail.value">
-          <view class="time-box">🕐 结束 {{ settings.quiet_end }}</view>
+          <view class="time-box"> 结束 {{ settings.quiet_end }}</view>
         </picker>
       </view>
     </view>
@@ -101,24 +102,24 @@ function goBack() { uni.navigateBack() }
 </script>
 
 <style scoped>
-.page { min-height: 100vh; background: #f6f7fb; padding-bottom: 60rpx; }
+.page { min-height: 100vh; background: var(--pt-bg); padding-bottom: 60rpx; }
 .navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 700; }
-.back { font-size: 44rpx; font-weight: 400; color: #333; }
+.back { font-size: 44rpx; font-weight: 400; color: var(--pt-fg); }
 .placeholder { width: 44rpx; }
-.card { background: #fff; border-radius: 20rpx; padding: 16rpx 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.04); }
+.card { background: #fff; border-radius: 20rpx; padding: 16rpx 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx transparent; }
 .card-title { font-size: 30rpx; font-weight: 700; padding: 12rpx 0 4rpx; }
-.switch-row { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1px solid #f3f4f6; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1px solid var(--pt-bg-muted); }
 .switch-row:last-child { border-bottom: none; }
 .switch-info { flex: 1; }
 .switch-title { font-size: 28rpx; font-weight: 600; }
-.switch-sub { font-size: 22rpx; color: #9aa0a6; margin-top: 4rpx; }
-.switch { width: 88rpx; height: 48rpx; border-radius: 999rpx; background: #d1d5db; position: relative; transition: .2s; }
+.switch-sub { font-size: 22rpx; color: var(--pt-fg-3); margin-top: 4rpx; }
+.switch { width: 88rpx; height: 48rpx; border-radius: 999rpx; background: var(--pt-border-strong); position: relative; transition: .2s; }
 .switch::after { content: ''; position: absolute; width: 40rpx; height: 40rpx; border-radius: 50%; background: #fff; top: 4rpx; left: 4rpx; transition: .2s; }
-.switch.on { background: #3d6cf5; }
+.switch.on { background: var(--pt-accent); }
 .switch.on::after { left: 44rpx; }
 .time-row { display: flex; align-items: center; gap: 16rpx; padding: 20rpx 0; }
-.time-box { background: #f6f7fb; border-radius: 12rpx; padding: 16rpx 24rpx; font-size: 26rpx; font-weight: 600; color: #3d6cf5; }
-.time-arrow { color: #c0c4cc; font-size: 26rpx; }
-.save-btn { margin: 30rpx 24rpx 0; text-align: center; background: linear-gradient(135deg, #5b8cff, #3d6cf5); color: #fff; border-radius: 999rpx; padding: 24rpx 0; font-size: 30rpx; font-weight: 600; }
+.time-box { background: var(--pt-bg); border-radius: 12rpx; padding: 16rpx 24rpx; font-size: 26rpx; font-weight: 600; color: var(--pt-accent); }
+.time-arrow { color: var(--pt-border-strong); font-size: 26rpx; }
+.save-btn { margin: 30rpx 24rpx 0; text-align: center; background: var(--pt-accent); color: #fff; border-radius: 999rpx; padding: 24rpx 0; font-size: 30rpx; font-weight: 600; }
 .save-btn.saving { opacity: .6; }
 </style>

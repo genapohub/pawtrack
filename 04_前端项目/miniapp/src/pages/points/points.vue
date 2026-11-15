@@ -1,11 +1,12 @@
 <template>
   <view class="page">
-    <!-- 积分余额 Hero -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 积分余额 Hero -->
     <view class="points-hero">
       <view class="hero-label">我的积分</view>
       <view class="hero-balance">{{ balance }}</view>
       <view class="sign-btn" :class="{ signed: signedToday }" @tap="signin">
-        {{ signing ? '签到中...' : signedToday ? '今日已签到 ✓' : '📅 每日签到' }}
+        {{ signing ? '签到中...' : signedToday ? '今日已签到 ' : ' 每日签到' }}
       </view>
     </view>
 
@@ -32,9 +33,9 @@
       <view class="card-title">积分商城</view>
       <view v-if="shop.length > 0" class="shop-grid">
         <view v-for="item in shop" :key="item.id" class="shop-item" @tap="exchange(item)">
-          <view class="shop-image">{{ item.image || '🎁' }}</view>
+          <view class="shop-image">{{ item.image || '' }}</view>
           <view class="shop-name">{{ item.name }}</view>
-          <view class="shop-points">🪙 {{ item.points }} 积分</view>
+          <view class="shop-points"> {{ item.points }} 积分</view>
         </view>
       </view>
       <view v-else class="empty-tip">商城筹备中，敬请期待</view>
@@ -54,12 +55,12 @@ const signing = ref(false)
 const signedToday = ref(false)
 
 const LOG_META: Record<string, { label: string; icon: string }> = {
-  meet: { label: '碰头奖励', icon: '🤝' },
-  invite: { label: '邀请奖励', icon: '🎁' },
-  signin: { label: '每日签到', icon: '📅' },
-  purchase: { label: '兑换消费', icon: '🛒' },
+  meet: { label: '碰头奖励', icon: '' },
+  invite: { label: '邀请奖励', icon: '' },
+  signin: { label: '每日签到', icon: '' },
+  purchase: { label: '兑换消费', icon: '' },
   expire: { label: '积分过期', icon: '⏰' },
-  admin: { label: '后台调整', icon: '⚙️' },
+  admin: { label: '后台调整', icon: '' },
 }
 
 function logName(type: string): string {
@@ -67,7 +68,7 @@ function logName(type: string): string {
 }
 
 function logIcon(type: string): string {
-  return LOG_META[type]?.icon || '🪙'
+  return LOG_META[type]?.icon || ''
 }
 
 function formatTime(iso: string): string {
@@ -103,7 +104,7 @@ async function signin() {
   signing.value = true
   try {
     const data = await http.post<any>('/points/signin')
-    uni.showToast({ title: `签到成功 +${data?.awarded || 5} 积分 🎉`, icon: 'success' })
+    uni.showToast({ title: `签到成功 +${data?.awarded || 5} 积分 `, icon: 'success' })
     loadAll()
   } catch (e: any) {
     uni.showToast({ title: e.message || '签到失败', icon: 'none' })
@@ -134,7 +135,7 @@ onShow(loadAll)
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding: 24rpx 0 60rpx;
 }
 
@@ -146,7 +147,7 @@ onShow(loadAll)
   margin: 0 24rpx 20rpx;
   border-radius: 24rpx;
   padding: 48rpx 0;
-  background: linear-gradient(135deg, #3d6cf5, #5b8cff);
+  background: var(--pt-accent);
   color: #fff;
 }
 
@@ -189,7 +190,7 @@ onShow(loadAll)
   align-items: center;
   gap: 20rpx;
   padding: 18rpx 0;
-  border-bottom: 2rpx solid #f3f4f6;
+  border-bottom: 2rpx solid var(--pt-bg-muted);
 }
 
 .log-row:last-child {
@@ -200,7 +201,7 @@ onShow(loadAll)
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
-  background: #f3f4f6;
+  background: var(--pt-bg-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,7 +219,7 @@ onShow(loadAll)
 
 .log-time {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
@@ -228,11 +229,11 @@ onShow(loadAll)
 }
 
 .log-change.plus {
-  color: #3d6cf5;
+  color: var(--pt-accent);
 }
 
 .log-change.minus {
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 /* 商城 */
@@ -248,7 +249,7 @@ onShow(loadAll)
   align-items: center;
   padding: 24rpx 12rpx;
   border-radius: 16rpx;
-  background: #f6f7fb;
+  background: var(--pt-bg);
 }
 
 .shop-image {
@@ -264,13 +265,13 @@ onShow(loadAll)
 
 .shop-points {
   font-size: 22rpx;
-  color: #f59e0b;
+  color: var(--pt-warning);
   margin-top: 8rpx;
 }
 
 .empty-tip {
   text-align: center;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   padding: 40rpx 0;
   font-size: 26rpx;
 }

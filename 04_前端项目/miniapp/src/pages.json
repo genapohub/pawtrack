@@ -3,7 +3,7 @@
     {
       "path": "pages/home/home",
       "style": {
-        "navigationBarTitleText": "宠迹",
+        "navigationBarTitleText": "首页",
         "navigationStyle": "custom"
       }
     },
@@ -22,7 +22,7 @@
     {
       "path": "pages/device-bind/device-bind",
       "style": {
-        "navigationBarTitleText": "绑定设备"
+        "navigationBarTitleText": "绑定定位器"
       }
     },
     {
@@ -34,19 +34,19 @@
     {
       "path": "pages/social/social",
       "style": {
-        "navigationBarTitleText": "宠物社交"
+        "navigationBarTitleText": "社交"
       }
     },
     {
       "path": "pages/member/member",
       "style": {
-        "navigationBarTitleText": "会员中心"
+        "navigationBarTitleText": "会员"
       }
     },
     {
       "path": "pages/points/points",
       "style": {
-        "navigationBarTitleText": "积分中心"
+        "navigationBarTitleText": "积分"
       }
     },
     {
@@ -82,7 +82,7 @@
     {
       "path": "pages/invite/invite",
       "style": {
-        "navigationBarTitleText": "邀请好友"
+        "navigationBarTitleText": "邀请"
       }
     },
     {
@@ -123,10 +123,10 @@
     }
   ],
   "tabBar": {
-    "color": "#9aa0a6",
-    "selectedColor": "#3d6cf5",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "color": "#746C64",
+    "selectedColor": "#3E5470",
+    "backgroundColor": "#FFFCF8",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/home/home",
@@ -157,7 +157,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "宠迹",
-    "navigationBarBackgroundColor": "#ffffff",
-    "backgroundColor": "#f6f7fb"
+    "navigationBarBackgroundColor": "#FFFCF8",
+    "backgroundColor": "#F6F3EE"
   }
 }

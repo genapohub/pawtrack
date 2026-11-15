@@ -93,12 +93,12 @@ export default function UsersPage() {
     { title: '手机号', dataIndex: 'phone', width: 140 },
     {
       title: '会员', dataIndex: 'member_level', width: 90,
-      render: (v: string) => v === 'pro' ? <Tag color="purple">Pro</Tag> : v === 'basic' ? <Tag color="blue">基础</Tag> : <Tag>免费</Tag>
+      render: (v: string) => v === 'pro' ? <Tag style={{ background: "var(--pt-accent-subtle)", color: "var(--pt-accent)", border: 0 }}>Pro</Tag> : v === 'basic' ? <Tag style={{ background: "var(--pt-accent-subtle)", color: "var(--pt-accent)", border: 0 }}>基础</Tag> : <Tag>免费</Tag>
     },
     { title: '积分', dataIndex: 'points', width: 80 },
     {
       title: '状态', dataIndex: 'status', width: 90,
-      render: (v: string) => v === 'blocked' ? <Tag color="red">已封禁</Tag> : v === 'deleted' ? <Tag color="default">已注销</Tag> : <Tag color="green">正常</Tag>
+      render: (v: string) => v === 'blocked' ? <Tag style={{ background: "var(--pt-danger-subtle)", color: "var(--pt-danger)", border: 0 }}>已封禁</Tag> : v === 'deleted' ? <Tag color="default">已注销</Tag> : <Tag style={{ background: "var(--pt-success-subtle)", color: "var(--pt-success)", border: 0 }}>正常</Tag>
     },
     {
       title: '会员到期', dataIndex: 'member_expire_at', width: 160,

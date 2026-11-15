@@ -13,7 +13,7 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   paid: { label: '已支付', color: 'green' },
   failed: { label: '失败', color: 'red' },
   cancelled: { label: '已取消', color: 'default' },
-  refunded: { label: '已退款', color: 'purple' }
+  refunded: { label: '已退款', color: 'default' }
 }
 
 export default function OrdersPage() {

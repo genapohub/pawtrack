@@ -1,8 +1,9 @@
 <template>
   <view class="page">
-    <!-- 成功动画区 -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 成功动画区 -->
     <view class="success-hero">
-      <view class="badge">🎉</view>
+      <view class="badge"></view>
       <view class="title">碰头成功！</view>
       <view class="sub">双方确认到场，友谊 +1</view>
     </view>
@@ -14,11 +15,11 @@
         <view class="points-value">+{{ points }} 积分</view>
       </view>
       <view class="points-row">
-        <text>🥇 完成碰头</text>
+        <text> 完成碰头</text>
         <text>+{{ points }}</text>
       </view>
       <view class="points-row">
-        <text>💰 当前余额</text>
+        <text> 当前余额</text>
         <text>{{ balance }} 分</text>
       </view>
       <view class="points-note">积分可在积分商城兑换宠物用品（12 个月内有效）</view>
@@ -26,7 +27,7 @@
 
     <!-- 碰头记录卡 -->
     <view class="record-card" v-if="meet">
-      <view class="record-title">📅 碰头记录</view>
+      <view class="record-title"> 碰头记录</view>
       <view class="record-row">
         <text>碰头对象</text>
         <text>{{ meet.pet_name || '未知宠物' }}</text>
@@ -90,7 +91,7 @@ function backToSocial() {
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding: 60rpx 32rpx;
 }
 
@@ -107,14 +108,14 @@ function backToSocial() {
   font-size: 44rpx;
   font-weight: 800;
   margin-top: 16rpx;
-  background: linear-gradient(90deg, #3d6cf5, #22c55e);
+  background: var(--pt-accent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .sub {
   font-size: 26rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 12rpx;
 }
 
@@ -130,7 +131,7 @@ function backToSocial() {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #f3f4f6;
+  border-bottom: 1rpx solid var(--pt-bg-muted);
 }
 
 .points-label {
@@ -141,7 +142,7 @@ function backToSocial() {
 .points-value {
   font-size: 36rpx;
   font-weight: 800;
-  color: #3d6cf5;
+  color: var(--pt-accent);
 }
 
 .points-row {
@@ -149,14 +150,14 @@ function backToSocial() {
   justify-content: space-between;
   padding: 20rpx 0;
   font-size: 26rpx;
-  color: #4b5563;
+  color: var(--pt-fg-2);
 }
 
 .points-note {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   padding-top: 12rpx;
-  border-top: 1rpx solid #f3f4f6;
+  border-top: 1rpx solid var(--pt-bg-muted);
 }
 
 .record-card {
@@ -177,7 +178,7 @@ function backToSocial() {
   justify-content: space-between;
   padding: 12rpx 0;
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 .actions {
@@ -185,7 +186,7 @@ function backToSocial() {
 }
 
 .btn-primary {
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
   text-align: center;
   padding: 28rpx 0;
@@ -195,8 +196,8 @@ function backToSocial() {
 }
 
 .btn-outline {
-  border: 2rpx solid #3d6cf5;
-  color: #3d6cf5;
+  border: 2rpx solid var(--pt-accent);
+  color: var(--pt-accent);
   text-align: center;
   padding: 26rpx 0;
   border-radius: 16rpx;

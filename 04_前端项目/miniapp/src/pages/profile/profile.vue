@@ -1,181 +1,159 @@
 <template>
   <view class="page">
-    <!-- 用户信息卡 -->
-    <view class="card profile-card">
-      <view class="avatar-lg">🐾<text class="pro-chip" style="float:right;margin-top:10rpx" @tap="goPro">升级Pro</text></view>
-      <view class="profile-info">
-        <view class="profile-name">{{ user.nickname || '宠友' }}</view>
-        <view class="profile-phone">{{ user.phone || '未绑定手机号' }}</view>
-      </view>
-      <view class="vip-card" @tap="goMember">{{ user.member_level === 'free' ? '免费版' : (user.member_level === 'pro' ? 'Pro版' : '基础版') }} ›</view>
+    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+
+    <view v-if="loadError" class="pt-card">
+      <view class="err-box">资料加载失败，请重试。当前仍是本地预览，不是账号已失效。</view>
+      <view class="btn-primary" @tap="reload">重新加载</view>
     </view>
 
-    <!-- 数据统计 -->
-    <view class="card stat-row">
-      <view class="stat-item">
-        <view class="num">{{ stats.pets || 0 }}</view>
-        <view class="label">宠物</view>
-      </view>
-      <view class="stat-item">
-        <view class="num">{{ stats.devices || 0 }}</view>
-        <view class="label">设备</view>
-      </view>
-      <view class="stat-item">
-        <view class="num">{{ stats.alarms || 0 }}</view>
-        <view class="label">报警</view>
-      </view>
-      <view class="stat-item">
-        <view class="num" style="color:#f59e0b">{{ stats.points || 0 }}</view>
-        <view class="label">积分</view>
-      </view>
-    </view>
-
-    <!-- 功能入口 -->
-    <view class="card menu">
-      <view class="menu-item" @tap="goMember">
-        <view class="mi-left"><text class="mi-icon">💎</text>会员中心</view>
-        <text class="arrow">›</text>
-      </view>
-      <view class="menu-item" @tap="goPoints">
-        <view class="mi-left"><text class="mi-icon">🪙</text>我的积分</view>
-        <view class="mi-right"><text class="badge blue">{{ stats.points || 0 }}</text><text class="arrow">›</text></view>
-      </view>
-      <view class="menu-item" @tap="goInvite">
-        <view class="mi-left"><text class="mi-icon">🎁</text>邀请好友</view>
-        <view class="mi-right"><text class="badge orange">+50积分/人</text><text class="arrow">›</text></view>
-      </view>
-      <view class="menu-item" @tap="goDevices">
-        <view class="mi-left"><text class="mi-icon">📡</text>设备管理</view>
-        <text class="arrow">›</text>
-      </view>
-      <view class="menu-item" @tap="goNotify">
-        <view class="mi-left"><text class="mi-icon">🔔</text>通知设置</view>
-        <text class="arrow">›</text>
-      </view>
-      <view class="menu-item" @tap="goSettings">
-        <view class="mi-left"><text class="mi-icon">⚙️</text>设置</view>
-        <text class="arrow">›</text>
-      </view>
-    </view>
-
-    <!-- 我的宠物 -->
-    <view class="card">
-      <view class="card-title">我的宠物</view>
-      <view v-if="pets.length > 0" class="pet-list">
-        <view v-for="p in pets" :key="p.id" class="pet-row" @tap="goPetDetail(p.id)">
-          <view class="pet-avatar" :class="p.type === 'cat' ? 'cat' : 'dog'">{{ p.type === 'cat' ? '🐱' : '🐶' }}</view>
-          <view class="pet-info">
-            <view class="pet-name">{{ p.name }}</view>
-            <view class="pet-sub">{{ p.breed || (p.type === 'cat' ? '猫咪' : '狗狗') }}</view>
-          </view>
-          <text class="arrow">›</text>
+    <template v-else>
+      <view class="pt-card user-card">
+        <view class="avatar-mark avatar-cat">{{ nameMark }}</view>
+        <view class="user-meta">
+          <view class="user-name">{{ displayName }}</view>
+          <view class="user-sub">{{ maskedPhone }} · {{ memberLabel }}（Mock 字段）</view>
         </view>
       </view>
-      <view v-else class="empty-tip" @tap="goAddPet">+ 添加第一只宠物</view>
-    </view>
 
-    <view class="logout-btn" @tap="logout">退出登录</view>
+      <view class="pt-card menu">
+        <view class="menu-item" @tap="goDevices">
+          <text class="mi-name">设备管理</text>
+          <text class="mi-note">主路径</text>
+        </view>
+        <view class="menu-item" @tap="goMember">
+          <text class="mi-name">会员</text>
+          <text class="mi-note">入口保留，非本轮必做，非真实扣款</text>
+        </view>
+        <view class="menu-item" @tap="goPoints">
+          <text class="mi-name">积分</text>
+          <text class="mi-note">后置，入口不删</text>
+        </view>
+        <view class="menu-item" @tap="goInvite">
+          <text class="mi-name">邀请</text>
+          <text class="mi-note">后置</text>
+        </view>
+        <view class="menu-item" @tap="goNotify">
+          <text class="mi-name">通知</text>
+          <text class="mi-note">与报警设置分离</text>
+        </view>
+        <view class="menu-item last" @tap="goSettings">
+          <text class="mi-name">设置</text>
+          <text class="mi-note">隐私与退出</text>
+        </view>
+      </view>
+
+      <view class="foot-note">个人中心不做运营化大改。会员 / 积分 / 邀请 / 社交不是本轮必交付。</view>
+    </template>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { http } from '@/utils/request'
-import { getUser, clearTokens } from '@/utils/auth'
+import { getUser } from '@/utils/auth'
 
 const user = ref<any>(getUser() || {})
-const pets = ref<any[]>([])
-const stats = ref<any>({})
+const loadError = ref(false)
 
-onShow(async () => {
-  await Promise.all([loadUser(), loadPets(), loadStats()])
+const displayName = computed(() => user.value?.nickname || '预览用户')
+const nameMark = computed(() => displayName.value.slice(0, 1))
+const maskedPhone = computed(() => {
+  const p = String(user.value?.phone || '13800000000')
+  if (p.length >= 7) return p.slice(0, 3) + '****' + p.slice(-4)
+  return p || '未绑定手机号'
+})
+const memberLabel = computed(() => {
+  const lv = user.value?.member_level
+  if (lv === 'pro') return 'Pro 版'
+  if (lv === 'basic') return '基础版'
+  return '免费版'
 })
 
 async function loadUser() {
+  loadError.value = false
   try {
     const me = await http.get<any>('/users/me')
     if (me) user.value = me
-  } catch (e) { /* 静默 */ }
+  } catch (e) {
+    if (!user.value?.phone) loadError.value = true
+  }
 }
 
-async function loadPets() {
-  try {
-    pets.value = (await http.get<any[]>('/pets')) || []
-  } catch (e) { /* 静默 */ }
-}
-
-async function loadStats() {
-  try {
-    const [bal] = await Promise.all([
-      http.get<any>('/points/balance').catch(() => null),
-    ])
-    stats.value = {
-      pets: pets.value.length,
-      devices: 0,
-      alarms: 0,
-      points: bal?.balance || 0,
-    }
-  } catch (e) { /* 静默 */ }
-}
-
+function reload() { loadUser() }
 function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
-function goPro() { goMember() }
-function goPoints() { uni.switchTab({ url: '/pages/points/points' }) }
+function goPoints() { uni.navigateTo({ url: '/pages/points/points' }) }
 function goInvite() { uni.navigateTo({ url: '/pages/invite/invite' }) }
 function goDevices() { uni.navigateTo({ url: '/pages/device-manage/device-manage' }) }
 function goNotify() { uni.navigateTo({ url: '/pages/notify-settings/notify-settings' }) }
 function goSettings() { uni.navigateTo({ url: '/pages/settings/settings' }) }
-function goPetDetail(id: number) { uni.navigateTo({ url: '/pages/pet-detail/pet-detail?id=' + id }) }
-function goAddPet() { uni.navigateTo({ url: '/pages/pet-add/pet-add' }) }
 
-function logout() {
-  uni.showModal({
-    title: '退出登录',
-    content: '确定要退出当前账号吗？',
-    success: (res) => {
-      if (res.confirm) {
-        clearTokens()
-        uni.reLaunch({ url: '/pages/login/login' })
-      }
-    },
-  })
-}
+onShow(() => { loadUser() })
 </script>
 
 <style scoped>
-.page { min-height: 100vh; background: #f6f7fb; padding-bottom: 60rpx; }
-.card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin: 20rpx 24rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.04); }
-.profile-card { display: flex; align-items: center; gap: 20rpx; }
-.avatar-lg { width: 96rpx; height: 96rpx; border-radius: 50%; background: #eef2ff; display: flex; align-items: center; justify-content: center; font-size: 44rpx; }
-.profile-info { flex: 1; }
-.profile-name { font-size: 32rpx; font-weight: 700; }
-.profile-phone { font-size: 24rpx; color: #9aa0a6; margin-top: 4rpx; }
-.vip-card { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; font-size: 22rpx; font-weight: 600; padding: 12rpx 24rpx; border-radius: 999rpx; }
-.stat-row { display: flex; text-align: center; padding: 24rpx 0; }
-.stat-item { flex: 1; }
-.num { font-size: 36rpx; font-weight: 800; }
-.label { font-size: 22rpx; color: #9aa0a6; margin-top: 4rpx; }
-.menu { padding: 8rpx 28rpx; }
-.menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1px solid #f3f4f6; font-size: 28rpx; font-weight: 600; }
-.menu-item:last-child { border-bottom: none; }
-.mi-left { display: flex; align-items: center; gap: 16rpx; }
-.mi-icon { font-size: 32rpx; }
-.mi-right { display: flex; align-items: center; gap: 12rpx; }
-.arrow { color: #c0c4cc; font-size: 32rpx; font-weight: 400; }
-.badge { font-size: 20rpx; padding: 6rpx 14rpx; border-radius: 999rpx; }
-.badge.blue { background: #eef2ff; color: #3d6cf5; }
-.badge.orange { background: #fffbeb; color: #f59e0b; }
-.card-title { font-size: 30rpx; font-weight: 700; margin-bottom: 12rpx; }
-.pet-row { display: flex; align-items: center; gap: 16rpx; padding: 14rpx 0; }
-.pet-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36rpx; }
-.pet-avatar.dog { background: #eff6ff; }
-.pet-avatar.cat { background: #fff7ed; }
-.pet-info { flex: 1; }
-.pet-name { font-size: 28rpx; font-weight: 600; }
-.pet-sub { font-size: 22rpx; color: #9aa0a6; margin-top: 2rpx; }
-.empty-tip { text-align: center; color: #3d6cf5; padding: 30rpx 0; font-size: 26rpx; font-weight: 600; }
-.logout-btn { margin: 30rpx 24rpx; text-align: center; background: #fef2f2; color: #ef4444; border-radius: 999rpx; padding: 22rpx 0; font-size: 28rpx; font-weight: 600; }
-.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
-.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
+.page {
+  min-height: 100vh;
+  background: var(--pt-bg);
+  padding-bottom: 80rpx;
+}
+
+.user-card {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.user-meta { flex: 1; }
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--pt-fg);
+}
+
+.user-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  font-weight: 400;
+  color: var(--pt-fg-2);
+}
+
+.menu {
+  padding: 8rpx 32rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid var(--pt-border);
+}
+
+.menu-item.last { border-bottom: none; }
+
+.mi-name {
+  font-size: 30rpx;
+  font-weight: 400;
+  color: var(--pt-fg);
+}
+
+.mi-note {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--pt-fg-3);
+  text-align: right;
+}
+
+.foot-note {
+  margin: 8rpx 40rpx 0;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--pt-fg-3);
+  line-height: 1.5;
+}
 </style>

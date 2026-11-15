@@ -1,101 +1,48 @@
 <template>
   <view class="login-page">
-    <!-- Logo -->
-    <view class="logo-area">
-      <view class="logo-icon">🐾</view>
-      <view class="logo-title">宠迹 PawTrack</view>
-      <view class="logo-desc">宠物智能定位与社交平台</view>
+    <view class="mock-banner">本地 Mock 预览 · 不接真实微信 / 短信 · 非验收</view>
+
+    <view class="brand">
+      <view class="mark">迹</view>
+      <view class="name">宠迹</view>
+      <view class="sub">宠物定位与围栏告警 · 本地预览</view>
     </view>
 
-    <!-- 模式切换 -->
-    <view class="mode-switch">
-      <view
-        class="mode-item"
-        :class="{ active: mode === 'login' }"
-        @tap="mode = 'login'"
-      >登录</view>
-      <view
-        class="mode-item"
-        :class="{ active: mode === 'register' }"
-        @tap="mode = 'register'"
-      >注册</view>
-    </view>
+    <view class="form">
+      <view class="label">手机号</view>
+      <input
+        v-model="phone"
+        class="input"
+        type="number"
+        maxlength="11"
+        placeholder="请输入手机号"
+      />
 
-    <!-- 表单 -->
-    <view class="form-area">
-      <!-- 昵称（注册时显示） -->
-      <view v-if="mode === 'register'" class="input-group">
-        <view class="input-label">昵称（选填）</view>
+      <view class="label">验证码</view>
+      <view class="code-row">
         <input
-          v-model="nickname"
-          class="input"
-          placeholder="给自己起个昵称"
-          maxlength="20"
-        />
-      </view>
-
-      <!-- 手机号 -->
-      <view class="input-group">
-        <view class="input-label">手机号</view>
-        <input
-          v-model="phone"
-          class="input"
+          v-model="code"
+          class="input code-input"
           type="number"
-          placeholder="请输入手机号"
-          maxlength="11"
+          maxlength="6"
+          placeholder="请输入验证码"
         />
+        <view class="btn-ghost sms-btn" @tap="onSmsUnused">短信未接入</view>
       </view>
 
-      <!-- 验证码 -->
-      <view class="input-group">
-        <view class="input-label">验证码</view>
-        <view class="code-row">
-          <input
-            v-model="code"
-            class="input code-input"
-            type="number"
-            placeholder="请输入验证码"
-            maxlength="6"
-          />
-          <view
-            class="send-code"
-            :class="{ disabled: countdown > 0 }"
-            @tap="sendCode"
-          >
-            {{ countdown > 0 ? countdown + 's' : '发送' }}
-          </view>
-        </view>
+      <view v-if="errorText" class="err-box">{{ errorText }}</view>
+
+      <view
+        class="btn-primary submit"
+        :class="{ loading }"
+        @tap="enterPreview"
+      >
+        {{ loading ? '登录中...' : '进入本地预览' }}
       </view>
 
-      <!-- 提交按钮 -->
-      <view class="btn-primary submit-btn" :class="{ loading: loading }" @tap="handleSubmit">
-        {{ loading ? '请稍候...' : mode === 'register' ? '注册' : '登录' }}
-      </view>
+      <view class="hint">默认以本地 Mock 进入，不调用真实微信、短信或 Apple 登录。</view>
 
-      <view v-if="useMock" class="btn-mock" :class="{ loading: loading }" @tap="handleMockLogin">
-        模拟登录（本地占位）
-      </view>
-      <view v-if="useMock" class="mock-tip">当前为本地 Mock，非验收。不接真实微信/短信。</view>
-
-      <!-- 分割线 -->
-      <view class="divider">
-        <view class="divider-line" />
-        <view class="divider-text">其他登录方式</view>
-        <view class="divider-line" />
-      </view>
-
-      <!-- 微信登录 -->
-      <view class="wechat-login">
-        <view class="wechat-circle" @tap="handleWechatLogin">
-          <text class="wechat-icon">💬</text>
-        </view>
-        <view class="wechat-text">微信登录</view>
-      </view>
-    </view>
-
-    <!-- 协议 -->
-    <view class="agreement">
-      登录即代表同意《用户协议》和《隐私政策》
+      <view class="btn-ghost wechat-btn" @tap="onWechatUnused">微信登录未接入</view>
     </view>
   </view>
 </template>
@@ -106,15 +53,12 @@ import { http } from '@/utils/request'
 import { setTokens, setUser } from '@/utils/auth'
 import { USE_MOCK } from '@/utils/config'
 
-const mode = ref<'login' | 'register'>('login')
-const phone = ref('')
-const code = ref('')
-const nickname = ref('')
+const phone = ref(USE_MOCK ? '13800000000' : '')
+const code = ref(USE_MOCK ? '123456' : '')
 const loading = ref(false)
-const countdown = ref(0)
-const useMock = USE_MOCK
+const errorText = ref('')
 
-function applyAuth(resp: any, title: string) {
+function applyAuth(resp: any) {
   if (!resp?.access_token) return
   setTokens(resp.access_token, resp.refresh_token)
   setUser({
@@ -123,106 +67,39 @@ function applyAuth(resp: any, title: string) {
     nickname: resp.nickname,
     member_level: resp.member_level,
   })
-  uni.showToast({ title, icon: 'success' })
-  setTimeout(() => uni.switchTab({ url: '/pages/home/home' }), 800)
+  uni.switchTab({ url: '/pages/home/home' })
 }
 
-/** 本地占位登录，不请求真实短信或微信 */
-async function handleMockLogin() {
+function onSmsUnused() {
+  uni.showToast({ title: '短信未接入', icon: 'none' })
+}
+
+function onWechatUnused() {
+  uni.showToast({ title: '微信登录未接入', icon: 'none' })
+}
+
+async function enterPreview() {
+  if (!phone.value.trim() || !code.value.trim()) {
+    errorText.value = '请先输入手机号后再进入预览'
+    return
+  }
+  errorText.value = ''
   loading.value = true
   try {
     const resp = await http.post<any>('/auth/login', {
-      phone: '13800000000', code: '123456',
+      phone: phone.value.trim(),
+      code: code.value.trim(),
     }, false)
-    applyAuth(resp, '已进入 Mock 预览')
+    applyAuth(resp)
   } catch (e: any) {
-    uni.showToast({ title: e.message || 'Mock 登录失败', icon: 'none' })
-  } finally {
-    loading.value = false
-  }
-}
-
-
-/** 发送验证码（MVP：仅提示） */
-function sendCode() {
-  if (!/^1[3-9]\d{9}$/.test(phone.value)) {
-    uni.showToast({ title: '请输入正确的手机号', icon: 'none' })
-    return
-  }
-  uni.showToast({ title: '开发环境验证码：123456', icon: 'none' })
-  countdown.value = 60
-  const timer = setInterval(() => {
-    countdown.value--
-    if (countdown.value <= 0) clearInterval(timer)
-  }, 1000)
-}
-
-/** 登录/注册提交 */
-async function handleSubmit() {
-  if (!/^1[3-9]\d{9}$/.test(phone.value)) {
-    uni.showToast({ title: '请输入正确的手机号', icon: 'none' })
-    return
-  }
-  if (code.value.length < 4) {
-    uni.showToast({ title: '请输入验证码', icon: 'none' })
-    return
-  }
-
-  loading.value = true
-  try {
-    const resp = mode.value === 'register'
-      ? await http.post<any>('/auth/register', {
-          phone: phone.value, code: code.value, nickname: nickname.value || undefined,
-        }, false)
-      : await http.post<any>('/auth/login', {
-          phone: phone.value, code: code.value,
-        }, false)
-
-    if (resp.access_token) {
-      setTokens(resp.access_token, resp.refresh_token)
-      setUser({
-        user_id: resp.user_id,
-        phone: resp.phone,
-        nickname: resp.nickname,
-        member_level: resp.member_level,
-      })
-      uni.showToast({ title: mode.value === 'register' ? '注册成功！' : '登录成功！', icon: 'success' })
-      setTimeout(() => uni.switchTab({ url: '/pages/home/home' }), 800)
+    const raw = String(e?.message || '')
+    if (/凭证|验证码|不正确|错误/.test(raw)) {
+      errorText.value = '预览凭证不正确，请核对后重试。本页仍是本地示意，未调用真实短信。'
+    } else if (/连接|启动|network|fail|Failed|超时|无法/.test(raw) || !USE_MOCK) {
+      errorText.value = '无法连接服务，请确认后端已启动。当前未接入生产登录。'
+    } else {
+      errorText.value = raw || '无法连接服务，请确认后端已启动。当前未接入生产登录。'
     }
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '网络错误', icon: 'none' })
-  } finally {
-    loading.value = false
-  }
-}
-
-/** 微信一键登录 */
-async function handleWechatLogin() {
-  loading.value = true
-  try {
-    const code = USE_MOCK
-      ? `mock_wx_code_${Date.now()}`
-      : (await new Promise<any>((resolve, reject) => {
-          uni.login({
-            provider: 'weixin',
-            success: (res) => resolve(res),
-            fail: reject,
-          })
-        })).code
-    const resp = await http.post<any>('/auth/wechat-login', { code }, false)
-    if (resp.access_token) {
-      setTokens(resp.access_token, resp.refresh_token)
-      setUser({
-        user_id: resp.user_id,
-        phone: resp.phone,
-        nickname: resp.nickname,
-        member_level: resp.member_level,
-      })
-      uni.showToast({ title: '微信登录成功！', icon: 'success' })
-      setTimeout(() => uni.switchTab({ url: '/pages/home/home' }), 800)
-    }
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '微信登录失败', icon: 'none' })
   } finally {
     loading.value = false
   }
@@ -232,194 +109,101 @@ async function handleWechatLogin() {
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: #f6f7fb;
-  display: flex;
-  flex-direction: column;
+  background: var(--pt-bg);
+  padding-bottom: 80rpx;
 }
 
-.logo-area {
+.brand {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 140rpx;
-  padding-bottom: 60rpx;
+  padding: 80rpx 40rpx 48rpx;
 }
 
-.logo-icon {
-  font-size: 100rpx;
-}
-
-.logo-title {
+.mark {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 28rpx;
+  background: var(--pt-accent);
+  color: #fff;
   font-size: 44rpx;
-  font-weight: 700;
-  margin-top: 16rpx;
-  color: #1f2329;
-}
-
-.logo-desc {
-  font-size: 24rpx;
-  color: #9aa0a6;
-  margin-top: 8rpx;
-}
-
-/* 模式切换 */
-.mode-switch {
-  display: flex;
-  margin: 0 40rpx 24rpx;
-  background: #eceef2;
-  border-radius: 16rpx;
-  padding: 6rpx;
-}
-
-.mode-item {
-  flex: 1;
-  text-align: center;
-  padding: 16rpx 0;
-  border-radius: 12rpx;
-  font-size: 28rpx;
-  color: #6b7280;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.mode-item.active {
-  background: #fff;
-  color: #3d6cf5;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+.name {
+  margin-top: 28rpx;
+  font-size: 44rpx;
+  font-weight: 600;
+  color: var(--pt-fg);
+  letter-spacing: -0.01em;
 }
 
-/* 表单 */
-.form-area {
-  padding: 0 40rpx;
-}
-
-.input-group {
-  margin-bottom: 24rpx;
-}
-
-.input-label {
+.sub {
+  margin-top: 10rpx;
   font-size: 24rpx;
-  color: #6b7280;
-  margin-bottom: 10rpx;
+  font-weight: 400;
+  color: var(--pt-fg-2);
+}
+
+.form {
+  margin: 0 32rpx;
+  background: var(--pt-surface);
+  border: 1rpx solid var(--pt-border);
+  border-radius: 28rpx;
+  padding: 32rpx;
+}
+
+.label {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: var(--pt-fg-2);
+  margin: 8rpx 0 12rpx;
 }
 
 .input {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 20rpx 24rpx;
-  font-size: 28rpx;
-  border: 2rpx solid transparent;
+  background: var(--pt-bg-muted);
+  border-radius: 24rpx;
+  padding: 22rpx 28rpx;
+  font-size: 30rpx;
+  color: var(--pt-fg);
+  font-weight: 400;
 }
 
 .code-row {
   display: flex;
   gap: 16rpx;
-  align-items: center;
+  align-items: stretch;
 }
 
 .code-input {
   flex: 1;
 }
 
-.send-code {
-  white-space: nowrap;
-  padding: 20rpx 32rpx;
-  border-radius: 16rpx;
-  border: 2rpx solid #3d6cf5;
-  color: #3d6cf5;
-  font-size: 26rpx;
-  font-weight: 600;
-}
-
-.send-code.disabled {
-  border-color: #d1d5db;
-  color: #9ca3af;
-}
-
-.submit-btn {
-  margin-top: 20rpx;
-}
-
-.submit-btn.loading {
-  opacity: 0.6;
-}
-
-/* 分割线 */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-  margin: 48rpx 0 32rpx;
-}
-
-.divider-line {
-  flex: 1;
-  height: 2rpx;
-  background: #e5e7eb;
-}
-
-.divider-text {
-  font-size: 24rpx;
-  color: #9aa0a6;
-}
-
-/* 微信登录 */
-.wechat-login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.wechat-circle {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 50%;
-  background: #07c160;
+.sms-btn {
+  width: 220rpx;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 26rpx;
 }
 
-.wechat-icon {
-  font-size: 48rpx;
+.submit {
+  margin-top: 8rpx;
 }
 
-.wechat-text {
-  font-size: 24rpx;
-  color: #6b7280;
-  margin-top: 12rpx;
+.hint {
+  margin: 20rpx 0 28rpx;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--pt-fg-3);
+  line-height: 1.5;
 }
 
-/* 协议 */
-.agreement {
-  position: fixed;
-  bottom: 60rpx;
-  left: 0;
+.wechat-btn {
   width: 100%;
-  text-align: center;
-  font-size: 22rpx;
-  color: #9aa0a6;
-}
-
-.btn-mock {
-  margin-top: 20rpx;
-  text-align: center;
-  padding: 22rpx 0;
-  border-radius: 44rpx;
-  border: 2rpx solid #3d6cf5;
-  color: #3d6cf5;
-  font-size: 30rpx;
-  font-weight: 600;
-  background: #fff;
-}
-
-.btn-mock.loading {
-  opacity: 0.6;
-}
-
-.mock-tip {
-  margin-top: 16rpx;
-  text-align: center;
-  font-size: 22rpx;
-  color: #9aa0a6;
 }
 </style>

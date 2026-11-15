@@ -52,13 +52,13 @@ export default function PetsPage() {
     { title: '名字', dataIndex: 'name', width: 100 },
     {
       title: '类型', dataIndex: 'type', width: 70,
-      render: (v: string) => v === 'cat' ? <Tag color="orange">🐱 猫</Tag> : <Tag color="blue">🐶 狗</Tag>
+      render: (v: string) => v === 'cat' ? <Tag style={{ background: "var(--pt-warning-subtle)", color: "var(--pt-warning)", border: 0 }}>猫 猫</Tag> : <Tag style={{ background: "var(--pt-accent-subtle)", color: "var(--pt-accent)", border: 0 }}>狗 狗</Tag>
     },
     { title: '品种', dataIndex: 'breed', width: 120 },
     { title: '性别', dataIndex: 'gender', width: 70 },
     {
       title: '围栏', width: 120,
-      render: (_, r) => r.fence_enabled ? <Tag color="green">开启 {r.fence_radius}m</Tag> : <Tag>关闭</Tag>
+      render: (_, r) => r.fence_enabled ? <Tag style={{ background: "var(--pt-success-subtle)", color: "var(--pt-success)", border: 0 }}>开启 {r.fence_radius}m</Tag> : <Tag>关闭</Tag>
     },
     { title: '状态', dataIndex: 'status', width: 80, render: (v: string) => <Tag>{v === 'active' ? '正常' : '已删'}</Tag> },
     { title: '创建时间', dataIndex: 'created_at', width: 160, render: (v: string) => v ? dayjs(v).format('YYYY-MM-DD HH:mm') : '—' }

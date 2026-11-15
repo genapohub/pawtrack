@@ -22,7 +22,7 @@ export default function PlansPage() {
   return (
     <Card title="会员方案管理" extra={<Button size="small" type="primary">新增方案</Button>}>
       <Table size="small" rowKey="key" columns={columns} dataSource={data} pagination={false} />
-      <div style={{ marginTop: 16, color: '#888', fontSize: 12 }}>价格变更需审批 · 审批记录保留 180 天</div>
+      <div style={{ marginTop: 16, color: 'var(--pt-fg-3)', fontSize: 12 }}>价格变更需审批 · 审批记录保留 180 天</div>
     </Card>
   )
 }

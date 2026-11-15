@@ -1,447 +1,291 @@
 <template>
   <view class="home-page">
-    <!-- 顶部导航 -->
-    <view class="nav-bar">
-      <view class="nav-title">🐾 宠迹<text class="pro-chip" @tap="goPro">Pro</text></view>
-      <view v-if="isDev" class="dev-badge">DEV</view>
-      <view class="nav-right">
-        <view class="ws-dot" :class="{ online: wsConnected }"></view>
-        <view class="nav-icon" @tap="goAlarms">🔔</view>
-      </view>
-    </view>
+    <view class="status-spacer" />
+    <view class="nav">首页</view>
+    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
-    <!-- 地图区域 -->
-    <view class="map-wrap">
-      <map
-        id="pawMap"
-        class="paw-map"
-        :latitude="centerLat"
-        :longitude="centerLng"
-        :scale="15"
-        :markers="markers"
-        :circles="circles"
-        show-location
-      ></map>
-      <!-- 坐标浮标 -->
-      <view class="coord-badge">
-        {{ location.lat !== null && location.lng !== null ? location.lat.toFixed(4) + ', ' + location.lng.toFixed(4) : '等待定位...' }}
-      </view>
-    </view>
-
-    <!-- 宠物选择栏 -->
-    <scroll-view v-if="pets.length > 0" class="pet-bar" scroll-x>
-      <view
-        v-for="pet in pets"
-        :key="pet.id"
-        class="pet-chip"
-        :class="{ active: selectedPet?.id === pet.id }"
-        @tap="selectPet(pet)"
-      >
-        {{ pet.type === 'cat' ? '🐱' : '🐶' }} {{ pet.name }}
-      </view>
-    </scroll-view>
-
-    <!-- 位置信息卡片 -->
-    <view class="card info-card">
-      <template v-if="selectedPet">
-        <view class="pet-head" @tap="goPetDetail">
-          <view class="pet-avatar" :class="selectedPet.type === 'cat' ? 'cat-bg' : 'dog-bg'">
-            {{ selectedPet.type === 'cat' ? '🐱' : '🐶' }}
-          </view>
-          <view class="pet-meta">
-            <view class="pet-name">{{ selectedPet.name }}</view>
-            <view class="pet-breed">
-              {{ selectedPet.breed || (selectedPet.type === 'cat' ? '猫咪' : '狗狗') }}
-            </view>
-          </view>
-          <view class="status-badge" :class="location.source !== 'none' ? 'online' : 'offline'">
-            {{ location.source !== 'none' ? '● 在线' : '○ 离线' }}
-          </view>
+    <view class="body">
+      <template v-if="pageState === 'loading'">
+        <view class="map schematic muted">
+          <view class="map-grid" />
+          <view class="map-cap">定位中... 当前为本地预览，不模拟真实刷新间隔</view>
         </view>
+      </template>
 
-        <view class="loc-row">
-          <text class="loc-item">🔋 {{ location.battery }}%</text>
-          <text class="loc-item">📡 {{ location.source }}</text>
-          <text v-if="location.ts" class="loc-item">🕐 {{ formatTime(location.ts) }}</text>
+      <template v-else-if="pageState === 'empty'">
+        <view class="map schematic muted">
+          <view class="map-grid" />
+          <view class="map-cap">还没有位置记录，请先添加宠物并绑定设备（当前为本地预览数据）</view>
         </view>
-
-        <view v-if="selectedPet.fence_enabled" class="fence-tip">
-          🛡️ 安全围栏已开启 · 半径 {{ selectedPet.fence_radius }}m
+        <view class="pt-card empty-card">
+          <view class="empty-title">还没有宠物，先添加一只。</view>
+          <view class="empty-desc">添加后可绑定定位器，查看示意位置与围栏。</view>
         </view>
-
-        <!-- 模拟上报按钮（开发测试） -->
-        <view
-          class="sim-btn"
-          @tap="simulateLocation"
-        >
-          {{ simulating ? '📍 模拟上报中...' : '📍 模拟定位上报（测试）' }}
-        </view>
+        <view class="btn-primary add-btn" @tap="goAddPet">添加宠物</view>
       </template>
 
       <template v-else>
-        <view class="empty-state">
-          <view class="empty-icon">🐾</view>
-          <view class="empty-text">还没有添加宠物</view>
-          <view class="empty-action" @tap="goAddPet">+ 添加第一只宠物</view>
+        <view class="map schematic" :class="{ unconfigured: mapUnconfigured }" @tap="goFirstPet">
+          <view class="map-grid" />
+          <view v-if="!mapUnconfigured" class="fence" />
+          <view v-if="!mapUnconfigured" class="pin" />
+          <view class="map-cap">{{ mapCaption }}</view>
         </view>
-      </template>
-    </view>
 
-    <!-- 底部操作栏 -->
-    <view v-if="selectedPet" class="bottom-actions">
-      <view class="action-btn" @tap="goAddPet">➕ 添加宠物</view>
-      <view class="action-btn" @tap="goBindDevice">📡 绑定设备</view>
+        <view v-if="mapUnconfigured" class="warn-box map-warn">
+          地图 Key 未接入。页面不会白屏，位置以示意坐标和文案展示。
+        </view>
+
+        <view
+          v-for="pet in pets"
+          :key="pet.id"
+          class="pt-card pet-card"
+          @tap="goPetDetail(pet.id)"
+        >
+          <view class="pet-head">
+            <view class="avatar-mark" :class="pet.type === 'cat' ? 'avatar-cat' : 'avatar-dog'">
+              {{ nameMark(pet.name) }}
+            </view>
+            <view class="pet-meta">
+              <view class="pet-name">{{ pet.name }}</view>
+              <view class="pet-sub">{{ petSubtitle(pet) }}</view>
+            </view>
+            <view class="pet-flags">
+              <text class="tag" :class="placeClass(pet)">{{ placeLabel(pet) }}</text>
+              <text class="tag tag-success">在线 {{ batteryOf(pet) }}%</text>
+            </view>
+          </view>
+          <view class="pet-loc">{{ lastLocationText(pet) }}</view>
+        </view>
+
+        <view class="btn-primary add-btn" @tap="goAddPet">添加宠物</view>
+        <view class="foot-note">地图钉与列表均可进入宠物详情。社交页本轮不做必交付，底栏仅保留入口。</view>
+      </template>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { onShow, onHide } from '@dcloudio/uni-app'
+import { ref, computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { http } from '@/utils/request'
-import { pawSocket } from '@/utils/ws'
 import { isLoggedIn } from '@/utils/auth'
-
-const isDev = true
+import { USE_MOCK, AMAP_KEY } from '@/utils/config'
 
 interface PetInfo {
   id: number
   name: string
   type: string
   breed: string | null
-  fence_enabled: boolean
-  fence_radius: number
+  fence_enabled?: boolean
+  fence_radius?: number
 }
 
+const SCHEMA_LAT = 31.23
+const SCHEMA_LNG = 121.473
+
 const pets = ref<PetInfo[]>([])
-const selectedPet = ref<PetInfo | null>(null)
-const location = ref({
-  lat: null as number | null,
-  lng: null as number | null,
-  battery: 0,
-  source: 'none',
-  ts: 0,
-})
-const wsConnected = ref(false)
-const simulating = ref(false)
+const locations = ref<Record<number, { lat: number; lng: number; battery: number; source: string; ts: number }>>({})
+const loading = ref(true)
 const loaded = ref(false)
 
-// 郑州默认坐标
-const DEFAULT_LAT = 34.7466
-const DEFAULT_LNG = 113.6253
-
-const centerLat = computed(() => location.value.lat || DEFAULT_LAT)
-const centerLng = computed(() => location.value.lng || DEFAULT_LNG)
-
-const markers = computed(() => {
-  if (!location.value.lat || !location.value.lng || !selectedPet.value) return []
-  return [{
-    id: 1,
-    latitude: location.value.lat,
-    longitude: location.value.lng,
-    title: selectedPet.value.name,
-    iconPath: selectedPet.value.type === 'cat'
-      ? '/static/marker/marker-cat.png'
-      : '/static/marker/marker-dog.png',
-    width: 32,
-    height: 32,
-  }]
+const mapUnconfigured = computed(() => !USE_MOCK && !AMAP_KEY)
+const pageState = computed(() => {
+  if (loading.value && !loaded.value) return 'loading'
+  if (!pets.value.length) return 'empty'
+  return 'default'
 })
 
-const circles = computed(() => {
-  if (!selectedPet.value?.fence_enabled || !location.value.lat) return []
-  return [{
-    latitude: location.value.lat,
-    longitude: location.value.lng,
-    radius: selectedPet.value.fence_radius,
-    color: '#3D6CF533',
-    fillColor: '#3D6CF51A',
-    strokeWidth: 2,
-  }]
+const mapCaption = computed(() => {
+  if (mapUnconfigured.value) {
+    return `地图服务未配置，仅显示示意坐标 ${SCHEMA_LAT.toFixed(3)}, ${SCHEMA_LNG.toFixed(3)}，非实地地图服务`
+  }
+  return `示意位置，非实地地图服务 · 示意坐标 ${SCHEMA_LAT.toFixed(3)}, ${SCHEMA_LNG.toFixed(3)}`
 })
 
-/** 加载宠物列表 */
+function nameMark(name: string) {
+  return (name || '宠').slice(0, 1)
+}
+
+function petSubtitle(pet: PetInfo) {
+  const kind = pet.type === 'cat' ? '猫' : '狗'
+  const breed = pet.breed ? shortBreed(pet.breed) : kind
+  const bound = '已绑定定位器'
+  return `${breed} · ${kind} · ${bound}`
+}
+
+function shortBreed(breed: string) {
+  return breed.replace('英国短毛猫', '英短').replace('英国短毛', '英短')
+}
+
+function placeLabel(pet: PetInfo) {
+  return pet.type === 'cat' ? '宅家' : '户外'
+}
+
+function placeClass(pet: PetInfo) {
+  return pet.type === 'cat' ? 'tag-muted' : 'tag-warning'
+}
+
+function batteryOf(pet: PetInfo) {
+  return locations.value[pet.id]?.battery ?? (pet.type === 'cat' ? 72 : 88)
+}
+
+function lastLocationText(pet: PetInfo) {
+  if (pet.type === 'dog') {
+    return '最后位置（示意）：滨江步道 · 来源 GPS · 刚刚。预览不模拟真实刷新间隔。'
+  }
+  const source = locations.value[pet.id]?.source === 'gps' ? 'GPS' : 'Wi-Fi'
+  return `最后位置（示意）：小区中心点附近 · 来源 ${source} · 2 分钟前`
+}
+
 async function loadPets() {
+  loading.value = true
   try {
     const list = await http.get<any[]>('/pets')
     pets.value = list || []
-    if (list.length > 0) {
-      const first = list[0]
-      // 保持当前选中的宠物
-      const keep = list.find((p) => p.id === selectedPet.value?.id)
-      selectPet(keep || first)
-    } else {
-      selectedPet.value = null
-    }
-  } catch (e: any) {
-    console.error('加载宠物失败', e)
-  }
-}
-
-/** 获取实时位置 */
-async function fetchRealtime(petId: number) {
-  try {
-    const data = await http.get<any>(`/location/realtime/${petId}`)
-    if (data) {
-      location.value = {
-        lat: data.lat ?? null,
-        lng: data.lng ?? null,
-        battery: data.battery || 0,
-        source: data.source || 'none',
-        ts: data.ts || 0,
-      }
-    }
-  } catch (e) {
-    // 静默
-  }
-}
-
-/** 切换宠物 */
-function selectPet(pet: PetInfo) {
-  selectedPet.value = pet
-  fetchRealtime(pet.id)
-  pawSocket.subscribe('location', pet.id)
-}
-
-/** 模拟定位上报（开发测试） */
-async function simulateLocation() {
-  if (!selectedPet.value) {
-    uni.showToast({ title: '请先添加宠物', icon: 'none' })
-    return
-  }
-
-  try {
-    const devices = await http.get<any[]>('/devices')
-    if (!devices || devices.length === 0) {
-      uni.showToast({ title: '请先绑定设备', icon: 'none' })
-      goBindDevice()
-      return
-    }
-
-    const device = devices[0]
-    simulating.value = true
-    let step = 0
-
-    uni.showToast({ title: '开始模拟定位上报...', icon: 'none' })
-
-    const simTimer = setInterval(async () => {
-      step++
-      const lat = DEFAULT_LAT + (Math.random() - 0.5) * 0.001 * step
-      const lng = DEFAULT_LNG + (Math.random() - 0.5) * 0.001 * step
-
+    await Promise.all(pets.value.map(async (p) => {
       try {
-        await http.post('/location/upload', {
-          device_id: device.id,
-          lat,
-          lng,
-          accuracy: 5.0 + Math.random() * 10,
-          battery: Math.max(20, 100 - step),
-          source: 'gps',
-          ts: Math.floor(Date.now() / 1000),
-        })
-        // 本地更新位置
-        location.value = {
-          lat, lng,
-          battery: Math.max(20, 100 - step),
-          source: 'gps',
-          ts: Math.floor(Date.now() / 1000),
+        const data = await http.get<any>(`/location/realtime/${p.id}`)
+        if (data) {
+          locations.value = {
+            ...locations.value,
+            [p.id]: {
+              lat: data.lat ?? SCHEMA_LAT,
+              lng: data.lng ?? SCHEMA_LNG,
+              battery: data.battery || 0,
+              source: data.source || 'none',
+              ts: data.ts || 0,
+            },
+          }
         }
-      } catch (e) {
-        // 静默
-      }
-
-      if (step >= 20) {
-        clearInterval(simTimer)
-        simulating.value = false
-        uni.showToast({ title: '模拟上报完成', icon: 'success' })
-      }
-    }, 2000)
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '模拟失败', icon: 'none' })
-    simulating.value = false
+      } catch (e) { /* 示意坐标仍可展示 */ }
+    }))
+  } catch (e) {
+    pets.value = []
+  } finally {
+    loading.value = false
+    loaded.value = true
   }
 }
 
-function formatTime(ts: number): string {
-  const d = new Date(ts * 1000)
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
-}
-
-function goPro() { uni.navigateTo({ url: "/pages/member/member" }) }
 function goAddPet() {
   uni.navigateTo({ url: '/pages/pet-add/pet-add' })
 }
 
-function goPetDetail() {
-  if (!selectedPet.value) return
-  uni.navigateTo({ url: `/pages/pet-detail/pet-detail?id=${selectedPet.value.id}` })
+function goPetDetail(id: number) {
+  uni.navigateTo({ url: `/pages/pet-detail/pet-detail?id=${id}` })
 }
 
-function goBindDevice() {
-  uni.navigateTo({ url: '/pages/device-bind/device-bind' })
-}
-
-function goAlarms() {
-  uni.switchTab({ url: '/pages/alarms/alarms' })
+function goFirstPet() {
+  if (pets.value[0]) goPetDetail(pets.value[0].id)
 }
 
 onShow(() => {
-  // 未登录跳登录页
   if (!isLoggedIn()) {
     uni.reLaunch({ url: '/pages/login/login' })
     return
   }
-  if (!loaded.value) {
-    loadPets()
-    loaded.value = true
-  } else {
-    loadPets() // 刷新（从添加页返回）
-  }
-})
-
-onHide(() => {
-  // 不主动断开，保持后台接收
-})
-
-onMounted(() => {
-  // WebSocket 消息监听
-  pawSocket.on('connected', () => {
-    wsConnected.value = true
-    if (selectedPet.value) pawSocket.subscribe('location', selectedPet.value.id)
-    pawSocket.subscribe('alarm')
-  })
-  pawSocket.on('location', (msg: any) => {
-    if (selectedPet.value && msg.pet_id === selectedPet.value.id) {
-      location.value = {
-        lat: msg.lat,
-        lng: msg.lng,
-        battery: msg.battery,
-        source: msg.source,
-        ts: msg.ts,
-      }
-    }
-  })
-  pawSocket.on('alarm', (msg: any) => {
-    uni.showToast({ title: `⚠️ 报警：${msg.alarm_type}`, icon: 'none' })
-  })
-  pawSocket.connect()
-})
-
-onUnmounted(() => {
-  pawSocket.close()
+  loadPets()
 })
 </script>
 
 <style scoped>
 .home-page {
   min-height: 100vh;
-  background: #f6f7fb;
-  padding-bottom: 140rpx;
+  background: var(--pt-bg);
+  padding-bottom: 48rpx;
 }
 
-/* 导航栏 */
-.nav-bar {
+.status-spacer {
+  height: var(--status-bar-height, 44px);
+  background: var(--pt-surface);
+}
+
+.nav {
+  height: 88rpx;
+  background: var(--pt-surface);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 88rpx 32rpx 20rpx;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.nav-title {
-  font-size: 36rpx;
-  font-weight: 700;
-}
-
-.dev-badge {
-  background: #f59e0b;
-  color: #fff;
-  font-size: 20rpx;
+  justify-content: center;
+  font-size: 34rpx;
   font-weight: 600;
-  padding: 4rpx 12rpx;
-  border-radius: 8rpx;
-  letter-spacing: 2rpx;
+  color: var(--pt-fg);
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
+.body {
+  padding: 24rpx 0 40rpx;
 }
 
-.ws-dot {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
-  background: #d1d5db;
-}
-
-.ws-dot.online {
-  background: #22c55e;
-}
-
-.nav-icon {
-  font-size: 40rpx;
-}
-
-/* 地图 */
-.map-wrap {
-  position: relative;
-  height: 420rpx;
-  margin: 16rpx 24rpx;
-  border-radius: 24rpx;
+.map {
+  margin: 0 32rpx 24rpx;
+  height: 360rpx;
+  border-radius: 28rpx;
   overflow: hidden;
+  position: relative;
 }
 
-.paw-map {
-  width: 100%;
-  height: 100%;
+.schematic {
+  background: var(--pt-map);
 }
 
-.coord-badge {
+.schematic.muted .fence,
+.schematic.muted .pin {
+  display: none;
+}
+
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--pt-map-line) 1rpx, transparent 1rpx),
+    linear-gradient(90deg, var(--pt-map-line) 1rpx, transparent 1rpx);
+  background-size: 72rpx 72rpx;
+  opacity: 0.7;
+}
+
+.fence {
+  position: absolute;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  border: 4rpx dashed var(--pt-accent);
+  background: var(--pt-accent-soft);
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+}
+
+.pin {
+  position: absolute;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: var(--pt-pin);
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+}
+
+.map-cap {
   position: absolute;
   left: 16rpx;
+  right: 16rpx;
   bottom: 16rpx;
-  background: rgba(255, 255, 255, 0.92);
-  padding: 8rpx 16rpx;
-  border-radius: 12rpx;
+  background: var(--pt-fg-scrim);
+  color: var(--pt-fg-inv);
   font-size: 22rpx;
-  color: #6b7280;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 12rpx 20rpx;
+  border-radius: 16rpx;
 }
 
-/* 宠物选择栏 */
-.pet-bar {
-  display: flex;
-  white-space: nowrap;
-  padding: 8rpx 24rpx;
-  background: #fff;
+.map-warn {
+  margin: 0 32rpx 24rpx;
 }
 
-.pet-chip {
-  display: inline-block;
-  margin-right: 16rpx;
-  padding: 12rpx 28rpx;
-  border-radius: 999rpx;
-  background: #f3f4f6;
-  font-size: 26rpx;
-  font-weight: 600;
-  color: #1f2329;
-}
-
-.pet-chip.active {
-  background: #3d6cf5;
-  color: #fff;
-}
-
-/* 信息卡片 */
-.info-card {
-  margin: 20rpx 24rpx;
-  background: #fff;
-  border-radius: 20rpx;
-  padding: 28rpx;
+.pet-card {
+  margin-bottom: 20rpx;
 }
 
 .pet-head {
@@ -450,131 +294,60 @@ onUnmounted(() => {
   gap: 20rpx;
 }
 
-.pet-avatar {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40rpx;
-}
-
-.cat-bg {
-  background: #fff7ed;
-}
-
-.dog-bg {
-  background: #eff6ff;
-}
-
 .pet-meta {
   flex: 1;
+  min-width: 0;
 }
 
 .pet-name {
   font-size: 32rpx;
-  font-weight: 700;
+  font-weight: 500;
+  color: var(--pt-fg);
 }
 
-.pet-breed {
-  font-size: 24rpx;
-  color: #9aa0a6;
+.pet-sub {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--pt-fg-2);
 }
 
-.status-badge {
-  font-size: 24rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 999rpx;
-}
-
-.status-badge.online {
-  color: #22c55e;
-  background: #f0fdf4;
-}
-
-.status-badge.offline {
-  color: #9aa0a6;
-  background: #f3f4f6;
-}
-
-.loc-row {
-  display: flex;
-  gap: 28rpx;
-  margin-top: 24rpx;
-  font-size: 26rpx;
-  color: #6b7280;
-}
-
-.fence-tip {
-  margin-top: 16rpx;
-  font-size: 24rpx;
-  color: #22c55e;
-}
-
-.sim-btn {
-  margin-top: 24rpx;
-  text-align: center;
-  padding: 20rpx;
-  border-radius: 16rpx;
-  border: 2rpx solid #3d6cf5;
-  color: #3d6cf5;
-  font-size: 26rpx;
-  font-weight: 600;
-}
-
-/* 空状态 */
-.empty-state {
+.pet-flags {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 60rpx 0;
+  align-items: flex-end;
+  gap: 8rpx;
 }
 
-.empty-icon {
-  font-size: 80rpx;
-}
-
-.empty-text {
-  margin-top: 16rpx;
-  color: #9aa0a6;
-  font-size: 28rpx;
-}
-
-.empty-action {
+.pet-loc {
   margin-top: 20rpx;
-  color: #3d6cf5;
-  font-weight: 600;
-  font-size: 28rpx;
+  font-size: 24rpx;
+  font-weight: 400;
+  color: var(--pt-fg-2);
+  line-height: 1.5;
 }
 
-/* 底部操作 */
-.bottom-actions {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  gap: 20rpx;
-  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
-  background: #fff;
-  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+.add-btn {
+  margin: 12rpx 32rpx 16rpx;
 }
 
-.action-btn {
-  flex: 1;
-  text-align: center;
-  padding: 20rpx;
-  border-radius: 44rpx;
-  background: #f3f4f6;
-  font-size: 28rpx;
-  font-weight: 600;
+.foot-note,
+.empty-desc {
+  margin: 0 40rpx;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--pt-fg-3);
+  line-height: 1.5;
 }
 
-.action-btn:first-child {
-  background: #3d6cf5;
-  color: #fff;
+.empty-card {
+  text-align: left;
 }
-.pro-chip{font-size:20rpx;background:#3d6cf5;color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
-.pro-chip.right{position:absolute;right:24rpx;top:24rpx}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--pt-fg);
+  margin-bottom: 8rpx;
+}
 </style>

@@ -1,2 +1,44 @@
+@import './styles/tokens.css';
+
 html, body, #root { height: 100%; margin: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif; }
+body {
+  font-family: var(--pt-font);
+  font-weight: 400;
+  background: var(--pt-bg);
+  color: var(--pt-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.pt-mock-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--pt-mock-bg);
+  color: var(--pt-mock);
+  border: 1px solid var(--pt-mock-border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 4px 10px;
+  line-height: 1.4;
+}
+
+.pt-page-note {
+  color: var(--pt-fg-2);
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+
+.ant-layout-sider { position: relative; }
+.ant-layout-sider-dark,
+.ant-layout-sider-children { background: var(--pt-sidebar) !important; }
+.ant-menu-dark, .ant-menu-dark .ant-menu-sub { background: transparent !important; }
+.ant-menu-dark .ant-menu-item { color: var(--pt-sidebar-off) !important; border-radius: 10px; width: auto; margin-inline: 0; }
+.ant-menu-dark .ant-menu-item-selected {
+  background: var(--pt-accent) !important;
+  color: var(--pt-fg-inv) !important;
+}
+.ant-menu-dark .ant-menu-item:hover { color: var(--pt-sidebar-link) !important; }
+.ant-table-wrapper .ant-table { background: var(--pt-surface); }
+.ant-table-thead > tr > th { background: var(--pt-bg-muted) !important; color: var(--pt-fg-2) !important; font-weight: 400; }

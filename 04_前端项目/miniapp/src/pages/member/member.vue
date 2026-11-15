@@ -1,6 +1,7 @@
 <template>
   <view class="page">
-    <!-- 当前会员状态 -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 当前会员状态 -->
     <view class="member-hero" :class="'lv-' + currentLevel()">
       <view class="hero-icon">{{ levelIcon(currentLevel()) }}</view>
       <view class="hero-info">
@@ -34,11 +35,11 @@
           <text class="price-symbol">¥</text>
           <text class="price-num">{{ plan.price }}</text>
           <view class="buy-btn" :class="{ paying: payingPlan === plan.plan }">
-            {{ payingPlan === plan.plan ? '支付中...' : sub?.plan === plan.plan ? '当前套餐' : '开通' }}
+            {{ payingPlan === plan.plan ? '处理中...' : sub?.plan === plan.plan ? '当前套餐' : '示意开通' }}
           </view>
         </view>
       </view>
-      <view class="pay-tip">💳 MVP 阶段为模拟支付，点击即开通</view>
+      <view class="pay-tip">会员购买非本轮必交付，不走真实扣款。入口保留，开通不可当作已到账。</view>
     </view>
 
     <!-- 订单历史 -->
@@ -80,7 +81,7 @@ const payingPlan = ref('')
 const LEVEL_META: Record<string, { label: string; icon: string }> = {
   free: { label: '免费版', icon: '🆓' },
   basic: { label: '基础版', icon: '⭐' },
-  pro: { label: 'Pro版', icon: '💎' },
+  pro: { label: 'Pro版', icon: '' },
 }
 
 const benefits = [
@@ -150,7 +151,7 @@ async function buyPlan(plan: Plan) {
     // 2. 模拟支付回调
     const txnId = `MOCK${Date.now()}${Math.floor(Math.random() * 10000)}`
     await http.post('/orders/pay-callback', { order_no: orderNo, transaction_id: txnId })
-    uni.showToast({ title: `🎉 ${plan.name} 开通成功！`, icon: 'success' })
+    uni.showToast({ title: ` ${plan.name} 开通成功！`, icon: 'success' })
     loadAll()
     loadHistory()
   } catch (e: any) {
@@ -166,7 +167,7 @@ onShow(loadAll)
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding: 24rpx 0 60rpx;
 }
 
@@ -178,19 +179,19 @@ onShow(loadAll)
   margin: 0 24rpx 20rpx;
   border-radius: 24rpx;
   padding: 40rpx;
-  background: linear-gradient(135deg, #8b9dfa, #3d6cf5);
+  background: var(--pt-accent);
 }
 
 .member-hero.lv-free {
-  background: linear-gradient(135deg, #a5b4fc, #6366f1);
+  background: var(--pt-accent);
 }
 
 .member-hero.lv-basic {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  background: var(--pt-warning);
 }
 
 .member-hero.lv-pro {
-  background: linear-gradient(135deg, #a78bfa, #7c3aed);
+  background: var(--pt-accent);
 }
 
 .hero-icon {
@@ -232,7 +233,7 @@ onShow(loadAll)
   align-items: flex-start;
   gap: 16rpx;
   padding: 14rpx 0;
-  border-bottom: 2rpx solid #f3f4f6;
+  border-bottom: 2rpx solid var(--pt-bg-muted);
 }
 
 .benefit-row:last-child {
@@ -248,7 +249,7 @@ onShow(loadAll)
 
 .benefit-items {
   font-size: 24rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
   flex: 1;
   line-height: 1.6;
 }
@@ -260,7 +261,7 @@ onShow(loadAll)
   align-items: center;
   padding: 24rpx;
   border-radius: 16rpx;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   margin-bottom: 16rpx;
 }
 
@@ -271,7 +272,7 @@ onShow(loadAll)
 
 .plan-days {
   font-size: 24rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
@@ -283,21 +284,21 @@ onShow(loadAll)
 
 .price-symbol {
   font-size: 24rpx;
-  color: #ef4444;
+  color: var(--pt-danger);
   font-weight: 600;
 }
 
 .price-num {
   font-size: 44rpx;
   font-weight: 700;
-  color: #ef4444;
+  color: var(--pt-danger);
 }
 
 .buy-btn {
   margin-left: 20rpx;
   padding: 12rpx 28rpx;
   border-radius: 999rpx;
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
   font-size: 26rpx;
   font-weight: 600;
@@ -309,7 +310,7 @@ onShow(loadAll)
 
 .pay-tip {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 8rpx;
 }
 
@@ -319,7 +320,7 @@ onShow(loadAll)
   justify-content: space-between;
   align-items: center;
   padding: 18rpx 0;
-  border-bottom: 2rpx solid #f3f4f6;
+  border-bottom: 2rpx solid var(--pt-bg-muted);
 }
 
 .order-name {
@@ -329,7 +330,7 @@ onShow(loadAll)
 
 .order-no {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
@@ -344,27 +345,27 @@ onShow(loadAll)
 
 .order-status {
   font-size: 22rpx;
-  color: #22c55e;
+  color: var(--pt-success);
 }
 
 .order-status.pending {
-  color: #f59e0b;
+  color: var(--pt-warning);
 }
 
 .order-status.failed,
 .order-status.cancelled {
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
 }
 
 .empty-tip {
   text-align: center;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   padding: 30rpx 0;
   font-size: 26rpx;
 }
 
 .arrow {
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   font-size: 26rpx;
 }
 </style>

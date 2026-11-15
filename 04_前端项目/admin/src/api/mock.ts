@@ -12,23 +12,24 @@ const store = {
     { id: 3, nickname: '已封禁账号', phone: '137****3003', member_level: 'free', points: 0, status: 'blocked', member_expire_at: null, created_at: '2026-10-03T18:00:00+08:00' },
   ],
   pets: [
-    { id: 1, user_id: 1, name: '奶茶', type: 'cat', breed: '英国短毛猫', gender: 'female', fence_enabled: true, fence_radius: 100, status: 'active', created_at: NOW },
-    { id: 2, user_id: 1, name: '阿黄', type: 'dog', breed: '柯基', gender: 'male', fence_enabled: true, fence_radius: 300, status: 'active', created_at: NOW },
+    { id: 1, user_id: 1, name: '橘子', type: 'cat', breed: '英国短毛猫', gender: 'female', fence_enabled: true, fence_radius: 100, status: 'active', created_at: NOW },
+    { id: 2, user_id: 1, name: '豆豆', type: 'dog', breed: '柯基', gender: 'male', fence_enabled: true, fence_radius: 300, status: 'active', created_at: NOW },
   ],
   devices: [
-    { id: 1, sn: 'PT-CAT-MOCK-0001', user_id: 1, pet_id: 1, hardware_type: 'cat', firmware_version: '0.1.0', battery_level: 86, status: 'online', last_online_at: NOW },
-    { id: 2, sn: 'PT-DOG-MOCK-0002', user_id: 1, pet_id: 2, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: 42, status: 'online', last_online_at: NOW },
+    { id: 1, sn: 'PT-MOCK-10086', user_id: 1, pet_id: 1, hardware_type: 'cat', firmware_version: '0.1.0', battery_level: 72, status: 'online', last_online_at: NOW },
+    { id: 2, sn: 'PT-MOCK-20011', user_id: 1, pet_id: 2, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: 88, status: 'online', last_online_at: NOW },
+    { id: 3, sn: 'PT-MOCK-30002', user_id: 1, pet_id: null, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: null, status: 'offline', last_online_at: '2026-11-14T18:20:00+08:00' },
   ],
   alarms: [
-    { id: 1, pet_id: 1, user_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '本地 Mock 地址', created_at: NOW },
-    { id: 2, pet_id: 2, user_id: 1, type: 'low_battery', severity: 'medium', status: 'handled', address: '本地 Mock 地址', created_at: NOW },
+    { id: 1, pet_id: 1, user_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近（示意）', created_at: NOW },
+    { id: 2, pet_id: 2, user_id: 1, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道（示意）', created_at: NOW },
   ],
   orders: [
     { id: 1, order_no: 'PT-MOCK-20261115001', user_id: 1, type: 'subscription', product_id: 'pro_month', amount: 29.9, pay_channel: 'mock', status: 'paid', paid_at: NOW, created_at: NOW },
   ],
   meets: [
-    { id: 1, created_at: NOW, from_pet: '奶茶', to_pet: '阿黄', distance: 12, points: 10, abnormal: '', color: 'green', status: 'success' },
-    { id: 2, created_at: NOW, from_pet: '阿黄', to_pet: '豆豆', distance: 8, points: 0, abnormal: '距离异常（Mock）', color: 'red', status: 'pending' },
+    { id: 1, created_at: NOW, from_pet: '橘子', to_pet: '豆豆', distance: 12, points: 10, abnormal: '', color: 'green', status: 'success' },
+    { id: 2, created_at: NOW, from_pet: '豆豆', to_pet: '橘子', distance: 8, points: 0, abnormal: '距离异常（Mock）', color: 'red', status: 'pending' },
   ],
 }
 
@@ -55,10 +56,10 @@ export function mockRequest(method: string, path: string, body?: any): any {
   if (m === 'POST' && pathname === '/admin/login') {
     const username = String(body?.username || '')
     const password = String(body?.password || '')
-    if (username === 'admin' && password === 'mock') {
-      return { data: { access_token: 'mock-admin-token', username: 'admin', role: 'super_admin' } }
+    if ((username === 'admin' || username === 'admin.preview') && password === 'mock') {
+      return { data: { access_token: 'mock-admin-token', username: '预览管理员', role: 'super_admin' } }
     }
-    throw new Error('Mock 登录失败：请用 admin / mock')
+    throw new Error('账号或密码错误')
   }
 
   if (m === 'GET' && pathname === '/admin/dashboard') {
@@ -114,14 +115,27 @@ export function mockRequest(method: string, path: string, body?: any): any {
     const status = params.get('status')
     if (keyword) list = list.filter((d) => d.sn.includes(keyword))
     if (status) list = list.filter((d) => d.status === status)
-    return paginate(list, page, size)
+    const enriched = list.map((d) => {
+      const pet = store.pets.find((x) => x.id === d.pet_id)
+      return {
+        ...d,
+        pet_name: pet?.name || '',
+        pet_type: pet?.type || d.hardware_type,
+      }
+    })
+    return paginate(enriched, page, size)
   }
 
   if (m === 'GET' && pathname === '/admin/alarms') {
     let list = [...store.alarms]
     const status = params.get('status')
     if (status) list = list.filter((a) => a.status === status)
-    return paginate(list, page, size)
+    const enriched = list.map((a) => {
+      const pet = store.pets.find((x) => x.id === a.pet_id)
+      const device = store.devices.find((d) => d.pet_id === a.pet_id)
+      return { ...a, pet_name: pet?.name || '', device_sn: device?.sn || '' }
+    })
+    return paginate(enriched, page, size)
   }
 
   if (m === 'PUT' && pathname === '/admin/alarms/handle') {

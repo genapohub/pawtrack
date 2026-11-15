@@ -20,7 +20,7 @@ export default function SystemSettingsPage() {
     <Card>
       <Tabs items={[
         {
-          key: 'rbac', label: '🔐 角色权限 (RBAC)',
+          key: 'rbac', label: ' 角色权限 (RBAC)',
           children: <Table size="small" rowKey="key"
             columns={[
               { title: '角色', dataIndex: 'role', render: (v: string, r: any) => <Tag color={r.level}>{v}</Tag> },
@@ -30,13 +30,13 @@ export default function SystemSettingsPage() {
             dataSource={roles} pagination={false} />,
         },
         {
-          key: 'logs', label: '📋 操作日志（保留 180 天）',
+          key: 'logs', label: ' 操作日志（保留 180 天）',
           children: (
             <div>
               <Table size="small" rowKey="key"
                 columns={[
                   { title: '时间', dataIndex: 'time' },
-                  { title: '操作人', dataIndex: 'user', render: (v: string) => <Tag color="blue">{v}</Tag> },
+                  { title: '操作人', dataIndex: 'user', render: (v: string) => <Tag style={{ background: "var(--pt-accent-subtle)", color: "var(--pt-accent)", border: 0 }}>{v}</Tag> },
                   { title: '操作', dataIndex: 'action' },
                 ]}
                 dataSource={logs} pagination={false} />

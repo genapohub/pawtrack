@@ -71,7 +71,7 @@ export default function SocialAuditPage() {
       return <Tag color={v === 'success' ? 'green' : v === 'confirmed' ? 'blue' : 'default'}>{map[v] || v}</Tag>
     }},
     { title: '异常标记', dataIndex: 'abnormal', render: (v: string, r: any) =>
-      v ? <Tag color="red">{v}</Tag> : <Tag color="green">正常</Tag> },
+      v ? <Tag style={{ background: "var(--pt-danger-subtle)", color: "var(--pt-danger)", border: 0 }}>{v}</Tag> : <Tag style={{ background: "var(--pt-success-subtle)", color: "var(--pt-success)", border: 0 }}>正常</Tag> },
     { title: '操作', width: 140, render: (_: any, r: any) => (
       <div style={{ display: 'flex', gap: 8 }}>
         {r.abnormal ? (
@@ -100,7 +100,7 @@ export default function SocialAuditPage() {
       />
     }>
       <Table size="small" rowKey="key" columns={columns} dataSource={data} loading={loading} pagination={false} />
-      <div style={{ marginTop: 16, color: '#888', fontSize: 12 }}>
+      <div style={{ marginTop: 16, color: 'var(--pt-fg-3)', fontSize: 12 }}>
         异常自动判定规则：相遇距离 &lt; 5m 标记距离异常 · 同对宠物 24h ≥ 3 次标记频繁碰头 · 驳回自动扣回双方积分
       </div>
     </Card>

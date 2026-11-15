@@ -5,21 +5,21 @@
 
 const NOW_ISO = '2026-11-15T12:00:00+08:00'
 const NOW_TS = 1763182800
-const DEFAULT_LAT = 34.7466
-const DEFAULT_LNG = 113.6253
+const DEFAULT_LAT = 31.230
+const DEFAULT_LNG = 121.473
 
 const user = {
   user_id: 1,
   phone: '13800000000',
-  nickname: '本地预览用户',
-  member_level: 'basic',
+  nickname: '预览用户',
+  member_level: 'free',
   privacy_location: true,
 }
 
 const pets = [
   {
     id: 1,
-    name: '奶茶',
+    name: '橘子',
     type: 'cat',
     breed: '英国短毛猫',
     fence_enabled: true,
@@ -27,7 +27,7 @@ const pets = [
   },
   {
     id: 2,
-    name: '阿黄',
+    name: '豆豆',
     type: 'dog',
     breed: '柯基',
     fence_enabled: true,
@@ -36,18 +36,19 @@ const pets = [
 ]
 
 const devices = [
-  { id: 1, sn: 'PT-CAT-MOCK-0001', pet_id: 1, status: 'online', battery: 86, hardware_type: 'cat' },
-  { id: 2, sn: 'PT-DOG-MOCK-0002', pet_id: 2, status: 'online', battery: 42, hardware_type: 'dog' },
+  { id: 1, sn: 'PT-MOCK-10086', pet_id: 1, status: 'online', battery: 72, hardware_type: 'cat', pet_name: '橘子', pet_type: 'cat' },
+  { id: 2, sn: 'PT-MOCK-20011', pet_id: 2, status: 'online', battery: 88, hardware_type: 'dog', pet_name: '豆豆', pet_type: 'dog' },
+  { id: 3, sn: 'PT-MOCK-30002', pet_id: null, status: 'offline', battery: null, hardware_type: 'dog', pet_name: '', pet_type: 'dog' },
 ]
 
 const locations: Record<number, { lat: number; lng: number; battery: number; source: string; ts: number }> = {
-  1: { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 86, source: 'wifi', ts: NOW_TS },
-  2: { lat: DEFAULT_LAT + 0.001, lng: DEFAULT_LNG + 0.001, battery: 42, source: 'gps', ts: NOW_TS },
+  1: { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 72, source: 'wifi', ts: NOW_TS },
+  2: { lat: DEFAULT_LAT + 0.001, lng: DEFAULT_LNG + 0.001, battery: 88, source: 'gps', ts: NOW_TS },
 }
 
 const alarms = [
-  { id: 1, pet_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '本地 Mock 地址', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
-  { id: 2, pet_id: 2, type: 'low_battery', severity: 'medium', status: 'handled', address: '本地 Mock 地址', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
+  { id: 1, pet_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近（示意）', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
+  { id: 2, pet_id: 2, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道（示意）', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
 ]
 
 const nearby = [
@@ -56,7 +57,7 @@ const nearby = [
 ]
 
 const meets = [
-  { id: 1, status: 'success', from_pet: '奶茶', to_pet: '豆豆', created_at: NOW_ISO, points: 10 },
+  { id: 1, status: 'success', from_pet: '橘子', to_pet: '豆豆', created_at: NOW_ISO, points: 10 },
 ]
 
 const alarmSettings = {
@@ -89,7 +90,16 @@ export function mockRequest(method: string, url: string, data?: any): any {
   const path = pathname.replace(/^\/api\/v1/, '') || pathname
   const m = method.toUpperCase()
 
-  if (m === 'POST' && (path === '/auth/login' || path === '/auth/register' || path === '/auth/wechat-login')) {
+  if (m === 'POST' && path === '/auth/wechat-login') {
+    throw new Error('微信登录未接入')
+  }
+  if (m === 'POST' && (path === '/auth/login' || path === '/auth/register')) {
+    const phone = String(data?.phone || '').replace(/\s+/g, '')
+    const code = String(data?.code || '')
+    if (!phone || !code) throw new Error('请先输入')
+    if (phone !== '13800000000' || code !== '123456') {
+      throw new Error('预览凭证不正确')
+    }
     return authPayload()
   }
   if (m === 'POST' && path === '/auth/refresh') {
@@ -124,14 +134,46 @@ export function mockRequest(method: string, url: string, data?: any): any {
     return { ok: true }
   }
 
-  if (m === 'GET' && path === '/devices') return devices.map((d) => ({ ...d }))
+  if (m === 'GET' && path === '/devices') {
+    return devices.map((d) => {
+      const pet = pets.find((x) => x.id === d.pet_id)
+      return { ...d, pet_name: pet?.name || d.pet_name || '', pet_type: pet?.type || d.pet_type }
+    })
+  }
   if (m === 'POST' && path === '/devices/register') {
-    const created = { id: Date.now(), sn: data?.sn || 'PT-MOCK-NEW', pet_id: data?.pet_id || null, status: 'online', battery: 100, hardware_type: 'dog' }
+    const sn = String(data?.sn || '').trim().toUpperCase()
+    const code = String(data?.activation_code || '').trim()
+    if (!sn || !code || sn.includes('XXXX') || sn.endsWith('00000') || code.toUpperCase() === 'INVALID') {
+      throw new Error('未找到该设备或激活码不正确')
+    }
+    const existed = devices.find((d) => d.sn === sn)
+    if (existed && existed.pet_id) {
+      throw new Error('该设备已绑定其他宠物')
+    }
+    if (existed) return existed
+    const created = { id: Date.now(), sn, pet_id: data?.pet_id || null, status: 'online', battery: 100, hardware_type: 'dog', pet_name: '', pet_type: 'dog' }
     devices.push(created)
     return created
   }
-  if (m === 'POST' && path === '/devices/bind') return { ok: true }
-  if (m === 'POST' && path === '/devices/unbind') return { ok: true }
+  if (m === 'POST' && path === '/devices/bind') {
+    const sn = String(data?.sn || '').trim().toUpperCase()
+    const existed = devices.find((d) => d.sn === sn)
+    if (!existed) throw new Error('未找到该设备或激活码不正确')
+    if (existed.pet_id && existed.pet_id !== data?.pet_id) {
+      throw new Error('该设备已绑定其他宠物')
+    }
+    existed.pet_id = data?.pet_id || existed.pet_id
+    return { ok: true }
+  }
+  if (m === 'POST' && path === '/devices/unbind') {
+    const sn = String(data?.sn || '').trim().toUpperCase()
+    if (sn === 'PT-MOCK-FAIL') {
+      throw new Error('解绑未完成')
+    }
+    const existed = devices.find((d) => d.sn === sn)
+    if (existed) existed.pet_id = null
+    return { ok: true }
+  }
   const findDev = path.match(/^\/devices\/(\d+)\/find$/)
   if (m === 'POST' && findDev) return { ok: true }
   const ota = path.match(/^\/devices\/(\d+)\/ota\/progress$/)
@@ -178,7 +220,7 @@ export function mockRequest(method: string, url: string, data?: any): any {
   if (m === 'GET' && path === '/social/nearby') return nearby
   if (m === 'GET' && path === '/social/meets') return { items: meets }
   if (m === 'POST' && path === '/social/meets') {
-    const created = { id: Date.now(), status: 'pending', from_pet: '奶茶', to_pet: data?.to_pet || '豆豆', created_at: NOW_ISO, points: 0 }
+    const created = { id: Date.now(), status: 'pending', from_pet: '橘子', to_pet: data?.to_pet || '豆豆', created_at: NOW_ISO, points: 0 }
     meets.push(created)
     return created
   }

@@ -1,18 +1,19 @@
 <template>
   <view class="page">
-    <!-- 通知渠道 -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 通知渠道 -->
     <view class="section">
-      <view class="section-title">🔔 通知渠道</view>
+      <view class="section-title"> 通知渠道</view>
       <view class="switch-row">
         <text>App Push 推送</text>
-        <switch :checked="form.notify_push" color="#3D6CF5" @change="form.notify_push = eventValue($event)" />
+        <switch :checked="form.notify_push" color="var(--pt-accent)" @change="form.notify_push = eventValue($event)" />
       </view>
       <view class="switch-row">
         <view class="switch-label">
           <text>短信通知</text>
           <text class="pro-tag">Pro</text>
         </view>
-        <switch :checked="form.notify_sms" color="#3D6CF5" @change="form.notify_sms = eventValue($event)" />
+        <switch :checked="form.notify_sms" color="var(--pt-accent)" @change="form.notify_sms = eventValue($event)" />
       </view>
     </view>
 
@@ -112,26 +113,26 @@ async function handleSave() {
 </script>
 
 <style scoped>
-.page { min-height: 100vh; background: #f6f7fb; padding: 24rpx 0 80rpx; }
+.page { min-height: 100vh; background: var(--pt-bg); padding: 24rpx 0 80rpx; }
 .section { background: #fff; margin: 24rpx 24rpx; border-radius: 16rpx; padding: 24rpx; }
 .section-title { font-size: 30rpx; font-weight: 700; }
-.section-desc { font-size: 24rpx; color: #9aa0a6; margin-top: 8rpx; }
-.switch-row { display: flex; justify-content: space-between; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.section-desc { font-size: 24rpx; color: var(--pt-fg-3); margin-top: 8rpx; }
+.switch-row { display: flex; justify-content: space-between; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid var(--pt-bg-muted); }
 .switch-row:last-child { border-bottom: none; }
 .switch-label { display: flex; align-items: center; gap: 8rpx; }
-.pro-tag { font-size: 20rpx; background: #3d6cf5; color: #fff; padding: 2rpx 10rpx; border-radius: 999rpx; }
-.contact-card { display: flex; justify-content: space-between; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.pro-tag { font-size: 20rpx; background: var(--pt-accent); color: #fff; padding: 2rpx 10rpx; border-radius: 999rpx; }
+.contact-card { display: flex; justify-content: space-between; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid var(--pt-bg-muted); }
 .contact-name { font-size: 28rpx; font-weight: 600; }
-.contact-phone { font-size: 24rpx; color: #9aa0a6; margin-left: 16rpx; }
-.contact-del { font-size: 24rpx; color: #ef4444; }
-.add-contact { text-align: center; padding: 24rpx 0; font-size: 26rpx; color: #3d6cf5; font-weight: 600; }
-.save-btn { margin: 48rpx 24rpx; background: #3d6cf5; color: #fff; text-align: center; padding: 28rpx 0; border-radius: 16rpx; font-size: 30rpx; font-weight: 700; }
-.modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.contact-phone { font-size: 24rpx; color: var(--pt-fg-3); margin-left: 16rpx; }
+.contact-del { font-size: 24rpx; color: var(--pt-danger); }
+.add-contact { text-align: center; padding: 24rpx 0; font-size: 26rpx; color: var(--pt-accent); font-weight: 600; }
+.save-btn { margin: 48rpx 24rpx; background: var(--pt-accent); color: #fff; text-align: center; padding: 28rpx 0; border-radius: 16rpx; font-size: 30rpx; font-weight: 700; }
+.modal-mask { position: fixed; inset: 0; background: var(--pt-fg-scrim); display: flex; align-items: center; justify-content: center; z-index: 999; }
 .modal-card { background: #fff; border-radius: 20rpx; padding: 40rpx 32rpx; width: 600rpx; }
 .modal-title { font-size: 32rpx; font-weight: 700; margin-bottom: 24rpx; }
-.modal-input { border: 1rpx solid #e5e7eb; border-radius: 12rpx; padding: 18rpx 20rpx; font-size: 28rpx; margin-bottom: 16rpx; }
+.modal-input { border: 1rpx solid var(--pt-border); border-radius: 12rpx; padding: 18rpx 20rpx; font-size: 28rpx; margin-bottom: 16rpx; }
 .modal-btns { display: flex; gap: 20rpx; margin-top: 16rpx; }
 .mbtn { flex:1; text-align: center; padding: 20rpx 0; border-radius: 12rpx; font-size: 28rpx; font-weight: 600; }
-.mbtn.cancel { background: #f3f4f6; color: #6b7280; }
-.mbtn.ok { background: #3d6cf5; color: #fff; }
+.mbtn.cancel { background: var(--pt-bg-muted); color: var(--pt-fg-2); }
+.mbtn.ok { background: var(--pt-accent); color: #fff; }
 </style>

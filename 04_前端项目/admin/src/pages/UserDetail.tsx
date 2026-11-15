@@ -9,7 +9,7 @@ export default function UserDetailPage() {
 
   const petsColumns = [
     { title: '宠物', dataIndex: 'name' },
-    { title: '类型', dataIndex: 'type', render: (v: string) => v === 'cat' ? '🐱 猫' : '🐶 狗' },
+    { title: '类型', dataIndex: 'type', render: (v: string) => v === 'cat' ? '猫 猫' : '狗 狗' },
     { title: '围栏', dataIndex: 'fence', render: (v: string) => <Tag color={v?.includes('开') ? 'green' : 'default'}>{v || '未开启'}</Tag> },
   ]
   const petsData = [

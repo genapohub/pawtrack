@@ -1,8 +1,9 @@
 <template>
   <view class="page">
-    <!-- 附近宠物（Tab 切换列表/地图） -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 附近宠物（Tab 切换列表/地图） -->
     <view class="section-title">
-      <text>🐾 附近的宠物</text>
+      <text> 附近的宠物</text>
       <view class="view-tabs">
         <text :class="{ active: viewMode === 'list' }" @tap="viewMode = 'list'">列表</text>
         <text :class="{ active: viewMode === 'map' }" @tap="viewMode = 'map'">地图</text>
@@ -30,7 +31,7 @@
     <view v-if="viewMode === 'list' && nearby.length > 0" class="nearby-list">
       <view v-for="p in nearby" :key="p.pet_id || p.id" class="card nearby-card">
         <view class="pet-avatar" :class="p.type === 'cat' ? 'cat-bg' : 'dog-bg'">
-          {{ p.type === 'cat' ? '🐱' : '🐶' }}
+          {{ p.type === 'cat' ? '猫' : '狗' }}
         </view>
         <view class="pet-info">
           <view class="pet-name">
@@ -47,12 +48,12 @@
     </view>
 
     <view v-else class="empty-state">
-      <view class="empty-icon">🐾</view>
+      <view class="empty-icon"></view>
       <view class="empty-text">附近还没有宠物，去遛弯看看吧</view>
     </view>
 
     <!-- 我的碰头记录 -->
-    <view class="section-title"><text>📅 我的碰头记录</text></view>
+    <view class="section-title"><text> 我的碰头记录</text></view>
 
     <view v-if="meets.length > 0" class="meet-list">
       <view v-for="m in meets" :key="m.id" class="card meet-card">
@@ -69,12 +70,12 @@
         </view>
         <!-- 待确认 → 操作按钮 -->
         <view v-if="m.status === 'pending' && m.receiver_pet_id === myPetId" class="meet-actions">
-          <view class="act-btn ok" @tap="confirmMeet(m)">✓ 接受</view>
-          <view class="act-btn no" @tap="cancelMeet(m)">✗ 拒绝</view>
+          <view class="act-btn ok" @tap="confirmMeet(m)"> 接受</view>
+          <view class="act-btn no" @tap="cancelMeet(m)"> 拒绝</view>
         </view>
         <!-- 已确认 → 前往碰头（S16 寻找中） -->
         <view v-if="m.status === 'confirmed'" class="meet-actions">
-          <view class="act-btn ok" @tap="goSeeking(m)">📍 前往碰头</view>
+          <view class="act-btn ok" @tap="goSeeking(m)"> 前往碰头</view>
           <view class="act-btn no" @tap="cancelMeet(m)">取消</view>
         </view>
       </view>
@@ -107,7 +108,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 function meetEmoji(status: string): string {
-  return { success: '🎉', confirmed: '🤝', pending: '⏳', failed: '💤', cancelled: '🚫' }[status] || '🤝'
+  return { success: '', confirmed: '', pending: '⏳', failed: '', cancelled: '' }[status] || ''
 }
 
 function meetStatusLabel(status: string): string {
@@ -269,7 +270,7 @@ onShow(() => {
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding: 24rpx 0 60rpx;
 }
 
@@ -284,7 +285,7 @@ onShow(() => {
 
 .refresh {
   font-size: 24rpx;
-  color: #3d6cf5;
+  color: var(--pt-accent);
   font-weight: 400;
   margin-left: 16rpx;
 }
@@ -297,14 +298,14 @@ onShow(() => {
 
 .view-tabs text {
   font-size: 24rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   padding: 8rpx 16rpx;
   border-radius: 999rpx;
-  background: #f3f4f6;
+  background: var(--pt-bg-muted);
 }
 
 .view-tabs text.active {
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
 }
 
@@ -332,7 +333,7 @@ onShow(() => {
   display: flex;
   align-items: center;
   gap: 4rpx;
-  color: #4b5563;
+  color: var(--pt-fg-2);
 }
 
 .dot {
@@ -342,8 +343,8 @@ onShow(() => {
   display: inline-block;
 }
 
-.dot.dog { background: #1677ff; }
-.dot.cat { background: #f59e0b; }
+.dot.dog { background: var(--pt-accent); }
+.dot.cat { background: var(--pt-warning); }
 
 /* 附近宠物 */
 .nearby-card {
@@ -363,11 +364,11 @@ onShow(() => {
 }
 
 .cat-bg {
-  background: #fff7ed;
+  background: var(--pt-warning-subtle);
 }
 
 .dog-bg {
-  background: #eff6ff;
+  background: var(--pt-accent-subtle);
 }
 
 .pet-info {
@@ -389,30 +390,30 @@ onShow(() => {
 }
 
 .match-badge.high {
-  background: #f0fdf4;
-  color: #22c55e;
+  background: var(--pt-success-subtle);
+  color: var(--pt-success);
 }
 
 .match-badge.mid {
-  background: #fffbeb;
-  color: #f59e0b;
+  background: var(--pt-warning-subtle);
+  color: var(--pt-warning);
 }
 
 .match-badge.low {
-  background: #f3f4f6;
-  color: #9ca3af;
+  background: var(--pt-bg-muted);
+  color: var(--pt-fg-3);
 }
 
 .pet-detail {
   font-size: 24rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
 .meet-btn {
   padding: 14rpx 28rpx;
   border-radius: 999rpx;
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
   font-size: 26rpx;
   font-weight: 600;
@@ -440,7 +441,7 @@ onShow(() => {
 
 .meet-time {
   font-size: 22rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
@@ -448,24 +449,24 @@ onShow(() => {
   font-size: 22rpx;
   padding: 6rpx 16rpx;
   border-radius: 999rpx;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pt-bg-muted);
+  color: var(--pt-fg-2);
 }
 
 .meet-status.success {
-  background: #f0fdf4;
-  color: #22c55e;
+  background: var(--pt-success-subtle);
+  color: var(--pt-success);
 }
 
 .meet-status.pending {
-  background: #fffbeb;
-  color: #f59e0b;
+  background: var(--pt-warning-subtle);
+  color: var(--pt-warning);
 }
 
 .meet-points {
   margin-top: 16rpx;
   font-size: 24rpx;
-  color: #3d6cf5;
+  color: var(--pt-accent);
   font-weight: 600;
 }
 
@@ -485,13 +486,13 @@ onShow(() => {
 }
 
 .act-btn.ok {
-  background: #eef2ff;
-  color: #3d6cf5;
+  background: var(--pt-accent-subtle);
+  color: var(--pt-accent);
 }
 
 .act-btn.no {
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pt-bg-muted);
+  color: var(--pt-fg-2);
 }
 
 /* 空状态 */
@@ -512,7 +513,7 @@ onShow(() => {
 
 .empty-text {
   margin-top: 16rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   font-size: 26rpx;
 }
 </style>

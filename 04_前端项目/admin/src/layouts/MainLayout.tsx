@@ -1,45 +1,33 @@
 /**
- * 管理后台 — 主布局（侧边栏 + 顶栏 + 内容区）
+ * 管理后台壳 — 对齐画布 205:1 侧栏与顶栏 Mock 口径
  */
-import { useState } from 'react'
-import { Layout, Menu, theme, Avatar, Dropdown, Space, Tag } from 'antd'
+import { Layout, Menu } from 'antd'
 import {
-  DashboardOutlined, UserOutlined,
-  ApiOutlined, BellOutlined, ShoppingCartOutlined, LogoutOutlined
+  DashboardOutlined, UserOutlined, ApiOutlined, BellOutlined,
+  TeamOutlined, ShoppingCartOutlined, SettingOutlined, AuditOutlined,
+  AccountBookOutlined, GiftOutlined, FileTextOutlined
 } from '@ant-design/icons'
-import type { MenuProps } from 'antd'
-import { getAdminInfo, clearAuth } from '../api/client'
-import { IS_DEV, APP_ENV, USE_MOCK } from '../env'
+import { getAdminInfo } from '../api/client'
+import { USE_MOCK } from '../env'
+import { PT } from '../styles/tokens'
+import type { ReactNode } from 'react'
 
 const { Header, Sider, Content } = Layout
 
-const MENU_ITEMS: { key: string; label: string; icon: React.ReactNode }[] = [
+const MENU_ITEMS = [
   { key: 'dashboard', label: '数据概览', icon: <DashboardOutlined /> },
-  { key: 'users', label: '用户管理', icon: <UserOutlined /> },
-  { key: 'pets', label: '宠物管理', icon: <PetIcon /> },
-  { key: 'devices', label: '设备管理', icon: <ApiOutlined /> },
-  { key: 'alarms', label: '报警管理', icon: <BellOutlined /> },
-  { key: 'social', label: '社交管理', icon: <TeamIcon /> },
-  { key: 'orders', label: '会员与营收', icon: <ShoppingCartOutlined /> },
-  { key: 'content', label: '内容管理', icon: <FileIcon /> },
-  { key: 'system', label: '系统设置', icon: <SettingIcon /> }
+  { key: 'devices', label: '设备', icon: <ApiOutlined /> },
+  { key: 'alarms', label: '报警', icon: <BellOutlined /> },
+  { key: 'users', label: '用户', icon: <UserOutlined /> },
+  { key: 'pets', label: '宠物', icon: <TeamOutlined /> },
+  { key: 'social', label: '社交审核', icon: <AuditOutlined /> },
+  { key: 'pointsRule', label: '积分规则', icon: <GiftOutlined /> },
+  { key: 'plans', label: '套餐', icon: <ShoppingCartOutlined /> },
+  { key: 'orders', label: '订单', icon: <FileTextOutlined /> },
+  { key: 'revenue', label: '收入', icon: <AccountBookOutlined /> },
+  { key: 'content', label: '内容', icon: <FileTextOutlined /> },
+  { key: 'system', label: '系统设置', icon: <SettingOutlined /> },
 ]
-
-function PetIcon() {
-  return <span style={{ fontSize: 14 }}>🐾</span>
-}
-
-function TeamIcon() {
-  return <span style={{ fontSize: 14 }}>🐕</span>
-}
-
-function FileIcon() {
-  return <span style={{ fontSize: 14 }}>📢</span>
-}
-
-function SettingIcon() {
-  return <span style={{ fontSize: 14 }}>⚙️</span>
-}
 
 export default function MainLayout({
   active,
@@ -50,54 +38,88 @@ export default function MainLayout({
   active: string
   onNavigate: (key: string) => void
   onLogout: () => void
-  children: React.ReactNode
+  children: ReactNode
 }) {
-  const [collapsed, setCollapsed] = useState(false)
-  const { token: themeToken } = theme.useToken()
   const admin = getAdminInfo()
-
-  const dropdownItems: MenuProps['items'] = [
-    { key: 'logout', label: '退出登录', icon: <LogoutOutlined /> }
-  ]
+  const siderSelected = ['userDetail'].includes(active) ? 'users'
+    : ['deviceDetail'].includes(active) ? 'devices'
+    : ['alarmRules'].includes(active) ? 'alarms'
+    : active
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} theme="light">
+    <Layout style={{ minHeight: '100vh', background: PT.bg }}>
+      <Sider width={220} theme="dark" style={{
+        background: PT.sidebar,
+        borderRight: `1px solid ${PT.sidebarLine}`,
+      }}>
         <div style={{
-          height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: themeToken.colorPrimary, fontWeight: 800, fontSize: collapsed ? 18 : 18,
-          borderBottom: `1px solid ${themeToken.colorBorder}`
+          padding: '20px 16px 16px',
+          borderBottom: `1px solid ${PT.sidebarLine}`,
+          display: 'flex',
+          gap: 10,
+          alignItems: 'center',
         }}>
-          {collapsed ? '🐾' : '🐾 宠迹后台'}
+          <div style={{
+            width: 32, height: 32, borderRadius: 10,
+            background: PT.accent, color: '#fff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 600, fontSize: 15, flexShrink: 0,
+          }}>迹</div>
+          <div>
+            <div style={{ color: PT.fgInv, fontWeight: 600, fontSize: 14, lineHeight: 1.3 }}>宠迹管理端</div>
+            <div style={{ color: PT.sidebarMuted, fontSize: 11, fontWeight: 400, marginTop: 2 }}>本地 Mock · 非验收</div>
+          </div>
         </div>
         <Menu
           mode="inline"
-          selectedKeys={[active]}
+          theme="dark"
+          selectedKeys={[siderSelected]}
           items={MENU_ITEMS}
           onClick={({ key }) => onNavigate(key)}
-          style={{ borderRight: 0 }}
+          style={{ background: 'transparent', borderInlineEnd: 0, padding: '12px 8px' }}
         />
-      </Sider>
-      <Layout>
-        <Header style={{
-          background: themeToken.colorBgContainer, padding: '0 24px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          borderBottom: `1px solid ${themeToken.colorBorder}`
+        <div style={{
+          position: 'absolute', left: 16, right: 16, bottom: 20,
+          color: PT.sidebarOff, fontSize: 11, lineHeight: 1.55, fontWeight: 400,
         }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <Tag color={IS_DEV ? 'orange' : 'red'} style={{ margin: 0, fontWeight: 600 }}>
-              {IS_DEV ? 'DEV 开发环境' : `${APP_ENV.toUpperCase()} 生产环境`}
-            </Tag>
-            {USE_MOCK ? <Tag style={{ margin: 0 }}>本地 Mock，非验收</Tag> : null}
+          <div style={{ marginBottom: 8 }}>{admin?.username || '预览管理员'}</div>
+          <div>社交审核、退款、固件推送本轮不做必交付。</div>
+          <div>不得把 Mock 订单写成真实营收。</div>
+          <button
+            type="button"
+            onClick={onLogout}
+            style={{
+              marginTop: 12, background: 'transparent', border: 0,
+              color: PT.sidebarLink, cursor: 'pointer', padding: 0, fontSize: 12,
+            }}
+          >退出登录</button>
+        </div>
+      </Sider>
+      <Layout style={{ background: PT.bg }}>
+        <Header style={{
+          background: PT.surface,
+          padding: '0 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: `1px solid ${PT.border}`,
+          height: 56,
+          lineHeight: '56px',
+        }}>
+          <div style={{ fontSize: 18, fontWeight: 600, color: PT.fg }}>
+            {MENU_ITEMS.find(i => i.key === siderSelected)?.label || '数据概览'}
           </div>
-          <Dropdown menu={{ items: dropdownItems, onClick: ({ key }) => key === 'logout' && onLogout() }}>
-            <Space style={{ cursor: 'pointer' }}>
-              <Avatar style={{ backgroundColor: themeToken.colorPrimary }} icon={<UserOutlined />} />
-              <span>{admin?.username || 'admin'}</span>
-            </Space>
-          </Dropdown>
+          {USE_MOCK ? (
+            <span style={{
+              color: PT.mock, fontSize: 12, fontWeight: 400,
+              background: PT.mockBg, border: `1px solid ${PT.mockBorder}`,
+              borderRadius: 999, padding: '4px 10px', lineHeight: 1.4,
+            }}>本地 Mock 可预览 · 非真实硬件与第三方 · 待复核</span>
+          ) : (
+            <span style={{ color: PT.fg3, fontSize: 12 }}>已关闭 Mock，请求将打到本地后端</span>
+          )}
         </Header>
-        <Content style={{ margin: 16, padding: 24, background: themeToken.colorBgContainer, borderRadius: 8, overflow: 'auto' }}>
+        <Content style={{ margin: 0, padding: 24, background: PT.bg, overflow: 'auto' }}>
           {children}
         </Content>
       </Layout>

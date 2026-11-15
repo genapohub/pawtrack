@@ -1,6 +1,7 @@
 <template>
   <view class="page">
-    <!-- 筛选栏 -->
+        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
+<!-- 筛选栏 -->
     <view class="filter-bar">
       <view
         v-for="f in filters"
@@ -27,23 +28,23 @@
           </view>
         </view>
 
-        <view v-if="alarm.address" class="alarm-address">📍 {{ alarm.address }}</view>
+        <view v-if="alarm.address" class="alarm-address"> {{ alarm.address }}</view>
         <view v-if="alarm.lat" class="alarm-coord">
           {{ alarm.lat.toFixed(5) }}, {{ alarm.lng.toFixed(5) }}
         </view>
 
         <!-- 操作按钮 -->
         <view v-if="alarm.status === 'active'" class="alarm-actions">
-          <view class="act-btn ok" @tap="handleAlarm(alarm, 'handled')">✓ 确认</view>
-          <view class="act-btn no" @tap="handleAlarm(alarm, 'false_positive')">✗ 误报</view>
+          <view class="act-btn ok" @tap="handleAlarm(alarm, 'handled')"> 确认</view>
+          <view class="act-btn no" @tap="handleAlarm(alarm, 'false_positive')"> 误报</view>
         </view>
       </view>
     </view>
 
     <!-- 空状态 -->
     <view v-else-if="!loading" class="empty-state">
-      <view class="empty-icon">🔔</view>
-      <view class="empty-text">暂无报警记录</view>
+      <view class="empty-icon"></view>
+      <view class="empty-text">暂时没有报警记录</view>
     </view>
 
     <view v-if="loading" class="loading-text">加载中...</view>
@@ -67,13 +68,13 @@ const alarms = ref<any[]>([])
 const loading = ref(false)
 
 const TYPE_MAP: Record<string, string> = {
-  leave_fence: '🏃 离开围栏',
-  leave_fence_cat: '🏃 猫咪离开围栏',
-  enter_fence: '🏠 进入围栏',
-  low_battery: '🔋 电量不足',
-  low_battery_critical: '🔋 电量严重不足',
-  offline_warning: '📡 设备离线',
-  tamper_detected: '⚠️ 防拆报警',
+  leave_fence: ' 离开围栏',
+  leave_fence_cat: ' 猫咪离开围栏',
+  enter_fence: ' 进入围栏',
+  low_battery: ' 电量不足',
+  low_battery_critical: ' 电量严重不足',
+  offline_warning: ' 设备离线',
+  tamper_detected: ' 防拆报警',
   fall_detected: '🆘 跌落检测',
 }
 
@@ -84,7 +85,7 @@ const SEVERITY_MAP: Record<string, string> = {
 }
 
 function alarmIcon(type: string): string {
-  return TYPE_MAP[type]?.split(' ')[0] || '🔔'
+  return TYPE_MAP[type]?.split(' ')[0] || ''
 }
 
 function alarmTitle(alarm: any): string {
@@ -144,7 +145,7 @@ onShow(loadAlarms)
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--pt-bg);
   padding-bottom: 40rpx;
 }
 
@@ -162,13 +163,13 @@ onShow(loadAlarms)
 .filter-item {
   padding: 12rpx 28rpx;
   border-radius: 999rpx;
-  background: #f3f4f6;
+  background: var(--pt-bg-muted);
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 .filter-item.active {
-  background: #3d6cf5;
+  background: var(--pt-accent);
   color: #fff;
   font-weight: 600;
 }
@@ -195,15 +196,15 @@ onShow(loadAlarms)
 }
 
 .alarm-icon.high {
-  background: #fef2f2;
+  background: var(--pt-danger-subtle);
 }
 
 .alarm-icon.medium {
-  background: #fffbeb;
+  background: var(--pt-warning-subtle);
 }
 
 .alarm-icon.low {
-  background: #f0f9ff;
+  background: var(--pt-accent-subtle);
 }
 
 .alarm-info {
@@ -217,7 +218,7 @@ onShow(loadAlarms)
 
 .alarm-time {
   font-size: 24rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   margin-top: 4rpx;
 }
 
@@ -228,25 +229,25 @@ onShow(loadAlarms)
 }
 
 .alarm-status.active {
-  color: #ef4444;
-  background: #fef2f2;
+  color: var(--pt-danger);
+  background: var(--pt-danger-subtle);
 }
 
 .alarm-status.handled {
-  color: #22c55e;
-  background: #f0fdf4;
+  color: var(--pt-success);
+  background: var(--pt-success-subtle);
 }
 
 .alarm-status.false_positive {
-  color: #9aa0a6;
-  background: #f3f4f6;
+  color: var(--pt-fg-3);
+  background: var(--pt-bg-muted);
 }
 
 .alarm-address,
 .alarm-coord {
   margin-top: 16rpx;
   font-size: 24rpx;
-  color: #6b7280;
+  color: var(--pt-fg-2);
 }
 
 .alarm-actions {
@@ -265,13 +266,13 @@ onShow(loadAlarms)
 }
 
 .act-btn.ok {
-  background: #eef2ff;
-  color: #3d6cf5;
+  background: var(--pt-accent-subtle);
+  color: var(--pt-accent);
 }
 
 .act-btn.no {
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pt-bg-muted);
+  color: var(--pt-fg-2);
 }
 
 .empty-state {
@@ -287,13 +288,13 @@ onShow(loadAlarms)
 
 .empty-text {
   margin-top: 20rpx;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   font-size: 28rpx;
 }
 
 .loading-text {
   text-align: center;
-  color: #9aa0a6;
+  color: var(--pt-fg-3);
   padding: 40rpx;
   font-size: 26rpx;
 }

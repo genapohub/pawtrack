@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <view class="navbar-sm">
       <view class="back" @tap="goBack">‹</view>
       历史轨迹
@@ -41,9 +40,10 @@
       </view>
     </view>
 
-    <view class="upgrade-banner is-disabled">
-      <view>免费版仅保留 7 天历史轨迹。升级不走真实支付，本轮开通按钮不可用。</view>
-      <view class="mini-btn disabled">开通（未接入真实支付）</view>
+    <view class="upgrade-banner">
+      <view class="upgrade-title">近 7 天</view>
+      <view>可查看近 7 天轨迹。7 天以外的轨迹需升级会员后查看。</view>
+      <view class="mini-btn" @tap="goMember">查看开通方式</view>
     </view>
 
     <!-- 轨迹点列表 -->
@@ -55,7 +55,7 @@
           <view class="point-addr">{{ p.addr }}</view>
         </view>
       </view>
-      <view v-else class="empty-tip">所选时间没有轨迹记录（设备上报后自动生成）</view>
+      <view v-else class="empty-tip">可以换一段时间再看，或确认设备已开始上报位置。</view>
     </view>
   </view>
 </template>
@@ -73,7 +73,7 @@ const stats = ref<any>({})
 const ranges = [
   { label: '今天', value: 'today' },
   { label: '昨天', value: 'yesterday' },
-  { label: '近7天', value: 'week' },
+  { label: '近 7 天', value: 'week' },
 ]
 
 onLoad(async (options: any) => {
@@ -121,7 +121,7 @@ function goPro() { goMember() }
 
 <style scoped>
 .page { min-height: 100vh; background: var(--pt-bg); padding-bottom: 60rpx; }
-.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 700; }
+.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 600; }
 .back { font-size: 44rpx; font-weight: 400; color: var(--pt-fg); }
 .placeholder { width: 44rpx; }
 .date-bar { display: flex; gap: 16rpx; padding: 8rpx 24rpx 20rpx; }
@@ -133,10 +133,10 @@ function goPro() { goMember() }
 .track { position: absolute; height: 6rpx; background: var(--pt-accent); border-radius: 6rpx; }
 .track-time { position: absolute; bottom: 16rpx; left: 16rpx; background: rgba(255,255,255,.92); padding: 8rpx 16rpx; border-radius: 10rpx; font-size: 22rpx; color: var(--pt-fg-2); }
 .card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx transparent; }
-.card-title { font-size: 30rpx; font-weight: 700; margin-bottom: 16rpx; }
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 16rpx; }
 .stat-row { display: flex; text-align: center; padding: 32rpx 0; }
 .stat-item { flex: 1; }
-.num { font-size: 36rpx; font-weight: 800; }
+.num { font-size: 36rpx; font-weight: 600; }
 .label { font-size: 22rpx; color: var(--pt-fg-3); margin-top: 6rpx; }
 .upgrade-banner { background: var(--pt-warning); color: #fff; border-radius: 20rpx; margin: 0 24rpx 20rpx; padding: 28rpx; text-align: center; font-size: 26rpx; font-weight: 600; }
 .mini-btn { display: inline-block; background: #fff; color: var(--pt-warning); border-radius: 999rpx; padding: 12rpx 32rpx; font-size: 24rpx; margin-top: 14rpx; }
@@ -148,6 +148,5 @@ function goPro() { goMember() }
 .pro-chip{font-size:20rpx;background:var(--pt-accent);color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
 .pro-chip.right{position:absolute;right:24rpx;top:24rpx}
 
-.upgrade-banner.is-disabled { pointer-events: none; }
-.mini-btn.disabled { opacity: 0.55; }
+.upgrade-title { font-weight: 500; margin-bottom: 6rpx; }
 </style>

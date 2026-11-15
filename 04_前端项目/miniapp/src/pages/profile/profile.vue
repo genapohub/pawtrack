@@ -1,9 +1,8 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view v-if="loadError" class="pt-card">
-      <view class="err-box">资料加载失败，请重试。当前仍是本地预览，不是账号已失效。</view>
+      <view class="err-box">资料加载失败，请稍后重试。</view>
       <view class="btn-primary" @tap="reload">重新加载</view>
     </view>
 
@@ -12,7 +11,7 @@
         <view class="avatar-mark avatar-cat">{{ nameMark }}</view>
         <view class="user-meta">
           <view class="user-name">{{ displayName }}</view>
-          <view class="user-sub">{{ maskedPhone }} · {{ memberLabel }}（Mock 字段）</view>
+          <view class="user-sub">{{ maskedPhone }} · {{ memberLabel }}</view>
         </view>
       </view>
 
@@ -23,15 +22,15 @@
         </view>
         <view class="menu-item" @tap="goMember">
           <text class="mi-name">会员</text>
-          <text class="mi-note">入口保留，非本轮必做，非真实扣款</text>
+          <text class="mi-note">会员与积分</text>
         </view>
         <view class="menu-item" @tap="goPoints">
           <text class="mi-name">积分</text>
-          <text class="mi-note">后置，入口不删</text>
+          <text class="mi-note">会员与积分</text>
         </view>
         <view class="menu-item" @tap="goInvite">
           <text class="mi-name">邀请</text>
-          <text class="mi-note">后置</text>
+          <text class="mi-note"></text>
         </view>
         <view class="menu-item" @tap="goNotify">
           <text class="mi-name">通知</text>
@@ -43,7 +42,7 @@
         </view>
       </view>
 
-      <view class="foot-note">个人中心不做运营化大改。会员 / 积分 / 邀请 / 社交不是本轮必交付。</view>
+      <view class="foot-note">管理账号、通知与设备相关设置。</view>
     </template>
   </view>
 </template>
@@ -57,7 +56,7 @@ import { getUser } from '@/utils/auth'
 const user = ref<any>(getUser() || {})
 const loadError = ref(false)
 
-const displayName = computed(() => user.value?.nickname || '预览用户')
+const displayName = computed(() => user.value?.nickname || '林晓荷')
 const nameMark = computed(() => displayName.value.slice(0, 1))
 const maskedPhone = computed(() => {
   const p = String(user.value?.phone || '13800000000')

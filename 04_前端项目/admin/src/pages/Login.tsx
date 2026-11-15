@@ -27,9 +27,9 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => vo
     } catch (e: any) {
       const raw = String(e?.message || '')
       if (/连接|启动|Failed to fetch|Network|超时|ECONNREFUSED|无法连接/i.test(raw) && !USE_MOCK) {
-        setErrorText('无法连接服务，请确认后端已启动。关闭 Mock 时不写死预览口令。')
+        setErrorText('暂时无法连接服务，请稍后重试')
       } else {
-        setErrorText('账号或密码错误')
+        setErrorText('账号或密码错误，请重新输入。')
       }
     } finally {
       setLoading(false)
@@ -61,13 +61,10 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => vo
           fontWeight: 400,
           padding: '4px 10px',
           marginBottom: 28,
-        }}>本地 Mock · 非验收</span>
+        }}>运营后台</span>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, letterSpacing: '-0.01em', color: PT.fgInv }}>宠迹管理端</h1>
         <p style={{ margin: '16px 0 0', fontSize: 13, lineHeight: 1.7, fontWeight: 400, color: PT.sidebarLink, maxWidth: 360 }}>
-          本轮只要求看懂设备与告警信息结构。SN、在线、电量、告警地址均为 Mock。关闭 Mock 且后端未启动时，应提示无法连接服务，而不是写死预览口令。
-        </p>
-        <p style={{ margin: '16px 0 0', fontSize: 13, lineHeight: 1.7, fontWeight: 400, color: PT.sidebarLink, maxWidth: 360 }}>
-          不把 Mock 订单「已支付」写成真实营收。社交审核、退款审批、固件批量推送不是本轮必交付。
+          查看设备在线、电量与最后位置，及时处理围栏与低电告警。支持按 SN 检索。为运营同事准备的管理后台。设备、告警与宠物绑定信息集中在这里查看。请使用运营管理员账号登录。
         </p>
       </aside>
 
@@ -87,19 +84,19 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => vo
         }}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: PT.fg }}>管理员登录</h2>
           <p style={{ margin: '8px 0 20px', fontSize: 13, color: PT.fg2, lineHeight: 1.55, fontWeight: 400 }}>
-            必须能看出这是本地预览。非 Mock 时不写死预览口令。
+            请输入管理员账号和密码
           </p>
           <Form
             onFinish={handleSubmit}
             layout="vertical"
             requiredMark={false}
-            initialValues={USE_MOCK ? { username: 'admin.preview' } : undefined}
+            initialValues={USE_MOCK ? { username: 'linxiaohe' } : undefined}
           >
             <Form.Item name="username" label="账号" rules={[{ required: true, message: '请输入账号' }]}>
-              <Input size="large" placeholder={USE_MOCK ? 'admin.preview' : '管理员账号'} autoComplete="username" />
+              <Input size="large" placeholder="请输入账号" autoComplete="username" />
             </Form.Item>
             <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}>
-              <Input.Password size="large" placeholder={USE_MOCK ? '本地预览口令' : '密码'} autoComplete="current-password" />
+              <Input.Password size="large" placeholder="密码" autoComplete="current-password" />
             </Form.Item>
             {errorText ? (
               <div style={{

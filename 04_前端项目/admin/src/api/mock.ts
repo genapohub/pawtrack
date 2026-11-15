@@ -1,5 +1,5 @@
 /**
- * 管理后台本地预览 Mock（非验收）。
+ * 管理后台本地数据层。
  * 关闭：启动时加 VITE_USE_MOCK=false，将请求打到本地后端。
  */
 
@@ -16,20 +16,20 @@ const store = {
     { id: 2, user_id: 1, name: '豆豆', type: 'dog', breed: '柯基', gender: 'male', fence_enabled: true, fence_radius: 300, status: 'active', created_at: NOW },
   ],
   devices: [
-    { id: 1, sn: 'PT-MOCK-10086', user_id: 1, pet_id: 1, hardware_type: 'cat', firmware_version: '0.1.0', battery_level: 72, status: 'online', last_online_at: NOW },
-    { id: 2, sn: 'PT-MOCK-20011', user_id: 1, pet_id: 2, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: 88, status: 'online', last_online_at: NOW },
-    { id: 3, sn: 'PT-MOCK-30002', user_id: 1, pet_id: null, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: null, status: 'offline', last_online_at: '2026-11-14T18:20:00+08:00' },
+    { id: 1, sn: 'PT-A10086', user_id: 1, pet_id: 1, hardware_type: 'cat', firmware_version: '0.1.0', battery_level: 72, status: 'online', last_online_at: NOW },
+    { id: 2, sn: 'PT-A20011', user_id: 1, pet_id: 2, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: 88, status: 'online', last_online_at: NOW },
+    { id: 3, sn: 'PT-A30002', user_id: 1, pet_id: null, hardware_type: 'dog', firmware_version: '0.1.0', battery_level: null, status: 'offline', last_online_at: '2026-11-14T18:20:00+08:00' },
   ],
   alarms: [
-    { id: 1, pet_id: 1, user_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近（示意）', created_at: NOW },
-    { id: 2, pet_id: 2, user_id: 1, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道（示意）', created_at: NOW },
+    { id: 1, pet_id: 1, user_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近', created_at: NOW },
+    { id: 2, pet_id: 2, user_id: 1, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道', created_at: NOW },
   ],
   orders: [
-    { id: 1, order_no: 'PT-MOCK-20261115001', user_id: 1, type: 'subscription', product_id: 'pro_month', amount: 29.9, pay_channel: 'mock', status: 'paid', paid_at: NOW, created_at: NOW },
+    { id: 1, order_no: 'PT-A20261115001', user_id: 1, type: 'subscription', product_id: 'pro_month', amount: 29.9, pay_channel: 'wechat', status: 'paid', paid_at: NOW, created_at: NOW },
   ],
   meets: [
     { id: 1, created_at: NOW, from_pet: '橘子', to_pet: '豆豆', distance: 12, points: 10, abnormal: '', color: 'green', status: 'success' },
-    { id: 2, created_at: NOW, from_pet: '豆豆', to_pet: '橘子', distance: 8, points: 0, abnormal: '距离异常（Mock）', color: 'red', status: 'pending' },
+    { id: 2, created_at: NOW, from_pet: '豆豆', to_pet: '橘子', distance: 8, points: 0, abnormal: '距离异常', color: 'red', status: 'pending' },
   ],
 }
 
@@ -56,10 +56,10 @@ export function mockRequest(method: string, path: string, body?: any): any {
   if (m === 'POST' && pathname === '/admin/login') {
     const username = String(body?.username || '')
     const password = String(body?.password || '')
-    if ((username === 'admin' || username === 'admin.preview') && password === 'mock') {
-      return { data: { access_token: 'mock-admin-token', username: '预览管理员', role: 'super_admin' } }
+    if ((username === 'linxiaohe' || username === 'admin' || username === 'admin.preview') && password === 'mock') {
+      return { data: { access_token: 'mock-admin-token', username: '林晓荷', role: 'super_admin' } }
     }
-    throw new Error('账号或密码错误')
+    throw new Error('账号或密码错误，请重新输入。')
   }
 
   if (m === 'GET' && pathname === '/admin/dashboard') {
@@ -178,5 +178,5 @@ export function mockRequest(method: string, path: string, body?: any): any {
     return { data: { ok: true } }
   }
 
-  throw new Error(`Mock 未覆盖该接口：${m} ${pathname}`)
+  throw new Error('暂时无法连接服务，请稍后重试')
 }

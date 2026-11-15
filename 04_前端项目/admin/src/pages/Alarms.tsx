@@ -31,7 +31,7 @@ export default function AlarmsPage() {
       setTotal(resp.pagination?.total || 0)
     } catch (e: any) {
       setData([])
-      setError('报警列表拉取失败，请重试。不可用空列表代替失败态。')
+      setError('报警列表拉取失败，请稍后重试。')
     } finally {
       setLoading(false)
     }
@@ -56,24 +56,24 @@ export default function AlarmsPage() {
     },
     { title: '类型', dataIndex: 'type', render: (v: string) => TYPE_LABEL[v] || v },
     { title: '状态', dataIndex: 'status', width: 100, render: (v: string) => statusTag(v) },
-    { title: '示意地址', dataIndex: 'address', render: (v: string) => v || '—' },
+    { title: '地址', dataIndex: 'address', render: (v: string) => v || '—' },
   ]
 
   return (
     <>
-      <p className="pt-page-note">状态用词与小程序一致：离开围栏、进入围栏、低电量、设备离线、设备拆卸。地址为示意。</p>
+      <p className="pt-page-note">告警类型：离开围栏、进入围栏、低电量、设备离线、设备拆卸。</p>
       <div style={{ marginBottom: 16 }}>
         <Button onClick={load} style={{ marginRight: 8 }}>刷新</Button>
         <Button onClick={() => {
           if (!data.length) return
-          exportCSV('报警列表（Mock 示意）', [
+          exportCSV('报警列表', [
             { title: '时间', dataIndex: 'created_at' },
             { title: '宠物', dataIndex: 'pet_name' },
             { title: '类型', dataIndex: 'type' },
             { title: '状态', dataIndex: 'status' },
-            { title: '示意地址', dataIndex: 'address' },
+            { title: '地址', dataIndex: 'address' },
           ], data)
-        }}>导出 CSV（示意）</Button>
+        }}>导出 CSV</Button>
       </div>
       {error ? (
         <div style={{ background: PT.dangerSubtle, color: PT.danger, borderRadius: 14, padding: 16, marginBottom: 16 }}>
@@ -86,7 +86,7 @@ export default function AlarmsPage() {
           columns={columns}
           dataSource={data}
           loading={loading}
-          locale={{ emptyText: '暂无报警。这是空列表，不是加载失败。' }}
+          locale={{ emptyText: '暂无告警' }}
           pagination={{ current: page, total, pageSize: 10, showSizeChanger: false, onChange: (p) => setPage(p) }}
         />
       )}

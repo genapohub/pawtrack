@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <view class="card">
       <!-- 宠物名称 -->
       <view class="form-item">
@@ -151,7 +150,7 @@ async function handleSubmit() {
     uni.showToast({ title: '添加成功！', icon: 'success' })
     setTimeout(() => uni.navigateBack(), 800)
   } catch (e: any) {
-    uni.showToast({ title: e.message || '添加失败', icon: 'none' })
+    uni.showToast({ title: '保存失败，已保留刚填写的内容。请稍后重试。', icon: 'none' })
   } finally {
     loading.value = false
   }

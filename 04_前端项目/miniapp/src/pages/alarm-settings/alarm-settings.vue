@@ -1,10 +1,9 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view v-if="noDevice" class="pt-card">
       <view class="empty-title">请先绑定定位器再设置围栏</view>
-      <view class="empty-desc">当前没有已绑定的定位器。围栏和离家报警都需要先完成示意绑定。</view>
+      <view class="empty-desc">请先绑定定位器再设置围栏。</view>
       <view class="btn-primary" @tap="goBind">去绑定定位器</view>
     </view>
 
@@ -25,6 +24,7 @@
       </view>
 
       <view v-if="lockNote" class="warn-box lock-note">{{ lockNote }}</view>
+      <view class="hint">离开围栏时记录一条告警。半径不能小于 20 米。可在地图上点选围栏圆心。</view>
 
       <view class="pt-card radius-card">
         <view class="radius-row">
@@ -104,7 +104,8 @@ async function load() {
     const devices = await http.get<any[]>('/devices').catch(() => [])
     noDevice.value = !devices?.some((d: any) => d.pet_id === current)
     if (isCat.value) {
-      intro.value = `报警设置绑定${p?.name || '宠物'}（猫）。猫咪离家报警默认开启且不可关闭，只能改圆心和半径（默认 100 米）。`
+      intro.value = `报警设置绑定${p?.name || '宠物'}（猫）。`
+      lockNote.value = '开启且不可关闭（猫规则）。'
     } else {
       intro.value = `报警设置绑定${p?.name || '宠物'}（狗）。狗可关闭离家报警，默认半径 300 米。`
     }
@@ -117,7 +118,7 @@ function onToggle(e: any) {
   const next = !!e.detail.value
   if (isCat.value) {
     settings.value.fence_enabled = true
-    lockNote.value = '猫咪离家报警默认开启，不能关闭。点击开关不会关闭，只会看到本说明。'
+    lockNote.value = '开启且不可关闭（猫规则）。'
     return
   }
   settings.value.fence_enabled = next
@@ -131,7 +132,7 @@ function onRadiusChange(e: any) {
   const v = Number(e.detail.value)
   settings.value.fence_radius = v
   if (v < 20) {
-    radiusError.value = '围栏范围不能小于 20 米。未保存，仍保留原半径。请调大后再保存。'
+    radiusError.value = '半径不能小于 20 米。'
   } else {
     radiusError.value = ''
   }
@@ -142,7 +143,7 @@ function goBind() { uni.navigateTo({ url: '/pages/device-bind/device-bind' }) }
 async function save() {
   if (saving.value) return
   if (settings.value.fence_radius < 20) {
-    radiusError.value = '围栏范围不能小于 20 米。未保存，仍保留原半径。请调大后再保存。'
+    radiusError.value = '半径不能小于 20 米。'
     return
   }
   if (isCat.value) settings.value.fence_enabled = true
@@ -155,7 +156,7 @@ async function save() {
       fence_center_lng: 121.473,
     })
     savedRadius.value = settings.value.fence_radius
-    uni.showToast({ title: '已保存（示意）', icon: 'none' })
+    uni.showToast({ title: '已保存', icon: 'none' })
   } catch (e: any) {
     uni.showToast({ title: e.message || '保存失败', icon: 'none' })
   } finally {
@@ -189,4 +190,5 @@ async function save() {
 .save-btn { margin: 24rpx 32rpx 0; }
 .empty-title { font-size: 30rpx; font-weight: 500; margin-bottom: 8rpx; }
 .empty-desc { font-size: 24rpx; color: var(--pt-fg-2); margin-bottom: 24rpx; line-height: 1.5; }
+.hint { margin: 8rpx 40rpx 0; font-size: 22rpx; color: var(--pt-fg-2); line-height: 1.55; font-weight: 400; }
 </style>

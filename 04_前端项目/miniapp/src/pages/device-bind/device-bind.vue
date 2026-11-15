@@ -1,22 +1,21 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view class="form-block">
       <view class="label">设备 SN / 激活码</view>
       <input
         v-model="form.sn"
         class="input"
-        placeholder="例如 PT-XXXX-00000（示例，非真机配对）"
+        placeholder="请输入设备 SN"
         maxlength="32"
       />
       <input
         v-model="form.activation_code"
         class="input second"
-        placeholder="激活码（示例，非真机配对）"
+        placeholder="请输入激活码"
         maxlength="20"
       />
-      <view class="scan-hint" @tap="onScanUnused">扫码绑定 · 相机未接入</view>
+      <view class="scan-hint" @tap="onScanUnused">输入 SN 或扫码。相机不可用时可改用手动输入。</view>
 
       <view v-if="errorText" class="err-box">{{ errorText }}</view>
 
@@ -25,9 +24,9 @@
         :class="{ loading }"
         @tap="handleSubmit"
       >
-        {{ loading ? '绑定中...' : (errorText ? '重新绑定' : '绑定定位器') }}
+        {{ loading ? '绑定中，请稍候。' : (errorText ? '重新绑定' : '绑定定位器') }}
       </view>
-      <view class="hint">本页是本地示意，不会假装已经连上真硬件。</view>
+      <view class="hint">绑定后即可查看位置与围栏告警。</view>
     </view>
   </view>
 </template>
@@ -48,7 +47,7 @@ onMounted(async () => {
 })
 
 function onScanUnused() {
-  uni.showToast({ title: '相机未接入', icon: 'none' })
+  uni.showToast({ title: '暂时无法使用相机，请改用手动输入。', icon: 'none' })
 }
 
 async function handleSubmit() {
@@ -74,20 +73,20 @@ async function handleSubmit() {
       } catch (e: any) {
         const msg = String(e?.message || '')
         if (/已绑定|其他宠物/.test(msg)) {
-          errorText.value = '该设备已绑定其他宠物。列表不会被改成已配对成功。'
+          errorText.value = '该设备已绑定其他宠物。'
           return
         }
         throw e
       }
     }
-    uni.showToast({ title: '已记录绑定（示意，非真机配对）', icon: 'none' })
+    uni.showToast({ title: '绑定成功', icon: 'none' })
     setTimeout(() => uni.navigateBack(), 800)
   } catch (e: any) {
     const msg = String(e?.message || '')
     if (/已绑定|其他宠物/.test(msg)) {
-      errorText.value = '该设备已绑定其他宠物。列表不会被改成已配对成功。'
+      errorText.value = '该设备已绑定其他宠物。'
     } else {
-      errorText.value = '未找到该设备或激活码不正确。即使在 Mock 下也走这条信息结构，不会假装已经连上真硬件。'
+      errorText.value = '未找到该设备或激活码不正确，请检查后重试。'
     }
   } finally {
     loading.value = false

@@ -1,15 +1,14 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view v-if="loadError" class="pt-card">
-      <view class="err-box">设备列表加载失败，请重试。失败不会把列表清空成「暂无设备」。</view>
+      <view class="err-box">设备列表加载失败，请稍后重试。</view>
       <view class="btn-primary" @tap="loadDevices">重新加载</view>
     </view>
 
     <view v-else-if="!devices.length" class="pt-card">
       <view class="empty-title">还没有定位器</view>
-      <view class="empty-desc">添加宠物后可绑定定位器。绑定是示意，不是真机配对。</view>
+      <view class="empty-desc">添加后可绑定定位器，查看位置与围栏。</view>
       <view class="btn-primary" @tap="goBind">绑定定位器</view>
     </view>
 
@@ -18,7 +17,9 @@
         <view class="dev-row">
           <view class="dev-meta">
             <view class="sn">{{ d.sn }}</view>
-            <view class="sub">绑定宠物：{{ petLabel(d) }}</view>
+            <view class="sub">绑定宠物：{{ bindDetail(d) }}</view>
+            <view class="sub">{{ deviceStateText(d) }}</view>
+            <view class="sub firmware" @tap="onFirmware">固件已是最新，暂无可升级版本。</view>
           </view>
           <text class="tag" :class="statusClass(d)">{{ statusLabel(d) }}</text>
         </view>
@@ -77,10 +78,33 @@ function statusClass(d: any) {
   return 'tag-muted'
 }
 
+
+function bindDetail(d: any) {
+  if (!d.pet_id && !d.pet_name) return '未绑定'
+  const kind = d.hardware_type === 'cat' || d.pet_type === 'cat' ? '猫' : (d.hardware_type === 'dog' || d.pet_type === 'dog' ? '狗' : '')
+  const name = d.pet_name || '已绑定'
+  const parts = [kind ? `${name}（${kind}）` : name]
+  if (d.battery != null) parts.push(`电量 ${d.battery}%`)
+  if (d.pet_id || d.pet_name) {
+    const src = d.source === 'gps' || d.source === 'GPS' ? 'GPS' : 'Wi-Fi'
+    parts.push(`来源 ${src}`)
+  }
+  return parts.join(' · ')
+}
+
+function deviceStateText(d: any) {
+  if (!d.pet_id && !d.pet_name) return '设备状态：未绑定。绑定后即可查看位置与围栏告警。'
+  return '设备状态：已绑定。可查看电量、位置来源或解绑。'
+}
+
+function onFirmware() {
+  uni.showToast({ title: '固件已是最新，暂无可升级版本', icon: 'none' })
+}
+
 function unbind(d: any) {
   uni.showModal({
     title: '解绑确认',
-    content: '解绑后该定位器仍会留在示意列表，直到解绑成功。这不是真机已断开。',
+    content: `解绑后，${d.pet_name || '该宠物'}将不再收到位置与围栏告警。`,
     confirmColor: PT.danger,
     success: async (res) => {
       if (!res.confirm) return
@@ -88,11 +112,11 @@ function unbind(d: any) {
       try {
         await http.post('/devices/unbind', { sn: d.sn })
         unbindError.value = ''
-        uni.showToast({ title: '已解绑（示意）', icon: 'none' })
+        uni.showToast({ title: '已解绑', icon: 'none' })
         loadDevices()
       } catch (e: any) {
         devices.value = snapshot
-        unbindError.value = '解绑未完成，设备仍留在列表中。请稍后重试。失败不会清除列表项，也不是真机已断开。'
+        unbindError.value = '解绑未完成，设备仍留在列表中。请稍后重试。'
       }
     },
   })

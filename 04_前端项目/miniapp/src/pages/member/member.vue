@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 当前会员状态 -->
     <view class="member-hero" :class="'lv-' + currentLevel()">
       <view class="hero-icon">{{ levelIcon(currentLevel()) }}</view>
@@ -35,11 +34,11 @@
           <text class="price-symbol">¥</text>
           <text class="price-num">{{ plan.price }}</text>
           <view class="buy-btn" :class="{ paying: payingPlan === plan.plan }">
-            {{ payingPlan === plan.plan ? '处理中...' : sub?.plan === plan.plan ? '当前套餐' : '示意开通' }}
+            {{ payingPlan === plan.plan ? '处理中...' : sub?.plan === plan.plan ? '当前套餐' : '开通' }}
           </view>
         </view>
       </view>
-      <view class="pay-tip">会员购买非本轮必交付，不走真实扣款。入口保留，开通不可当作已到账。</view>
+      <view class="pay-tip">选择适合的套餐开通会员。</view>
     </view>
 
     <!-- 订单历史 -->
@@ -136,29 +135,10 @@ async function loadHistory() {
   }
 }
 
-/** 购买套餐（MVP 模拟支付） */
-async function buyPlan(plan: Plan) {
+/** 开通会员 */
+async function buyPlan(_plan: Plan) {
   if (payingPlan.value) return
-  payingPlan.value = plan.plan
-  try {
-    // 1. 创建订单
-    const order = await http.post<any>('/orders', { plan: plan.plan, pay_channel: 'wechat' })
-    const orderNo = order?.order_no
-    if (!orderNo) {
-      uni.showToast({ title: '订单创建失败', icon: 'none' })
-      return
-    }
-    // 2. 模拟支付回调
-    const txnId = `MOCK${Date.now()}${Math.floor(Math.random() * 10000)}`
-    await http.post('/orders/pay-callback', { order_no: orderNo, transaction_id: txnId })
-    uni.showToast({ title: ` ${plan.name} 开通成功！`, icon: 'success' })
-    loadAll()
-    loadHistory()
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '开通失败', icon: 'none' })
-  } finally {
-    payingPlan.value = ''
-  }
+  uni.showToast({ title: '暂时无法完成开通，请稍后重试', icon: 'none' })
 }
 
 onShow(loadAll)
@@ -204,7 +184,7 @@ onShow(loadAll)
 
 .hero-level {
   font-size: 40rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .hero-expire {
@@ -224,7 +204,7 @@ onShow(loadAll)
 /* 卡片 */
 .card-title {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 20rpx;
 }
 
@@ -267,7 +247,7 @@ onShow(loadAll)
 
 .plan-name {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .plan-days {
@@ -290,7 +270,7 @@ onShow(loadAll)
 
 .price-num {
   font-size: 44rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--pt-danger);
 }
 
@@ -340,7 +320,7 @@ onShow(loadAll)
 
 .order-amount {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .order-status {

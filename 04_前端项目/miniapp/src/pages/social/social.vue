@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 附近宠物（Tab 切换列表/地图） -->
     <view class="section-title">
       <text> 附近的宠物</text>
@@ -280,7 +279,7 @@ onShow(() => {
   align-items: center;
   padding: 20rpx 32rpx 8rpx;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .refresh {
@@ -377,7 +376,7 @@ onShow(() => {
 
 .pet-name {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .match-badge {

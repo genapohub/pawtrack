@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 通知渠道 -->
     <view class="section">
       <view class="section-title"> 通知渠道</view>
@@ -115,7 +114,7 @@ async function handleSave() {
 <style scoped>
 .page { min-height: 100vh; background: var(--pt-bg); padding: 24rpx 0 80rpx; }
 .section { background: #fff; margin: 24rpx 24rpx; border-radius: 16rpx; padding: 24rpx; }
-.section-title { font-size: 30rpx; font-weight: 700; }
+.section-title { font-size: 30rpx; font-weight: 600; }
 .section-desc { font-size: 24rpx; color: var(--pt-fg-3); margin-top: 8rpx; }
 .switch-row { display: flex; justify-content: space-between; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid var(--pt-bg-muted); }
 .switch-row:last-child { border-bottom: none; }
@@ -126,10 +125,10 @@ async function handleSave() {
 .contact-phone { font-size: 24rpx; color: var(--pt-fg-3); margin-left: 16rpx; }
 .contact-del { font-size: 24rpx; color: var(--pt-danger); }
 .add-contact { text-align: center; padding: 24rpx 0; font-size: 26rpx; color: var(--pt-accent); font-weight: 600; }
-.save-btn { margin: 48rpx 24rpx; background: var(--pt-accent); color: #fff; text-align: center; padding: 28rpx 0; border-radius: 16rpx; font-size: 30rpx; font-weight: 700; }
+.save-btn { margin: 48rpx 24rpx; background: var(--pt-accent); color: #fff; text-align: center; padding: 28rpx 0; border-radius: 16rpx; font-size: 30rpx; font-weight: 600; }
 .modal-mask { position: fixed; inset: 0; background: var(--pt-fg-scrim); display: flex; align-items: center; justify-content: center; z-index: 999; }
 .modal-card { background: #fff; border-radius: 20rpx; padding: 40rpx 32rpx; width: 600rpx; }
-.modal-title { font-size: 32rpx; font-weight: 700; margin-bottom: 24rpx; }
+.modal-title { font-size: 32rpx; font-weight: 600; margin-bottom: 24rpx; }
 .modal-input { border: 1rpx solid var(--pt-border); border-radius: 12rpx; padding: 18rpx 20rpx; font-size: 28rpx; margin-bottom: 16rpx; }
 .modal-btns { display: flex; gap: 20rpx; margin-top: 16rpx; }
 .mbtn { flex:1; text-align: center; padding: 20rpx 0; border-radius: 12rpx; font-size: 28rpx; font-weight: 600; }

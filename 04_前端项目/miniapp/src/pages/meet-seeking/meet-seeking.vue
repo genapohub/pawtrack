@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 顶部状态 -->
     <view class="hero" :class="{ arrived: distance !== null && distance < 5 }">
       <view class="hero-emoji">{{ distance !== null && distance < 5 ? '' : '' }}</view>
@@ -174,7 +173,7 @@ onUnmounted(clearAll)
 
 .hero-title {
   font-size: 36rpx;
-  font-weight: 700;
+  font-weight: 600;
   margin-top: 12rpx;
 }
 
@@ -205,7 +204,7 @@ onUnmounted(clearAll)
 
 .ring-num {
   font-size: 72rpx;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -237,7 +236,7 @@ onUnmounted(clearAll)
 
 .timer-num {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--pt-warning);
   font-variant-numeric: tabular-nums;
 }
@@ -253,7 +252,7 @@ onUnmounted(clearAll)
   padding: 28rpx 0;
   border-radius: 16rpx;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .hint-card {

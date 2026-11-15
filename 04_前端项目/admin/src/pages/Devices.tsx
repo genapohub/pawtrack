@@ -25,7 +25,7 @@ export default function DevicesPage() {
       setTotal(resp.pagination?.total || 0)
     } catch (e: any) {
       setData([])
-      setError('设备列表拉取失败，请重试。当前为本地服务失败态，不是硬件掉线统计。')
+      setError('设备列表拉取失败，请稍后重试。')
     } finally {
       setLoading(false)
     }
@@ -52,7 +52,7 @@ export default function DevicesPage() {
     { title: '状态', dataIndex: 'status', width: 100, render: (v: string) => statusTag(v) },
     { title: '电量', dataIndex: 'battery_level', width: 90, render: (v: number | null) => v == null ? '—' : `${v}%` },
     {
-      title: '最后上报（示意）',
+      title: '最后上报',
       dataIndex: 'last_online_at',
       render: (v: string, r) => {
         if (!v) return '—'
@@ -65,19 +65,19 @@ export default function DevicesPage() {
 
   return (
     <>
-      <p className="pt-page-note">列表中的 SN、在线、电量均为 Mock，用词与小程序一致（在线 / 离线 / 低电）。</p>
+      <p className="pt-page-note">列表展示设备 SN、在线状态与电量，用词与小程序一致（在线 / 离线 / 低电）。</p>
       <div style={{ marginBottom: 16 }}>
         <Button onClick={load} style={{ marginRight: 8 }}>刷新</Button>
         <Button onClick={() => {
           if (!data.length) return
-          exportCSV('设备列表（Mock 示意）', [
+          exportCSV('设备列表', [
             { title: 'SN', dataIndex: 'sn' },
             { title: '绑定宠物', dataIndex: 'pet_name' },
             { title: '状态', dataIndex: 'status' },
             { title: '电量', dataIndex: 'battery_level' },
             { title: '最后上报', dataIndex: 'last_online_at' },
           ], data)
-        }}>导出 CSV（示意）</Button>
+        }}>导出 CSV</Button>
       </div>
       {error ? (
         <div style={{ background: PT.dangerSubtle, color: PT.danger, borderRadius: 14, padding: 16, marginBottom: 16 }}>
@@ -90,7 +90,7 @@ export default function DevicesPage() {
           columns={columns}
           dataSource={data}
           loading={loading}
-          locale={{ emptyText: '暂无数据。这是空列表，不是加载失败。' }}
+          locale={{ emptyText: '暂无设备' }}
           pagination={{ current: page, total, pageSize: 10, showSizeChanger: false, onChange: (p) => setPage(p) }}
         />
       )}

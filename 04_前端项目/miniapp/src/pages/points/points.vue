@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 积分余额 Hero -->
     <view class="points-hero">
       <view class="hero-label">我的积分</view>
@@ -158,7 +157,7 @@ onShow(loadAll)
 
 .hero-balance {
   font-size: 96rpx;
-  font-weight: 800;
+  font-weight: 600;
   margin: 8rpx 0;
   font-family: 'DIN Alternate', sans-serif;
 }
@@ -180,7 +179,7 @@ onShow(loadAll)
 /* 卡片 */
 .card-title {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 20rpx;
 }
 
@@ -225,7 +224,7 @@ onShow(loadAll)
 
 .log-change {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .log-change.plus {

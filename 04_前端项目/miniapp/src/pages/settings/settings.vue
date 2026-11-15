@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view class="pt-card menu">
       <view class="menu-item">
@@ -13,11 +12,11 @@
       </view>
       <view class="menu-item last">
         <text class="mi-name">关于宠迹</text>
-        <text class="mi-note" @tap="goAbout">本地预览版</text>
+        <text class="mi-note" @tap="goAbout">关于宠迹</text>
       </view>
     </view>
 
-    <view class="privacy-note">位置分享、地图能力均未接入真实服务。本页只保留隐私说明和退出确认。</view>
+    <view class="privacy-note">管理位置隐私、通知与账号。</view>
 
     <view class="logout" @tap="logout">退出登录</view>
   </view>
@@ -60,7 +59,7 @@ function goNotify() { uni.navigateTo({ url: '/pages/notify-settings/notify-setti
 function goAbout() {
   uni.showModal({
     title: '关于宠迹',
-    content: '宠迹本地预览版。未接入真实硬件、微信、短信、支付或地图。',
+    content: '宠迹\n宠物定位与围栏告警',
     showCancel: false,
   })
 }

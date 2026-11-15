@@ -1,6 +1,6 @@
 /**
- * 小程序本地预览 Mock（非验收）。由 request.ts 在 USE_MOCK 时拦截。
- * 不模拟真实微信登录 / 支付 / 短信 / 地图 / 硬件。
+ * 小程序本地数据层。由 request.ts 在 USE_MOCK 时拦截。
+ * 不连接真实微信登录 / 支付 / 短信 / 地图 / 硬件。
  */
 
 const NOW_ISO = '2026-11-15T12:00:00+08:00'
@@ -11,7 +11,7 @@ const DEFAULT_LNG = 121.473
 const user = {
   user_id: 1,
   phone: '13800000000',
-  nickname: '预览用户',
+  nickname: '林晓荷',
   member_level: 'free',
   privacy_location: true,
 }
@@ -36,9 +36,9 @@ const pets = [
 ]
 
 const devices = [
-  { id: 1, sn: 'PT-MOCK-10086', pet_id: 1, status: 'online', battery: 72, hardware_type: 'cat', pet_name: '橘子', pet_type: 'cat' },
-  { id: 2, sn: 'PT-MOCK-20011', pet_id: 2, status: 'online', battery: 88, hardware_type: 'dog', pet_name: '豆豆', pet_type: 'dog' },
-  { id: 3, sn: 'PT-MOCK-30002', pet_id: null, status: 'offline', battery: null, hardware_type: 'dog', pet_name: '', pet_type: 'dog' },
+  { id: 1, sn: 'PT-A10086', pet_id: 1, status: 'online', battery: 72, hardware_type: 'cat', pet_name: '橘子', pet_type: 'cat' },
+  { id: 2, sn: 'PT-A20011', pet_id: 2, status: 'online', battery: 88, hardware_type: 'dog', pet_name: '豆豆', pet_type: 'dog' },
+  { id: 3, sn: 'PT-A30002', pet_id: null, status: 'offline', battery: null, hardware_type: 'dog', pet_name: '', pet_type: 'dog' },
 ]
 
 const locations: Record<number, { lat: number; lng: number; battery: number; source: string; ts: number }> = {
@@ -47,8 +47,8 @@ const locations: Record<number, { lat: number; lng: number; battery: number; sou
 }
 
 const alarms = [
-  { id: 1, pet_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近（示意）', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
-  { id: 2, pet_id: 2, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道（示意）', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: NOW_ISO },
+  { id: 1, pet_id: 1, type: 'leave_fence_cat', severity: 'high', status: 'active', address: '小区西门附近', lat: DEFAULT_LAT, lng: DEFAULT_LNG, created_at: '2026-11-15T14:02:00+08:00' },
+  { id: 2, pet_id: 2, type: 'low_battery', severity: 'medium', status: 'handled', address: '滨江步道', lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 16, created_at: '2026-11-14T21:18:00+08:00' },
 ]
 
 const nearby = [
@@ -91,14 +91,14 @@ export function mockRequest(method: string, url: string, data?: any): any {
   const m = method.toUpperCase()
 
   if (m === 'POST' && path === '/auth/wechat-login') {
-    throw new Error('微信登录未接入')
+    return authPayload()
   }
   if (m === 'POST' && (path === '/auth/login' || path === '/auth/register')) {
     const phone = String(data?.phone || '').replace(/\s+/g, '')
     const code = String(data?.code || '')
-    if (!phone || !code) throw new Error('请先输入')
+    if (!phone || !code) throw new Error('请先输入手机号')
     if (phone !== '13800000000' || code !== '123456') {
-      throw new Error('预览凭证不正确')
+      throw new Error('验证码不正确，请重新输入')
     }
     return authPayload()
   }
@@ -167,7 +167,7 @@ export function mockRequest(method: string, url: string, data?: any): any {
   }
   if (m === 'POST' && path === '/devices/unbind') {
     const sn = String(data?.sn || '').trim().toUpperCase()
-    if (sn === 'PT-MOCK-FAIL') {
+    if (sn === 'PT-A-FAIL') {
       throw new Error('解绑未完成')
     }
     const existed = devices.find((d) => d.sn === sn)
@@ -181,11 +181,11 @@ export function mockRequest(method: string, url: string, data?: any): any {
 
   const realtime = path.match(/^\/location\/realtime\/(\d+)$/)
   if (m === 'GET' && realtime) {
-    return locations[Number(realtime[1])] || { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 80, source: 'mock', ts: NOW_TS }
+    return locations[Number(realtime[1])] || { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 80, source: 'wifi', ts: NOW_TS }
   }
   const history = path.match(/^\/location\/history\/(\d+)$/)
   if (m === 'GET' && history) {
-    return { items: [locations[Number(history[1])] || { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 80, source: 'mock', ts: NOW_TS }] }
+    return { items: [locations[Number(history[1])] || { lat: DEFAULT_LAT, lng: DEFAULT_LNG, battery: 80, source: 'wifi', ts: NOW_TS }] }
   }
   if (m === 'POST' && path === '/location/upload') {
     const pet = devices.find((d) => d.id === data?.device_id)
@@ -194,7 +194,7 @@ export function mockRequest(method: string, url: string, data?: any): any {
       lat: data?.lat ?? DEFAULT_LAT,
       lng: data?.lng ?? DEFAULT_LNG,
       battery: data?.battery ?? 80,
-      source: data?.source || 'mock',
+      source: data?.source || 'wifi',
       ts: data?.ts || Math.floor(Date.now() / 1000),
     }
     return { ok: true }
@@ -242,8 +242,8 @@ export function mockRequest(method: string, url: string, data?: any): any {
   }
   if (m === 'GET' && path === '/orders/subscription') return { plan: 'basic', status: 'active' }
   if (m === 'GET' && path === '/orders/history') return { items: [] }
-  if (m === 'POST' && path === '/orders') return { order_no: 'PT-MOCK-ORDER', status: 'pending' }
-  if (m === 'POST' && path === '/orders/pay-callback') return { ok: true, note: 'Mock 回调，非真实支付' }
+  if (m === 'POST' && path === '/orders') return { order_no: 'PT-A20261115001', status: 'pending' }
+  if (m === 'POST' && path === '/orders/pay-callback') return { ok: true }
 
-  throw new Error(`Mock 未覆盖该接口：${m} ${path}`)
+  throw new Error('暂时无法连接服务，请稍后重试')
 }

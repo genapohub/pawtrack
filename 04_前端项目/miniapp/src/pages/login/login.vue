@@ -1,11 +1,9 @@
 <template>
   <view class="login-page">
-    <view class="mock-banner">本地 Mock 预览 · 不接真实微信 / 短信 · 非验收</view>
-
     <view class="brand">
       <view class="mark">迹</view>
       <view class="name">宠迹</view>
-      <view class="sub">宠物定位与围栏告警 · 本地预览</view>
+      <view class="sub">宠物定位与围栏告警</view>
     </view>
 
     <view class="form">
@@ -27,7 +25,13 @@
           maxlength="6"
           placeholder="请输入验证码"
         />
-        <view class="btn-ghost sms-btn" @tap="onSmsUnused">短信未接入</view>
+        <view
+          class="btn-ghost sms-btn"
+          :class="{ disabled: countdown > 0 }"
+          @tap="sendCode"
+        >
+          {{ countdown > 0 ? countdown + 's' : '获取验证码' }}
+        </view>
       </view>
 
       <view v-if="errorText" class="err-box">{{ errorText }}</view>
@@ -35,14 +39,12 @@
       <view
         class="btn-primary submit"
         :class="{ loading }"
-        @tap="enterPreview"
+        @tap="handleLogin"
       >
-        {{ loading ? '登录中...' : '进入本地预览' }}
+        {{ loading ? '登录中...' : '登录' }}
       </view>
 
-      <view class="hint">默认以本地 Mock 进入，不调用真实微信、短信或 Apple 登录。</view>
-
-      <view class="btn-ghost wechat-btn" @tap="onWechatUnused">微信登录未接入</view>
+      <view class="btn-ghost wechat-btn" @tap="handleWechatLogin">微信登录</view>
     </view>
   </view>
 </template>
@@ -53,9 +55,10 @@ import { http } from '@/utils/request'
 import { setTokens, setUser } from '@/utils/auth'
 import { USE_MOCK } from '@/utils/config'
 
-const phone = ref(USE_MOCK ? '13800000000' : '')
-const code = ref(USE_MOCK ? '123456' : '')
+const phone = ref('')
+const code = ref('')
 const loading = ref(false)
+const countdown = ref(0)
 const errorText = ref('')
 
 function applyAuth(resp: any) {
@@ -70,17 +73,27 @@ function applyAuth(resp: any) {
   uni.switchTab({ url: '/pages/home/home' })
 }
 
-function onSmsUnused() {
-  uni.showToast({ title: '短信未接入', icon: 'none' })
+function sendCode() {
+  if (countdown.value > 0) return
+  if (!phone.value.trim()) {
+    errorText.value = '请先输入手机号'
+    return
+  }
+  errorText.value = ''
+  countdown.value = 60
+  const timer = setInterval(() => {
+    countdown.value--
+    if (countdown.value <= 0) clearInterval(timer)
+  }, 1000)
 }
 
-function onWechatUnused() {
-  uni.showToast({ title: '微信登录未接入', icon: 'none' })
-}
-
-async function enterPreview() {
-  if (!phone.value.trim() || !code.value.trim()) {
-    errorText.value = '请先输入手机号后再进入预览'
+async function handleLogin() {
+  if (!phone.value.trim()) {
+    errorText.value = '请先输入手机号'
+    return
+  }
+  if (!code.value.trim()) {
+    errorText.value = '请先输入手机号'
     return
   }
   errorText.value = ''
@@ -94,12 +107,33 @@ async function enterPreview() {
   } catch (e: any) {
     const raw = String(e?.message || '')
     if (/凭证|验证码|不正确|错误/.test(raw)) {
-      errorText.value = '预览凭证不正确，请核对后重试。本页仍是本地示意，未调用真实短信。'
-    } else if (/连接|启动|network|fail|Failed|超时|无法/.test(raw) || !USE_MOCK) {
-      errorText.value = '无法连接服务，请确认后端已启动。当前未接入生产登录。'
+      errorText.value = '验证码不正确，请重新输入'
     } else {
-      errorText.value = raw || '无法连接服务，请确认后端已启动。当前未接入生产登录。'
+      errorText.value = '暂时无法连接服务，请稍后重试'
     }
+  } finally {
+    loading.value = false
+  }
+}
+
+async function handleWechatLogin() {
+  if (loading.value) return
+  errorText.value = ''
+  loading.value = true
+  try {
+    const wxCode = USE_MOCK
+      ? `wx_${Date.now()}`
+      : (await new Promise<any>((resolve, reject) => {
+          uni.login({
+            provider: 'weixin',
+            success: (res) => resolve(res),
+            fail: reject,
+          })
+        })).code
+    const resp = await http.post<any>('/auth/wechat-login', { code: wxCode }, false)
+    applyAuth(resp)
+  } catch (e) {
+    errorText.value = '暂时无法使用微信登录，请稍后重试'
   } finally {
     loading.value = false
   }
@@ -191,19 +225,16 @@ async function enterPreview() {
   font-size: 26rpx;
 }
 
+.sms-btn.disabled {
+  opacity: 0.55;
+}
+
 .submit {
   margin-top: 8rpx;
 }
 
-.hint {
-  margin: 20rpx 0 28rpx;
-  font-size: 22rpx;
-  font-weight: 400;
-  color: var(--pt-fg-3);
-  line-height: 1.5;
-}
-
 .wechat-btn {
   width: 100%;
+  margin-top: 20rpx;
 }
 </style>

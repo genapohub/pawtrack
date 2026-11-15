@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 成功动画区 -->
     <view class="success-hero">
       <view class="badge"></view>
@@ -106,7 +105,7 @@ function backToSocial() {
 
 .title {
   font-size: 44rpx;
-  font-weight: 800;
+  font-weight: 600;
   margin-top: 16rpx;
   background: var(--pt-accent);
   -webkit-background-clip: text;
@@ -141,7 +140,7 @@ function backToSocial() {
 
 .points-value {
   font-size: 36rpx;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--pt-accent);
 }
 
@@ -192,7 +191,7 @@ function backToSocial() {
   padding: 28rpx 0;
   border-radius: 16rpx;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .btn-outline {

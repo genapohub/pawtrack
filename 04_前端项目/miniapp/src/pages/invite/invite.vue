@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <view class="navbar-sm">
       <view class="back" @tap="goBack">‹</view>
       邀请好友
@@ -104,17 +103,17 @@ function goBack() { uni.navigateBack() }
 
 <style scoped>
 .page { min-height: 100vh; background: var(--pt-bg); padding-bottom: 60rpx; }
-.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 700; }
+.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 600; }
 .back { font-size: 44rpx; font-weight: 400; color: var(--pt-fg); }
 .placeholder { width: 44rpx; }
 .card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx transparent; }
 .card.center { text-align: center; }
-.card-title { font-size: 30rpx; font-weight: 700; margin-bottom: 12rpx; }
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 12rpx; }
 .big-avatar { font-size: 72rpx; }
-.invite-title { font-size: 32rpx; font-weight: 700; margin-top: 12rpx; }
+.invite-title { font-size: 32rpx; font-weight: 600; margin-top: 12rpx; }
 .invite-sub { font-size: 24rpx; color: var(--pt-fg-3); margin-top: 6rpx; }
 .invite-code-box { display: flex; align-items: center; justify-content: center; gap: 16rpx; margin: 24rpx 0; }
-.invite-code { background: var(--pt-bg); border: 2rpx dashed var(--pt-accent); border-radius: 12rpx; padding: 16rpx 28rpx; font-size: 30rpx; letter-spacing: 4rpx; color: var(--pt-accent); font-weight: 700; }
+.invite-code { background: var(--pt-bg); border: 2rpx dashed var(--pt-accent); border-radius: 12rpx; padding: 16rpx 28rpx; font-size: 30rpx; letter-spacing: 4rpx; color: var(--pt-accent); font-weight: 600; }
 .copy-btn { background: var(--pt-accent-subtle); color: var(--pt-accent); border-radius: 999rpx; padding: 12rpx 24rpx; font-size: 24rpx; font-weight: 600; }
 .primary-btn { width: 100%; background: var(--pt-accent); color: #fff; border: none; border-radius: 999rpx; padding: 22rpx 0; font-size: 30rpx; font-weight: 600; }
 .rule-row { display: flex; align-items: center; gap: 16rpx; padding: 18rpx 0; border-bottom: 1px solid var(--pt-bg-muted); }
@@ -126,10 +125,10 @@ function goBack() { uni.navigateBack() }
 .rule-status { font-size: 28rpx; }
 .record-row { display: flex; align-items: center; gap: 16rpx; padding: 16rpx 0; border-bottom: 1px solid var(--pt-bg-muted); }
 .record-row:last-child { border-bottom: none; }
-.record-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: var(--pt-accent-subtle); display: flex; align-items: center; justify-content: center; font-size: 28rpx; font-weight: 700; color: var(--pt-accent); }
+.record-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: var(--pt-accent-subtle); display: flex; align-items: center; justify-content: center; font-size: 28rpx; font-weight: 600; color: var(--pt-accent); }
 .record-info { flex: 1; }
 .record-name { font-size: 28rpx; font-weight: 600; }
 .record-sub { font-size: 22rpx; color: var(--pt-fg-3); margin-top: 2rpx; }
-.record-points { font-size: 28rpx; font-weight: 700; color: var(--pt-accent); }
+.record-points { font-size: 28rpx; font-weight: 600; color: var(--pt-accent); }
 .empty-tip { text-align: center; color: var(--pt-fg-3); padding: 40rpx 0; font-size: 26rpx; }
 </style>

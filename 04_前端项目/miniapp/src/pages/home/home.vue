@@ -2,24 +2,23 @@
   <view class="home-page">
     <view class="status-spacer" />
     <view class="nav">首页</view>
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view class="body">
       <template v-if="pageState === 'loading'">
         <view class="map schematic muted">
           <view class="map-grid" />
-          <view class="map-cap">定位中... 当前为本地预览，不模拟真实刷新间隔</view>
+          <view class="map-cap">定位中…</view>
         </view>
       </template>
 
       <template v-else-if="pageState === 'empty'">
         <view class="map schematic muted">
           <view class="map-grid" />
-          <view class="map-cap">还没有位置记录，请先添加宠物并绑定设备（当前为本地预览数据）</view>
+          <view class="map-cap">还没有位置记录，请先添加宠物并绑定设备</view>
         </view>
         <view class="pt-card empty-card">
-          <view class="empty-title">还没有宠物，先添加一只。</view>
-          <view class="empty-desc">添加后可绑定定位器，查看示意位置与围栏。</view>
+          <view class="empty-title">还没有宠物，先添加一只</view>
+          <view class="empty-desc">添加后可绑定定位器，查看位置与围栏。</view>
         </view>
         <view class="btn-primary add-btn" @tap="goAddPet">添加宠物</view>
       </template>
@@ -29,11 +28,10 @@
           <view class="map-grid" />
           <view v-if="!mapUnconfigured" class="fence" />
           <view v-if="!mapUnconfigured" class="pin" />
-          <view class="map-cap">{{ mapCaption }}</view>
         </view>
 
         <view v-if="mapUnconfigured" class="warn-box map-warn">
-          地图 Key 未接入。页面不会白屏，位置以示意坐标和文案展示。
+          地图暂时无法显示，仍可查看最后位置
         </view>
 
         <view
@@ -59,7 +57,7 @@
         </view>
 
         <view class="btn-primary add-btn" @tap="goAddPet">添加宠物</view>
-        <view class="foot-note">地图钉与列表均可进入宠物详情。社交页本轮不做必交付，底栏仅保留入口。</view>
+        <view class="foot-note">点地图钉或列表，可查看宠物详情。</view>
       </template>
     </view>
   </view>
@@ -96,13 +94,6 @@ const pageState = computed(() => {
   return 'default'
 })
 
-const mapCaption = computed(() => {
-  if (mapUnconfigured.value) {
-    return `地图服务未配置，仅显示示意坐标 ${SCHEMA_LAT.toFixed(3)}, ${SCHEMA_LNG.toFixed(3)}，非实地地图服务`
-  }
-  return `示意位置，非实地地图服务 · 示意坐标 ${SCHEMA_LAT.toFixed(3)}, ${SCHEMA_LNG.toFixed(3)}`
-})
-
 function nameMark(name: string) {
   return (name || '宠').slice(0, 1)
 }
@@ -132,10 +123,10 @@ function batteryOf(pet: PetInfo) {
 
 function lastLocationText(pet: PetInfo) {
   if (pet.type === 'dog') {
-    return '最后位置（示意）：滨江步道 · 来源 GPS · 刚刚。预览不模拟真实刷新间隔。'
+    return '最后位置：滨江步道 · GPS · 刚刚'
   }
   const source = locations.value[pet.id]?.source === 'gps' ? 'GPS' : 'Wi-Fi'
-  return `最后位置（示意）：小区中心点附近 · 来源 ${source} · 2 分钟前`
+  return `最后位置：小区中心点附近 · ${source} · 2 分钟前`
 }
 
 async function loadPets() {
@@ -158,7 +149,7 @@ async function loadPets() {
             },
           }
         }
-      } catch (e) { /* 示意坐标仍可展示 */ }
+      } catch (e) { /* 位置文案仍可展示 */ }
     }))
   } catch (e) {
     pets.value = []

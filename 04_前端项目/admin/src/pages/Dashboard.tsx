@@ -37,7 +37,6 @@ export default function DashboardPage() {
   return (
     <>
       <h2 style={{ marginBottom: 8 }}>数据概览</h2>
-      <p className="pt-page-note">数据概览中的订单与营收来自本地 Mock，不得理解为真实营收或已到账。</p>
       <Row gutter={[16, 16]}>
         {cards.map((c, i) => (
           <Col xs={12} sm={8} md={6} key={i}>

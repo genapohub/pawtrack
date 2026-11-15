@@ -2,7 +2,7 @@
 import { onLaunch } from '@dcloudio/uni-app'
 
 onLaunch(() => {
-  console.log('[宠迹] 小程序启动（本地预览，非验收）')
+  console.log('[宠迹] 小程序启动')
 })
 </script>
 
@@ -17,16 +17,6 @@ page {
   font-weight: 400;
 }
 
-.mock-banner {
-  background: var(--pt-mock-bg);
-  color: var(--pt-mock);
-  border-bottom: 1rpx solid var(--pt-mock-border);
-  font-size: 22rpx;
-  font-weight: 400;
-  text-align: center;
-  padding: 14rpx 32rpx;
-  line-height: 1.45;
-}
 
 .pt-card {
   background: var(--pt-surface);

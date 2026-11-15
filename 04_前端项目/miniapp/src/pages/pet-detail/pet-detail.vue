@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 顶部信息 -->
     <view class="hero" :class="pet?.type === 'cat' ? 'cat-bg' : 'dog-bg'">
       <view class="back" @tap="goBack">‹</view>
@@ -20,7 +19,7 @@
     <view class="card grid-2">
       <view class="cell" @tap="goHistory">
         <div class="cell-icon"></div>历史轨迹
-        <span>{{ location.ts ? '今日有更新' : '暂无数据' }}</span>
+        <span>可查看近 7 天轨迹</span>
       </view>
       <view class="cell" @tap="goAlarmSettings">
         <div class="cell-icon"></div>安全围栏
@@ -29,6 +28,7 @@
       <view class="cell" @tap="goDeviceStatus">
         <div class="cell-icon"></div>设备状态
         <span>{{ device.sn || '未绑定' }}</span>
+        <span v-if="device.sn" class="cell-extra">已绑定定位器，可在设备管理中查看固件或解绑。</span>
       </view>
       <view class="cell" @tap="goMember">
         <div class="cell-icon"></div>会员升级
@@ -43,10 +43,10 @@
         <view class="pin-sm me" style="left:50%;top:50%">{{ pet?.type === 'cat' ? '猫' : '狗' }}</view>
       </view>
       <view class="loc-row">
-        <text>坐标：{{ location.lat ? location.lat.toFixed(5) + ', ' + location.lng.toFixed(5) : '等待定位...' }}</text>
+        <text>{{ location.lat ? ('最后位置：' + location.lat.toFixed(3) + ', ' + location.lng.toFixed(3)) : '还没有位置记录，请先绑定设备并等待上报' }}</text>
       </view>
       <view class="loc-row" v-if="location.ts">
-        <text>更新：{{ formatTime(location.ts) }} · 来源 {{ location.source }}</text>
+        <text>更新：{{ formatTime(location.ts) }} · 来源 {{ sourceLabel(location.source) }}</text>
       </view>
     </view>
 
@@ -112,6 +112,12 @@ async function loadDevice() {
   } catch (e) { /* 静默 */ }
 }
 
+function sourceLabel(source: string): string {
+  if (source === 'gps' || source === 'GPS') return 'GPS'
+  if (source === 'wifi' || source === 'Wi-Fi' || source === 'WIFI') return 'Wi-Fi'
+  return 'GPS'
+}
+
 function formatTime(ts: number): string {
   const d = new Date(ts * 1000)
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
@@ -121,7 +127,7 @@ function goPro() { uni.navigateTo({ url: "/pages/member/member" }) }
 function goBack() { uni.navigateBack() }
 function goHistory() { uni.navigateTo({ url: '/pages/history/history?id=' + petId.value }) }
 function goAlarmSettings() { uni.navigateTo({ url: '/pages/alarm-settings/alarm-settings?id=' + petId.value }) }
-function goDeviceStatus() { uni.navigateTo({ url: '/pages/device-bind/device-bind' }) }
+function goDeviceStatus() { uni.navigateTo({ url: '/pages/device-manage/device-manage' }) }
 function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 </script>
 
@@ -132,7 +138,7 @@ function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 .cat-bg { background: var(--pt-bg); }
 .back { position: absolute; left: 24rpx; top: 12rpx; font-size: 44rpx; color: var(--pt-fg); }
 .big-avatar { font-size: 80rpx; }
-.hero-name { font-size: 36rpx; font-weight: 700; margin-top: 8rpx; }
+.hero-name { font-size: 36rpx; font-weight: 600; margin-top: 8rpx; }
 .hero-sub { font-size: 24rpx; color: var(--pt-fg-3); margin-top: 4rpx; }
 .hero-status { margin-top: 16rpx; display: flex; gap: 12rpx; justify-content: center; }
 .badge { font-size: 22rpx; padding: 6rpx 18rpx; border-radius: 999rpx; }
@@ -140,7 +146,7 @@ function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 .badge.orange { background: var(--pt-warning-subtle); color: var(--pt-warning); }
 .badge.gray { background: var(--pt-bg-muted); color: var(--pt-fg-3); }
 .card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin: 20rpx 24rpx; box-shadow: 0 4rpx 16rpx transparent; }
-.card-title { font-size: 30rpx; font-weight: 700; margin-bottom: 16rpx; }
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 16rpx; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24rpx; }
 .cell { font-size: 26rpx; font-weight: 600; }
 .cell-icon { font-size: 36rpx; margin-bottom: 8rpx; }
@@ -155,4 +161,5 @@ function goMember() { uni.navigateTo({ url: '/pages/member/member' }) }
 .pro-tag { font-size: 20rpx; color: var(--pt-warning); background: var(--pt-warning-subtle); padding: 4rpx 12rpx; border-radius: 999rpx; }
 .pro-chip{font-size:20rpx;background:var(--pt-accent);color:#fff;padding:4rpx 14rpx;border-radius:999rpx;font-weight:600;vertical-align:middle}
 .pro-chip.right{position:absolute;right:24rpx;top:24rpx}
+.cell-extra { display: block; font-size: 20rpx; color: var(--pt-fg-3); font-weight: 400; margin-top: 4rpx; line-height: 1.4; }
 </style>

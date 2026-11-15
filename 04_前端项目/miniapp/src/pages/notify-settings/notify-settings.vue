@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <view class="navbar-sm">
       <view class="back" @tap="goBack">‹</view>
       通知设置
@@ -103,11 +102,11 @@ function goBack() { uni.navigateBack() }
 
 <style scoped>
 .page { min-height: 100vh; background: var(--pt-bg); padding-bottom: 60rpx; }
-.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 700; }
+.navbar-sm { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 24rpx; font-size: 32rpx; font-weight: 600; }
 .back { font-size: 44rpx; font-weight: 400; color: var(--pt-fg); }
 .placeholder { width: 44rpx; }
 .card { background: #fff; border-radius: 20rpx; padding: 16rpx 28rpx; margin: 0 24rpx 20rpx; box-shadow: 0 4rpx 16rpx transparent; }
-.card-title { font-size: 30rpx; font-weight: 700; padding: 12rpx 0 4rpx; }
+.card-title { font-size: 30rpx; font-weight: 600; padding: 12rpx 0 4rpx; }
 .switch-row { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1px solid var(--pt-bg-muted); }
 .switch-row:last-child { border-bottom: none; }
 .switch-info { flex: 1; }

@@ -1,9 +1,8 @@
 <template>
   <view class="page">
-    <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 
     <view v-if="loadError" class="pt-card">
-      <view class="err-box">宠物列表加载失败，请重试。这不是空列表。</view>
+      <view class="err-box">列表加载失败，请稍后重试。</view>
       <view class="btn-primary" @tap="load">重新加载</view>
     </view>
 

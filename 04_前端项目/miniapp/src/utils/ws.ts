@@ -21,7 +21,7 @@ class PawSocket {
   /** 建立连接（token 为空则跳过） */
   connect(): void {
     if (USE_MOCK) {
-      console.log('[WS] Mock 模式，不连接真实 WebSocket')
+      console.log('[WS] 当前不连接 WebSocket')
       return
     }
     const token = getAccessToken()

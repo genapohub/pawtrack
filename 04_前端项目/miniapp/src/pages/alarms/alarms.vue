@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-        <view class="mock-banner">本地 Mock 预览 · 非真实硬件 / 微信 / 短信 / 地图 / 支付</view>
 <!-- 筛选栏 -->
     <view class="filter-bar">
       <view
@@ -28,10 +27,7 @@
           </view>
         </view>
 
-        <view v-if="alarm.address" class="alarm-address"> {{ alarm.address }}</view>
-        <view v-if="alarm.lat" class="alarm-coord">
-          {{ alarm.lat.toFixed(5) }}, {{ alarm.lng.toFixed(5) }}
-        </view>
+        <view class="alarm-address">{{ alarmLine(alarm) }}</view>
 
         <!-- 操作按钮 -->
         <view v-if="alarm.status === 'active'" class="alarm-actions">
@@ -44,10 +40,11 @@
     <!-- 空状态 -->
     <view v-else-if="!loading" class="empty-state">
       <view class="empty-icon"></view>
-      <view class="empty-text">暂时没有报警记录</view>
+      <view class="empty-text">还没有围栏告警。宠物离开围栏后会显示在这里。</view>
     </view>
 
     <view v-if="loading" class="loading-text">加载中...</view>
+    <view v-if="!loading" class="footer-note">处理或标记误报后，告警状态会更新。</view>
   </view>
 </template>
 
@@ -68,14 +65,14 @@ const alarms = ref<any[]>([])
 const loading = ref(false)
 
 const TYPE_MAP: Record<string, string> = {
-  leave_fence: ' 离开围栏',
-  leave_fence_cat: ' 猫咪离开围栏',
-  enter_fence: ' 进入围栏',
-  low_battery: ' 电量不足',
-  low_battery_critical: ' 电量严重不足',
-  offline_warning: ' 设备离线',
-  tamper_detected: ' 防拆报警',
-  fall_detected: '🆘 跌落检测',
+  leave_fence: '离开围栏',
+  leave_fence_cat: '离开围栏',
+  enter_fence: '进入围栏',
+  low_battery: '低电量',
+  low_battery_critical: '低电量',
+  offline_warning: '设备离线',
+  tamper_detected: '设备拆卸',
+  fall_detected: '跌落检测',
 }
 
 const SEVERITY_MAP: Record<string, string> = {
@@ -84,8 +81,19 @@ const SEVERITY_MAP: Record<string, string> = {
   low: 'low',
 }
 
-function alarmIcon(type: string): string {
-  return TYPE_MAP[type]?.split(' ')[0] || ''
+function alarmIcon(_type: string): string {
+  return ''
+}
+
+function alarmLine(alarm: any): string {
+  const parts: string[] = []
+  if (alarm.address) parts.push(`地址：${alarm.address}`)
+  if (alarm.type === 'low_battery' || alarm.type === 'low_battery_critical') {
+    const bat = alarm.battery ?? alarm.battery_level
+    if (bat != null) parts.push(`电量 ${bat}%`)
+    parts.push('优先级低于离线告警')
+  }
+  return parts.join(' · ')
 }
 
 function alarmTitle(alarm: any): string {
@@ -104,7 +112,14 @@ function formatTime(iso: string): string {
   if (!iso) return ''
   const d = new Date(iso)
   const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getMonth() + 1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`
+  const hm = `${pad(d.getHours())}:${pad(d.getMinutes())}`
+  const today = new Date()
+  const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
+  const startThat = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
+  const diff = Math.round((startToday - startThat) / 86400000)
+  if (diff === 0) return `今天 ${hm}`
+  if (diff === 1) return `昨天 ${hm}`
+  return `${d.getMonth() + 1}月${d.getDate()}日 ${hm}`
 }
 
 async function loadAlarms() {
@@ -213,7 +228,7 @@ onShow(loadAlarms)
 
 .alarm-title {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .alarm-time {
@@ -298,4 +313,5 @@ onShow(loadAlarms)
   padding: 40rpx;
   font-size: 26rpx;
 }
+.footer-note { margin: 24rpx 40rpx 0; font-size: 22rpx; color: var(--pt-fg-3); line-height: 1.5; }
 </style>

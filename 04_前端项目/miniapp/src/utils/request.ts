@@ -55,7 +55,7 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
     try {
       return Promise.resolve(mockRequest(method, url, data) as T)
     } catch (e) {
-      const err = e instanceof Error ? e : new Error('Mock 请求失败')
+      const err = e instanceof Error ? e : new Error('暂时无法连接服务，请稍后重试')
       uni.showToast({ title: err.message, icon: 'none' })
       return Promise.reject(err)
     }

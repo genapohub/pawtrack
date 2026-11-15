@@ -14,6 +14,8 @@ from app.config import settings
 from app.database import get_db
 from app.models import Pet, Device, User, MemberLevel
 from app.auth import get_current_user
+from app.services.mock_notice import LOCATION_NOTICE, LOCAL_PREVIEW_NOTICE
+from app.services.memory_backends import MemoryLocations, MemoryRedis
 from app import main as app_main
 
 router = APIRouter(prefix="/api/v1/location", tags=["定位"])
@@ -53,6 +55,20 @@ def _locations_collection():
     return _mongo_client.get_default_database()["locations"]
 
 
+_memory_redis = MemoryRedis()
+_memory_locations = MemoryLocations()
+
+
+def _location_backends():
+    """开发 Mock 在无 Redis 时用进程内存，避免把未接入写成真实定位服务。"""
+    import app.main as app_main
+    if getattr(app_main, "redis_client", None):
+        return app_main.redis_client, _locations_collection()
+    if settings.is_dev:
+        return _memory_redis, _memory_locations
+    raise HTTPException(503, detail={"code": 50301, "message": "定位服务暂不可用"})
+
+
 # ── 接口实现 ──────────────────────────────────────────────
 
 @router.post("/upload", response_model=dict)
@@ -88,7 +104,8 @@ async def upload_location(
         "ts": str(body.ts)
     }
 
-    await app_main.redis_client.xadd(
+    redis_client, collection = _location_backends()
+    await redis_client.xadd(
         "location:stream",
         stream_data_full,
         maxlen=1000000,
@@ -96,9 +113,9 @@ async def upload_location(
     )
 
     # 2. 更新 Redis GEO（实时查询用）
-    await app_main.redis_client.geoadd("location:geo:nearby", (body.lng, body.lat, str(body.device_id)))
+    await redis_client.geoadd("location:geo:nearby", (body.lng, body.lat, str(body.device_id)))
 
-    await _locations_collection().insert_one({
+    await collection.insert_one({
         "device_id": body.device_id,
         "pet_id": device.pet_id,
         "user_id": device.user_id,
@@ -134,9 +151,9 @@ async def upload_location(
             "battery": body.battery,
             "ts": body.ts
         }, ensure_ascii=False)
-        await app_main.redis_client.publish(f"ws:user:{device.user_id}", ws_message)
+        await redis_client.publish(f"ws:user:{device.user_id}", ws_message)
 
-    return {"code": 0, "message": "success"}
+    return {"code": 0, "message": LOCATION_NOTICE, "notice": LOCATION_NOTICE, "is_simulated": True}
 
 @router.get("/realtime/{pet_id}", response_model=dict)
 async def get_realtime_location(
@@ -157,8 +174,8 @@ async def get_realtime_location(
     if not device:
         raise HTTPException(404, detail={"code": 20003, "message": "该宠物未绑定设备"})
 
-    # 从 Redis GEO 获取最新位置
-    geo_result = await app_main.redis_client.geopos("location:geo:nearby", str(device.id))
+    redis_client, _collection = _location_backends()
+    geo_result = await redis_client.geopos("location:geo:nearby", str(device.id))
     if geo_result and geo_result[0]:
         lng, lat = geo_result[0]
         return {"code": 0, "data": {
@@ -168,7 +185,9 @@ async def get_realtime_location(
             "lng": lng,
             "source": "gps",
             "battery": device.battery_level,
-            "ts": int(datetime.now(timezone.utc).timestamp())
+            "ts": int(datetime.now(timezone.utc).timestamp()),
+            "is_simulated": True,
+            "notice": LOCATION_NOTICE,
         }}
 
     return {"code": 0, "data": {
@@ -178,7 +197,9 @@ async def get_realtime_location(
         "lng": None,
         "source": "none",
         "battery": device.battery_level,
-        "ts": 0
+        "ts": 0,
+        "is_simulated": True,
+        "notice": "还没有位置记录，请先绑定设备并等待上报（当前为本地预览数据）",
     }}
 
 @router.get("/history/{pet_id}", response_model=dict)
@@ -213,11 +234,11 @@ async def get_location_history(
     if end is not None:
         query.setdefault("ts", {})["$lte"] = end
 
-    collection = _locations_collection()
+    _redis_client, collection = _location_backends()
     total = await collection.count_documents(query)
     cursor = collection.find(
         query,
         {"_id": 0, "ts": 1, "lat": 1, "lng": 1, "accuracy": 1, "source": 1, "battery": 1},
     ).sort("ts", 1).limit(500)
     items = await cursor.to_list(length=500)
-    return {"code": 0, "data": items, "pagination": {"total": total}}
+    return {"code": 0, "data": items, "pagination": {"total": total},            "is_simulated": True, "notice": LOCATION_NOTICE}

@@ -12,6 +12,12 @@ from app.config import settings
 from app.database import get_db
 from app.models import Device, User
 from app.auth import get_current_user
+from app.services.mock_notice import (
+    DEVICE_BIND_NOTICE,
+    DEVICE_BOUND_OTHER_PET,
+    INVALID_DEVICE_MESSAGE,
+    LOCAL_PREVIEW_NOTICE,
+)
 
 router = APIRouter(prefix="/api/v1/devices", tags=["设备"])
 
@@ -46,7 +52,7 @@ async def register_device(body: DeviceRegisterRequest, db: AsyncSession = Depend
     if settings.is_dev and not allowed_codes:
         allowed_codes = {"PT-TEST-0001"}
     if body.activation_code not in allowed_codes:
-        raise HTTPException(400, detail={"code": 20007, "message": "设备激活码无效"})
+        raise HTTPException(400, detail={"code": 20007, "message": INVALID_DEVICE_MESSAGE})
 
     result = await db.execute(select(Device).where(Device.sn == body.sn))
     existing = result.scalar_one_or_none()
@@ -73,9 +79,11 @@ async def register_device(body: DeviceRegisterRequest, db: AsyncSession = Depend
         "sn": device.sn,
         "access_token": access,
         "refresh_token": refresh,
-        "mqtt_url": "ssl://mqtt.pawtrack.app:8883",
+        "mqtt_url": None,
         "token_type": "Bearer",
-        "expires_in": 7200
+        "expires_in": 7200,
+        "is_simulated": True,
+        "notice": LOCAL_PREVIEW_NOTICE,
     }}
 
 @router.post("/bind", response_model=dict)
@@ -84,9 +92,11 @@ async def bind_device(body: DeviceBindRequest, user: dict = Depends(get_current_
     result = await db.execute(select(Device).where(Device.sn == body.sn))
     device = result.scalar_one_or_none()
     if not device:
-        raise HTTPException(404, detail={"code": 20003, "message": "设备不存在"})
+        raise HTTPException(404, detail={"code": 20003, "message": INVALID_DEVICE_MESSAGE})
     if device.user_id is not None and device.user_id != int(user["sub"]):
         raise HTTPException(409, detail={"code": 40901, "message": "设备已被其他用户绑定"})
+    if device.pet_id is not None and device.pet_id != body.pet_id:
+        raise HTTPException(409, detail={"code": 40901, "message": DEVICE_BOUND_OTHER_PET})
 
     # 验证宠物属于当前用户
     from app.models import Pet
@@ -100,11 +110,13 @@ async def bind_device(body: DeviceBindRequest, user: dict = Depends(get_current_
     await db.commit()
     await db.refresh(device)
 
-    return {"code": 0, "message": "success", "data": {
+    return {"code": 0, "message": DEVICE_BIND_NOTICE, "data": {
         "device_id": device.id,
         "sn": device.sn,
         "pet_id": device.pet_id,
-        "status": device.status
+        "status": device.status,
+        "is_simulated": True,
+        "notice": DEVICE_BIND_NOTICE,
     }}
 
 @router.get("/{device_id}", response_model=dict)

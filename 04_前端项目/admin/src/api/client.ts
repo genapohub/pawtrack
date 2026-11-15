@@ -2,7 +2,8 @@
  * 宠迹 PawTrack 管理后台 — API 客户端
  */
 
-import { API_BASE as BASE_URL } from '../env'
+import { API_BASE as BASE_URL, USE_MOCK } from '../env'
+import { mockRequest } from './mock'
 
 const TOKEN_KEY = 'pawtrack_admin_token'
 const ADMIN_KEY = 'pawtrack_admin_info'
@@ -31,6 +32,10 @@ export function isLoggedIn(): boolean {
 }
 
 async function request<T = any>(method: string, path: string, body?: any): Promise<T> {
+  if (USE_MOCK) {
+    return mockRequest(method, path, body) as T
+  }
+
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   const token = getToken()
   if (token) headers['Authorization'] = `Bearer ${token}`

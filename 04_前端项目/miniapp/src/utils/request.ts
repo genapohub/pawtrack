@@ -1,8 +1,9 @@
 /**
  * 宠迹 PawTrack — 请求封装（uni.request + JWT 自动刷新）
  */
-import { API_BASE } from './config'
+import { API_BASE, USE_MOCK } from './config'
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './auth'
+import { mockRequest } from './mock'
 
 interface RequestOptions {
   url: string
@@ -49,6 +50,16 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
   const {
     url, method = 'GET', data, auth = true, retry = true,
   } = options
+
+  if (USE_MOCK) {
+    try {
+      return Promise.resolve(mockRequest(method, url, data) as T)
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error('Mock 请求失败')
+      uni.showToast({ title: err.message, icon: 'none' })
+      return Promise.reject(err)
+    }
+  }
 
   return new Promise<T>((resolve, reject) => {
     const token = auth ? getAccessToken() : ''

@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { getAdminInfo, clearAuth } from '../api/client'
-import { IS_DEV, APP_ENV } from '../env'
+import { IS_DEV, APP_ENV, USE_MOCK } from '../env'
 
 const { Header, Sider, Content } = Layout
 
@@ -84,9 +84,12 @@ export default function MainLayout({
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: `1px solid ${themeToken.colorBorder}`
         }}>
-          <Tag color={IS_DEV ? 'orange' : 'red'} style={{ margin: 0, fontWeight: 600 }}>
-            {IS_DEV ? 'DEV 开发环境' : `${APP_ENV.toUpperCase()} 生产环境`}
-          </Tag>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Tag color={IS_DEV ? 'orange' : 'red'} style={{ margin: 0, fontWeight: 600 }}>
+              {IS_DEV ? 'DEV 开发环境' : `${APP_ENV.toUpperCase()} 生产环境`}
+            </Tag>
+            {USE_MOCK ? <Tag style={{ margin: 0 }}>本地 Mock，非验收</Tag> : null}
+          </div>
           <Dropdown menu={{ items: dropdownItems, onClick: ({ key }) => key === 'logout' && onLogout() }}>
             <Space style={{ cursor: 'pointer' }}>
               <Avatar style={{ backgroundColor: themeToken.colorPrimary }} icon={<UserOutlined />} />

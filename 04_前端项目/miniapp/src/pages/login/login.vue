@@ -72,6 +72,11 @@
         {{ loading ? '请稍候...' : mode === 'register' ? '注册' : '登录' }}
       </view>
 
+      <view v-if="useMock" class="btn-mock" :class="{ loading: loading }" @tap="handleMockLogin">
+        模拟登录（本地占位）
+      </view>
+      <view v-if="useMock" class="mock-tip">当前为本地 Mock，非验收。不接真实微信/短信。</view>
+
       <!-- 分割线 -->
       <view class="divider">
         <view class="divider-line" />
@@ -99,6 +104,7 @@
 import { ref } from 'vue'
 import { http } from '@/utils/request'
 import { setTokens, setUser } from '@/utils/auth'
+import { USE_MOCK } from '@/utils/config'
 
 const mode = ref<'login' | 'register'>('login')
 const phone = ref('')
@@ -106,6 +112,36 @@ const code = ref('')
 const nickname = ref('')
 const loading = ref(false)
 const countdown = ref(0)
+const useMock = USE_MOCK
+
+function applyAuth(resp: any, title: string) {
+  if (!resp?.access_token) return
+  setTokens(resp.access_token, resp.refresh_token)
+  setUser({
+    user_id: resp.user_id,
+    phone: resp.phone,
+    nickname: resp.nickname,
+    member_level: resp.member_level,
+  })
+  uni.showToast({ title, icon: 'success' })
+  setTimeout(() => uni.switchTab({ url: '/pages/home/home' }), 800)
+}
+
+/** 本地占位登录，不请求真实短信或微信 */
+async function handleMockLogin() {
+  loading.value = true
+  try {
+    const resp = await http.post<any>('/auth/login', {
+      phone: '13800000000', code: '123456',
+    }, false)
+    applyAuth(resp, '已进入 Mock 预览')
+  } catch (e: any) {
+    uni.showToast({ title: e.message || 'Mock 登录失败', icon: 'none' })
+  } finally {
+    loading.value = false
+  }
+}
+
 
 /** 发送验证码（MVP：仅提示） */
 function sendCode() {
@@ -164,15 +200,15 @@ async function handleSubmit() {
 async function handleWechatLogin() {
   loading.value = true
   try {
-    // 获取微信登录 code
-    const loginRes = await new Promise<any>((resolve, reject) => {
-      uni.login({
-        provider: 'weixin',
-        success: (res) => resolve(res),
-        fail: reject,
-      })
-    })
-    const code = loginRes.code || `mock_wx_code_${Date.now()}`
+    const code = USE_MOCK
+      ? `mock_wx_code_${Date.now()}`
+      : (await new Promise<any>((resolve, reject) => {
+          uni.login({
+            provider: 'weixin',
+            success: (res) => resolve(res),
+            fail: reject,
+          })
+        })).code
     const resp = await http.post<any>('/auth/wechat-login', { code }, false)
     if (resp.access_token) {
       setTokens(resp.access_token, resp.refresh_token)
@@ -359,6 +395,29 @@ async function handleWechatLogin() {
   bottom: 60rpx;
   left: 0;
   width: 100%;
+  text-align: center;
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+
+.btn-mock {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 22rpx 0;
+  border-radius: 44rpx;
+  border: 2rpx solid #3d6cf5;
+  color: #3d6cf5;
+  font-size: 30rpx;
+  font-weight: 600;
+  background: #fff;
+}
+
+.btn-mock.loading {
+  opacity: 0.6;
+}
+
+.mock-tip {
+  margin-top: 16rpx;
   text-align: center;
   font-size: 22rpx;
   color: #9aa0a6;

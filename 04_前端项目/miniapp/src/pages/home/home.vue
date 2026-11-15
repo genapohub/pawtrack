@@ -141,8 +141,8 @@ const markers = computed(() => {
     longitude: location.value.lng,
     title: selectedPet.value.name,
     iconPath: selectedPet.value.type === 'cat'
-      ? '/static/marker-cat.png'
-      : '/static/marker-dog.png',
+      ? '/static/marker/marker-cat.png'
+      : '/static/marker/marker-dog.png',
     width: 32,
     height: 32,
   }]

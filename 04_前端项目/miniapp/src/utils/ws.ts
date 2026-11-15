@@ -5,7 +5,7 @@
  *   发送：{action: 'subscribe'|'unsubscribe'|'ping', channel: 'location'|'alarm', pet_id?}
  *   接收：{type: 'connected'|'location'|'alarm'|'pong'|'error', ...}
  */
-import { WS_BASE } from './config'
+import { USE_MOCK, WS_BASE } from './config'
 import { getAccessToken } from './auth'
 
 type MsgHandler = (msg: any) => void
@@ -20,6 +20,10 @@ class PawSocket {
 
   /** 建立连接（token 为空则跳过） */
   connect(): void {
+    if (USE_MOCK) {
+      console.log('[WS] Mock 模式，不连接真实 WebSocket')
+      return
+    }
     const token = getAccessToken()
     if (!token) return
 

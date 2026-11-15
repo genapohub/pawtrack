@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Card, Form, Input, Button, message } from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { api, saveAuth } from '../api/client'
+import { USE_MOCK } from '../env'
 
 export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => void }) {
   const [loading, setLoading] = useState(false)
@@ -40,7 +41,7 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => vo
           <h2 style={{ margin: '8px 0 4px' }}>宠迹 PawTrack</h2>
           <div style={{ color: '#94A3B8', fontSize: 13 }}>管理后台</div>
         </div>
-        <Form onFinish={handleSubmit} layout="vertical" initialValues={{ username: 'admin' }}>
+        <Form onFinish={handleSubmit} layout="vertical" initialValues={{ username: 'admin', password: USE_MOCK ? 'mock' : undefined }}>
           <Form.Item name="username" rules={[{ required: true, message: '请输入用户名' }]}>
             <Input size="large" prefix={<UserOutlined />} placeholder="管理员账号" />
           </Form.Item>
@@ -54,7 +55,9 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: () => vo
           </Form.Item>
         </Form>
         <div style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
-          默认账号 admin / pawtrack_admin_2026
+          {USE_MOCK
+            ? '当前为本地 Mock（非验收）。账号 admin / mock。关闭 Mock：VITE_USE_MOCK=false'
+            : '请使用本地后端管理员账号登录'}
         </div>
       </Card>
     </div>

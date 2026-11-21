@@ -1,0 +1,305 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "id": "290:498",
+        "type": "FRAME",
+        "layout": "vertical",
+        "gap": 8,
+        "padding": {
+          "left": 15,
+          "right": 15,
+          "top": 14,
+          "bottom": 14
+        },
+        "cornerRadius": 14,
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 1,
+              "g": 0.9882352948188782,
+              "b": 0.9725490212440491
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 343,
+        "height": 196,
+        "x": 16,
+        "y": 303,
+        "name": "围栏圆心",
+        "clipsContent": true,
+        "children": [
+          {
+            "id": "290:499",
+            "type": "FRAME",
+            "layout": "horizontal",
+            "gap": 0,
+            "padding": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "width": 313,
+            "height": 21,
+            "x": "auto",
+            "y": "auto",
+            "name": "圆心标题行",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:502",
+                "type": "TEXT",
+                "fontSize": 15,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Medium"
+                },
+                "characters": "围栏圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.16470588743686676,
+                      "g": 0.14901961386203766,
+                      "b": 0.13333334028720856
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "围栏圆心",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              },
+              {
+                "id": "290:503",
+                "type": "TEXT",
+                "fontSize": 13,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Regular"
+                },
+                "characters": "未选择",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.41960784792900085,
+                      "g": 0.3921568691730499,
+                      "b": 0.3607843220233917
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "未选择",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              }
+            ]
+          },
+          {
+            "id": "290:500",
+            "type": "FRAME",
+            "layout": "none",
+            "cornerRadius": 10,
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9019607901573181,
+                  "g": 0.8941176533699036,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 313,
+            "height": 100,
+            "x": "auto",
+            "y": "auto",
+            "name": "圆心示意地图",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:504",
+                "type": "ELLIPSE",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 0.11999999731779099,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 0.550000011920929,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 100,
+                "height": 60,
+                "x": 106,
+                "y": 20,
+                "name": "待选范围"
+              },
+              {
+                "id": "290:505",
+                "type": "TEXT",
+                "fontSize": 12,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Regular"
+                },
+                "characters": "点击地图点选圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.41960784792900085,
+                      "g": 0.3921568691730499,
+                      "b": 0.3607843220233917
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 96,
+                "height": 17,
+                "x": 109,
+                "y": 42,
+                "name": "点击地图点选圆心",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              }
+            ]
+          },
+          {
+            "id": "290:501",
+            "type": "FRAME",
+            "layout": "horizontal",
+            "gap": 0,
+            "padding": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "cornerRadius": 12,
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 1,
+                  "g": 0.9882352948188782,
+                  "b": 0.9725490212440491
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "strokes": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.23899999260902405,
+                  "g": 0.32899999618530273,
+                  "b": 0.4390000104904175
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 313,
+            "height": 36,
+            "x": "auto",
+            "y": "auto",
+            "name": "在地图上点选圆心",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:506",
+                "type": "TEXT",
+                "fontSize": 13,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Medium"
+                },
+                "characters": "在地图上点选圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24313725531101227,
+                      "g": 0.3294117748737335,
+                      "b": 0.43921568989753723
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "在地图上点选圆心",
+                "textAlignHorizontal": "CENTER",
+                "textAlignVertical": "CENTER"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "issues": [
+      "Some nodes do not have the specified properties will be omitted in the result"
+    ]
+  }
+}

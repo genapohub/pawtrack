@@ -1,0 +1,562 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "197:1",
+      "name": "报警列表-失败",
+      "type": "FRAME",
+      "bounds": {
+        "x": 0,
+        "y": 6804,
+        "width": 375,
+        "height": 812
+      },
+      "children": [
+        {
+          "id": "197:2",
+          "name": "Frame",
+          "type": "FRAME",
+          "bounds": {
+            "x": 0,
+            "y": 6804,
+            "width": 375,
+            "height": 812
+          },
+          "clipsContent": true,
+          "children": [
+            {
+              "id": "197:11",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 0,
+                "y": 6804,
+                "width": 375,
+                "height": 88
+              },
+              "children": [
+                {
+                  "id": "197:12",
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 0,
+                    "y": 6848,
+                    "width": 375,
+                    "height": 44
+                  },
+                  "children": [
+                    {
+                      "id": "197:13",
+                      "name": "报警",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 16,
+                        "y": 6856,
+                        "width": 34,
+                        "height": 24
+                      }
+                    },
+                    {
+                      "id": "197:14",
+                      "name": "Rectangle",
+                      "type": "RECTANGLE",
+                      "bounds": {
+                        "x": 0,
+                        "y": 6891,
+                        "width": 375,
+                        "height": 1
+                      }
+                    }
+                  ],
+                  "problems": {
+                    "warning": [
+                      "overlaps with \"官方胶囊\" (289:5409)"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "SIBLING_OVERLAP",
+                      "message": "overlaps with \"官方胶囊\" (289:5409)",
+                      "relatedNodeId": "289:5409",
+                      "severity": "warning"
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5409",
+                  "name": "官方胶囊",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 281,
+                    "y": 6852,
+                    "width": 87,
+                    "height": 32
+                  },
+                  "clipsContent": true,
+                  "problems": {
+                    "warning": [
+                      "overlaps with \"Frame\" (197:12)"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "SIBLING_OVERLAP",
+                      "message": "overlaps with \"Frame\" (197:12)",
+                      "relatedNodeId": "197:12",
+                      "severity": "warning"
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5740",
+                  "name": "系统时间",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 21,
+                    "y": 6816,
+                    "width": 29,
+                    "height": 21
+                  }
+                }
+              ]
+            },
+            {
+              "id": "197:15",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 0,
+                "y": 6892,
+                "width": 375,
+                "height": 642
+              },
+              "clipsContent": true,
+              "problems": {
+                "warning": [
+                  "large empty region at 0,7049 375x485 (76% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                ]
+              },
+              "problemDetails": [
+                {
+                  "code": "LARGE_EMPTY_AREA",
+                  "message": "large empty region at 0,7049 375x485 (76% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                  "detail": {
+                    "localBounds": {
+                      "x": 0,
+                      "y": 157,
+                      "width": 375,
+                      "height": 485
+                    },
+                    "absoluteBounds": {
+                      "x": 0,
+                      "y": 7049,
+                      "width": 375,
+                      "height": 485
+                    },
+                    "areaRatio": 0.7554517388343811,
+                    "cause": "OversizedContainer"
+                  },
+                  "severity": "warning"
+                }
+              ],
+              "children": [
+                {
+                  "id": "197:16",
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 0,
+                    "y": 6892,
+                    "width": 375,
+                    "height": 157
+                  },
+                  "layoutMode": "VERTICAL",
+                  "layoutPositioning": "ABSOLUTE",
+                  "children": [
+                    {
+                      "id": "197:17",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 16,
+                        "y": 6916,
+                        "width": 343,
+                        "height": 59
+                      },
+                      "problems": {
+                        "warning": [
+                          "large empty region at 304,6916 55x59 (16% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                        ]
+                      },
+                      "problemDetails": [
+                        {
+                          "code": "LARGE_EMPTY_AREA",
+                          "message": "large empty region at 304,6916 55x59 (16% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                          "detail": {
+                            "localBounds": {
+                              "x": 288,
+                              "y": 0,
+                              "width": 55,
+                              "height": 59
+                            },
+                            "absoluteBounds": {
+                              "x": 304,
+                              "y": 6916,
+                              "width": 55,
+                              "height": 59
+                            },
+                            "areaRatio": 0.16034986078739166,
+                            "cause": "OversizedContainer"
+                          },
+                          "severity": "warning"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "id": "197:18",
+                          "name": "告警列表拉取失败，请重试。这是接口失败态，不是",
+                          "type": "TEXT",
+                          "bounds": {
+                            "x": 28,
+                            "y": 6926,
+                            "width": 276,
+                            "height": 18
+                          }
+                        },
+                        {
+                          "id": "197:19",
+                          "name": "「暂时没有报警记录」。",
+                          "type": "TEXT",
+                          "bounds": {
+                            "x": 28,
+                            "y": 6945,
+                            "width": 132,
+                            "height": 18
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "197:20",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 16,
+                        "y": 6985,
+                        "width": 343,
+                        "height": 40
+                      },
+                      "children": [
+                        {
+                          "id": "197:21",
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "bounds": {
+                            "x": 16,
+                            "y": 6985,
+                            "width": 343,
+                            "height": 40
+                          },
+                          "layoutMode": "HORIZONTAL",
+                          "children": [
+                            {
+                              "id": "197:22",
+                              "name": "重新加载",
+                              "type": "TEXT",
+                              "bounds": {
+                                "x": 159.5,
+                                "y": 6995,
+                                "width": 56,
+                                "height": 20
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "289:5416",
+              "name": "底栏",
+              "type": "FRAME",
+              "bounds": {
+                "x": 0,
+                "y": 7534,
+                "width": 375,
+                "height": 82
+              },
+              "clipsContent": true,
+              "layoutMode": "HORIZONTAL",
+              "children": [
+                {
+                  "id": "289:5417",
+                  "name": "Tab-首页",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 0,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 26,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 26,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 26,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5418",
+                      "name": "图标-首页",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 0,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5422",
+                      "name": "标签-首页",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 0,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5423",
+                  "name": "Tab-社交",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 93.75,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 120,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 120,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 119.75,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5424",
+                      "name": "图标-社交",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 93.75,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5429",
+                      "name": "标签-社交",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 93.75,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5430",
+                  "name": "Tab-报警",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 187.5,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 214,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 214,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 213.5,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5431",
+                      "name": "图标-报警",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 187.5,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5434",
+                      "name": "标签-报警",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 187.5,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5435",
+                  "name": "Tab-我的",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 281.25,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 307,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 307,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 307.25,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5436",
+                      "name": "图标-我的",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 281.25,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5439",
+                      "name": "标签-我的",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 281.25,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

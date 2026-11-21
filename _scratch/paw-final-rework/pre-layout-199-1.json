@@ -1,0 +1,1228 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "199:1",
+      "name": "我的",
+      "type": "FRAME",
+      "bounds": {
+        "x": 950,
+        "y": 6804,
+        "width": 375,
+        "height": 812
+      },
+      "children": [
+        {
+          "id": "199:2",
+          "name": "Frame",
+          "type": "FRAME",
+          "bounds": {
+            "x": 950,
+            "y": 6804,
+            "width": 375,
+            "height": 812
+          },
+          "clipsContent": true,
+          "children": [
+            {
+              "id": "199:11",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 950,
+                "y": 6804,
+                "width": 375,
+                "height": 88
+              },
+              "children": [
+                {
+                  "id": "199:12",
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 950,
+                    "y": 6848,
+                    "width": 375,
+                    "height": 44
+                  },
+                  "children": [
+                    {
+                      "id": "199:13",
+                      "name": "我的",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 966,
+                        "y": 6856,
+                        "width": 34,
+                        "height": 24
+                      }
+                    },
+                    {
+                      "id": "199:14",
+                      "name": "Rectangle",
+                      "type": "RECTANGLE",
+                      "bounds": {
+                        "x": 950,
+                        "y": 6891,
+                        "width": 375,
+                        "height": 1
+                      }
+                    }
+                  ],
+                  "problems": {
+                    "warning": [
+                      "overlaps with \"官方胶囊\" (289:5440)"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "SIBLING_OVERLAP",
+                      "message": "overlaps with \"官方胶囊\" (289:5440)",
+                      "relatedNodeId": "289:5440",
+                      "severity": "warning"
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5440",
+                  "name": "官方胶囊",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 1231,
+                    "y": 6852,
+                    "width": 87,
+                    "height": 32
+                  },
+                  "clipsContent": true,
+                  "problems": {
+                    "warning": [
+                      "overlaps with \"Frame\" (199:12)"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "SIBLING_OVERLAP",
+                      "message": "overlaps with \"Frame\" (199:12)",
+                      "relatedNodeId": "199:12",
+                      "severity": "warning"
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5742",
+                  "name": "系统时间",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 971,
+                    "y": 6816,
+                    "width": 29,
+                    "height": 21
+                  }
+                }
+              ]
+            },
+            {
+              "id": "199:15",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 950,
+                "y": 6892,
+                "width": 375,
+                "height": 642
+              },
+              "clipsContent": true,
+              "problems": {
+                "warning": [
+                  "large empty region at 950,7339 375x195 (30% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                ]
+              },
+              "problemDetails": [
+                {
+                  "code": "LARGE_EMPTY_AREA",
+                  "message": "large empty region at 950,7339 375x195 (30% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                  "detail": {
+                    "localBounds": {
+                      "x": 0,
+                      "y": 446.8999938964844,
+                      "width": 375,
+                      "height": 195.10000610351562
+                    },
+                    "absoluteBounds": {
+                      "x": 950,
+                      "y": 7338.89990234375,
+                      "width": 375,
+                      "height": 195.10009765625
+                    },
+                    "areaRatio": 0.3038940727710724,
+                    "cause": "OversizedContainer"
+                  },
+                  "severity": "warning"
+                }
+              ],
+              "children": [
+                {
+                  "id": "199:16",
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 950,
+                    "y": 6892,
+                    "width": 375,
+                    "height": 446.89990234375
+                  },
+                  "layoutPositioning": "ABSOLUTE",
+                  "children": [
+                    {
+                      "id": "199:17",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 966,
+                        "y": 6906,
+                        "width": 343,
+                        "height": 70
+                      },
+                      "children": [
+                        {
+                          "id": "199:18",
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "bounds": {
+                            "x": 981,
+                            "y": 6921,
+                            "width": 313,
+                            "height": 40
+                          },
+                          "layoutMode": "HORIZONTAL",
+                          "layoutPositioning": "ABSOLUTE",
+                          "children": [
+                            {
+                              "id": "199:19",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 6921,
+                                "width": 40,
+                                "height": 40
+                              },
+                              "layoutMode": "HORIZONTAL",
+                              "children": [
+                                {
+                                  "id": "199:20",
+                                  "name": "预",
+                                  "type": "TEXT",
+                                  "bounds": {
+                                    "x": 993.5,
+                                    "y": 6930.5,
+                                    "width": 15,
+                                    "height": 21
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:21",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 1031,
+                                "y": 6922.5498046875,
+                                "width": 176.0999755859375,
+                                "height": 36.89990234375
+                              },
+                              "layoutMode": "VERTICAL",
+                              "children": [
+                                {
+                                  "id": "199:22",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1031,
+                                    "y": 6922.5498046875,
+                                    "width": 176.0999755859375,
+                                    "height": 21
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "199:23",
+                                      "name": "林晓荷",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1031,
+                                        "y": 6923.5498046875,
+                                        "width": 45,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:22) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:22) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:24",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1031,
+                                    "y": 6943.5498046875,
+                                    "width": 176.0999755859375,
+                                    "height": 15.89990234375
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "199:25",
+                                      "name": "138****0000 · 免费版",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1031,
+                                        "y": 6942.5498046875,
+                                        "width": 123,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:24) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:24) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "199:26",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 966,
+                        "y": 6984,
+                        "width": 343,
+                        "height": 305
+                      },
+                      "children": [
+                        {
+                          "id": "199:27",
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "bounds": {
+                            "x": 966,
+                            "y": 6984,
+                            "width": 343,
+                            "height": 305
+                          },
+                          "layoutMode": "VERTICAL",
+                          "children": [
+                            {
+                              "id": "199:28",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 6999,
+                                "width": 313,
+                                "height": 46
+                              },
+                              "children": [
+                                {
+                                  "id": "199:29",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7011,
+                                    "width": 64,
+                                    "height": 21
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:30",
+                                      "name": "设备管理",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 981,
+                                        "y": 7012,
+                                        "width": 60,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:29) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:29) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:31",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1261,
+                                    "y": 7014,
+                                    "width": 33,
+                                    "height": 15.89990234375
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:32",
+                                      "name": "主路径",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1261,
+                                        "y": 7013,
+                                        "width": 36,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:31) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:31) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:33",
+                                  "name": "Rectangle",
+                                  "type": "RECTANGLE",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7044,
+                                    "width": 313,
+                                    "height": 1
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:34",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 7045,
+                                "width": 313,
+                                "height": 46
+                              },
+                              "children": [
+                                {
+                                  "id": "199:35",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7057,
+                                    "width": 32,
+                                    "height": 21
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:36",
+                                      "name": "会员",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 981,
+                                        "y": 7058,
+                                        "width": 30,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:35) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:35) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:37",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1120,
+                                    "y": 7060,
+                                    "width": 173.5999755859375,
+                                    "height": 15.89990234375
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:38",
+                                      "name": "会员与积分",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1120,
+                                        "y": 7059,
+                                        "width": 60,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:37) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:37) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:39",
+                                  "name": "Rectangle",
+                                  "type": "RECTANGLE",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7090,
+                                    "width": 313,
+                                    "height": 1
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:40",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 7091,
+                                "width": 313,
+                                "height": 46
+                              },
+                              "children": [
+                                {
+                                  "id": "199:41",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7103,
+                                    "width": 32,
+                                    "height": 21
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:42",
+                                      "name": "积分",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 981,
+                                        "y": 7104,
+                                        "width": 30,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:41) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:41) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:43",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1218,
+                                    "y": 7106,
+                                    "width": 75.800048828125,
+                                    "height": 15.89990234375
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:44",
+                                      "name": "后续 · 入口不删",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1218,
+                                        "y": 7105,
+                                        "width": 86,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:43) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:43) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:45",
+                                  "name": "Rectangle",
+                                  "type": "RECTANGLE",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7136,
+                                    "width": 313,
+                                    "height": 1
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:46",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 7137,
+                                "width": 313,
+                                "height": 46
+                              },
+                              "children": [
+                                {
+                                  "id": "199:47",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7149,
+                                    "width": 32,
+                                    "height": 21
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:48",
+                                      "name": "邀请",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 981,
+                                        "y": 7150,
+                                        "width": 30,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:47) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:47) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:49",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1272,
+                                    "y": 7152,
+                                    "width": 22,
+                                    "height": 15.89990234375
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:50",
+                                      "name": "后续",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1272,
+                                        "y": 7151,
+                                        "width": 24,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:49) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:49) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:51",
+                                  "name": "Rectangle",
+                                  "type": "RECTANGLE",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7182,
+                                    "width": 313,
+                                    "height": 1
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:52",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 7183,
+                                "width": 313,
+                                "height": 46
+                              },
+                              "children": [
+                                {
+                                  "id": "199:53",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7195,
+                                    "width": 32,
+                                    "height": 21
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:54",
+                                      "name": "通知",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 981,
+                                        "y": 7196,
+                                        "width": 30,
+                                        "height": 21
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:53) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:53) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:55",
+                                  "name": "Frame",
+                                  "type": "FRAME",
+                                  "bounds": {
+                                    "x": 1217,
+                                    "y": 7198,
+                                    "width": 77,
+                                    "height": 15.89990234375
+                                  },
+                                  "layoutPositioning": "ABSOLUTE",
+                                  "children": [
+                                    {
+                                      "id": "199:56",
+                                      "name": "与报警设置分离",
+                                      "type": "TEXT",
+                                      "bounds": {
+                                        "x": 1217,
+                                        "y": 7197,
+                                        "width": 84,
+                                        "height": 18
+                                      },
+                                      "problems": {
+                                        "warning": [
+                                          "Outside parent(199:55) bounds, and parent (clipsContent: false)"
+                                        ]
+                                      },
+                                      "problemDetails": [
+                                        {
+                                          "code": "OUTSIDE_PARENT",
+                                          "message": "Outside parent(199:55) bounds, and parent (clipsContent: false)",
+                                          "detail": {
+                                            "clipsContent": false
+                                          },
+                                          "severity": "warning"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "199:57",
+                                  "name": "Rectangle",
+                                  "type": "RECTANGLE",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7228,
+                                    "width": 313,
+                                    "height": 1
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "199:58",
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "bounds": {
+                                "x": 981,
+                                "y": 7229,
+                                "width": 313,
+                                "height": 45
+                              },
+                              "layoutMode": "HORIZONTAL",
+                              "children": [
+                                {
+                                  "id": "199:59",
+                                  "name": "设置",
+                                  "type": "TEXT",
+                                  "bounds": {
+                                    "x": 981,
+                                    "y": 7241,
+                                    "width": 30,
+                                    "height": 21
+                                  }
+                                },
+                                {
+                                  "id": "199:60",
+                                  "name": "隐私与退出",
+                                  "type": "TEXT",
+                                  "bounds": {
+                                    "x": 1234,
+                                    "y": 7242.5,
+                                    "width": 60,
+                                    "height": 18
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "199:61",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 966,
+                        "y": 7299,
+                        "width": 343,
+                        "height": 15.89990234375
+                      },
+                      "layoutPositioning": "ABSOLUTE",
+                      "children": [
+                        {
+                          "id": "199:62",
+                          "name": "管理账号、通知与设备相关设置。",
+                          "type": "TEXT",
+                          "bounds": {
+                            "x": 966,
+                            "y": 7298,
+                            "width": 180,
+                            "height": 18
+                          },
+                          "problems": {
+                            "warning": [
+                              "Outside parent(199:61) bounds, and parent (clipsContent: false)"
+                            ]
+                          },
+                          "problemDetails": [
+                            {
+                              "code": "OUTSIDE_PARENT",
+                              "message": "Outside parent(199:61) bounds, and parent (clipsContent: false)",
+                              "detail": {
+                                "clipsContent": false
+                              },
+                              "severity": "warning"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "289:5447",
+              "name": "底栏",
+              "type": "FRAME",
+              "bounds": {
+                "x": 950,
+                "y": 7534,
+                "width": 375,
+                "height": 82
+              },
+              "clipsContent": true,
+              "layoutMode": "HORIZONTAL",
+              "children": [
+                {
+                  "id": "289:5448",
+                  "name": "Tab-首页",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 950,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 976,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 976,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 976,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5449",
+                      "name": "图标-首页",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 950,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5453",
+                      "name": "标签-首页",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 950,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5454",
+                  "name": "Tab-社交",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 1043.75,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 1070,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 1070,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 1069.75,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5455",
+                      "name": "图标-社交",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 1043.75,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5460",
+                      "name": "标签-社交",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 1043.75,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5461",
+                  "name": "Tab-报警",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 1137.5,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 1164,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 1164,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 1163.5,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5462",
+                      "name": "图标-报警",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 1137.5,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5465",
+                      "name": "标签-报警",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 1137.5,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "289:5466",
+                  "name": "Tab-我的",
+                  "type": "FRAME",
+                  "bounds": {
+                    "x": 1231.25,
+                    "y": 7534,
+                    "width": 93.75,
+                    "height": 48
+                  },
+                  "layoutMode": "VERTICAL",
+                  "problems": {
+                    "warning": [
+                      "large empty region at 1257,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "LARGE_EMPTY_AREA",
+                      "message": "large empty region at 1257,7534 68x48 (72% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                      "detail": {
+                        "localBounds": {
+                          "x": 26,
+                          "y": 0,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "absoluteBounds": {
+                          "x": 1257.25,
+                          "y": 7534,
+                          "width": 67.75,
+                          "height": 48
+                        },
+                        "areaRatio": 0.7226666808128357,
+                        "cause": "OversizedContainer"
+                      },
+                      "severity": "warning"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "289:5467",
+                      "name": "图标-我的",
+                      "type": "FRAME",
+                      "bounds": {
+                        "x": 1231.25,
+                        "y": 7534,
+                        "width": 26,
+                        "height": 26
+                      },
+                      "clipsContent": true
+                    },
+                    {
+                      "id": "289:5470",
+                      "name": "标签-我的",
+                      "type": "TEXT",
+                      "bounds": {
+                        "x": 1231.25,
+                        "y": 7560,
+                        "width": 24,
+                        "height": 14
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

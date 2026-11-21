@@ -1,0 +1,198 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "161:1",
+      "name": "封面 · 宠迹正式设计稿（平台规范整改待复核）",
+      "type": "FRAME",
+      "bounds": {
+        "x": 1084,
+        "y": -105,
+        "width": 1200,
+        "height": 400
+      },
+      "children": [
+        {
+          "id": "161:2",
+          "name": "Frame",
+          "type": "FRAME",
+          "bounds": {
+            "x": 1084,
+            "y": -105,
+            "width": 1200,
+            "height": 400
+          },
+          "problems": {
+            "warning": [
+              "large empty region at 1084,192 1200x103 (26% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+            ]
+          },
+          "problemDetails": [
+            {
+              "code": "LARGE_EMPTY_AREA",
+              "message": "large empty region at 1084,192 1200x103 (26% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+              "detail": {
+                "localBounds": {
+                  "x": 0,
+                  "y": 297,
+                  "width": 1200,
+                  "height": 103
+                },
+                "absoluteBounds": {
+                  "x": 1084,
+                  "y": 192,
+                  "width": 1200,
+                  "height": 103
+                },
+                "areaRatio": 0.2574999928474426,
+                "cause": "OversizedContainer"
+              },
+              "severity": "warning"
+            }
+          ],
+          "children": [
+            {
+              "id": "161:3",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 1132,
+                "y": -69,
+                "width": 300,
+                "height": 28
+              },
+              "children": [
+                {
+                  "id": "161:4",
+                  "name": "正式设计稿 · 已通过",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 1142,
+                    "y": -64,
+                    "width": 280,
+                    "height": 17
+                  }
+                }
+              ]
+            },
+            {
+              "id": "161:5",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 1132,
+                "y": -36,
+                "width": 1104,
+                "height": 38
+              },
+              "layoutPositioning": "ABSOLUTE",
+              "children": [
+                {
+                  "id": "161:6",
+                  "name": "宠迹 · 宠物定位与围栏告警",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 1132,
+                    "y": -33,
+                    "width": 341,
+                    "height": 39
+                  },
+                  "problems": {
+                    "warning": [
+                      "Outside parent(161:5) bounds, and parent (clipsContent: false)"
+                    ]
+                  },
+                  "problemDetails": [
+                    {
+                      "code": "OUTSIDE_PARENT",
+                      "message": "Outside parent(161:5) bounds, and parent (clipsContent: false)",
+                      "detail": {
+                        "clipsContent": false
+                      },
+                      "severity": "warning"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "161:7",
+              "name": "Frame",
+              "type": "FRAME",
+              "bounds": {
+                "x": 1132,
+                "y": 12,
+                "width": 1104,
+                "height": 180
+              },
+              "layoutMode": "VERTICAL",
+              "problems": {
+                "warning": [
+                  "large empty region at 1132,108 1104x83 (46% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect"
+                ]
+              },
+              "problemDetails": [
+                {
+                  "code": "LARGE_EMPTY_AREA",
+                  "message": "large empty region at 1132,108 1104x83 (46% of container); container sizing is probably larger than its content. This is a candidate finding: verify the screenshot and layout intent before treating it as a defect",
+                  "detail": {
+                    "localBounds": {
+                      "x": 0,
+                      "y": 96,
+                      "width": 1104,
+                      "height": 83.09999084472656
+                    },
+                    "absoluteBounds": {
+                      "x": 1132,
+                      "y": 108,
+                      "width": 1104,
+                      "height": 83.09999084472656
+                    },
+                    "areaRatio": 0.4639865756034851,
+                    "cause": "OversizedContainer"
+                  },
+                  "severity": "warning"
+                }
+              ],
+              "children": [
+                {
+                  "id": "161:8",
+                  "name": "覆盖登录、添加宠物、绑定设备、位置与轨迹、围栏告警，以及我的、设置与管理端设备告警看数。",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 1132,
+                    "y": 12,
+                    "width": 616,
+                    "height": 24
+                  }
+                },
+                {
+                  "id": "161:9",
+                  "name": "真硬件、微信、短信、支付、地图尚未接入，不得写成已对外上线。会员购买、积分兑换、邀请、社交碰头不是本轮必做。",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 1132,
+                    "y": 36,
+                    "width": 756,
+                    "height": 24
+                  }
+                },
+                {
+                  "id": "161:10",
+                  "name": "说明注释",
+                  "type": "TEXT",
+                  "bounds": {
+                    "x": 1132,
+                    "y": 60,
+                    "width": 1000,
+                    "height": 48
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

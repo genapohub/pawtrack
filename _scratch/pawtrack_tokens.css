@@ -1,0 +1,22 @@
+/* Pawtrack Tokens — 2026-11-15 visual refinement (warm paper + dusk blue)
+   Independent of 宠宝树绿 / SKIN79墨 / 宠小满墨松绿 / RAG青绿 / Agent海军
+   Official source is Ardot collection「Pawtrack Tokens」on file 747621516726578.
+   This CSS is a working mirror only. */
+:root{
+  --bg:#F6F3EE; --surface:#FFFCF8; --bg-muted:#EFEBE6; --border:#E4DFD8; --border-strong:#C9C2B8;
+  --fg:#2A2622; --fg-2:#6B645C; --fg-3:#746C64; --fg-inv:#F6F3EE;
+  --accent:#3E5470; --accent-hover:#32445C; --accent-subtle:#E8EDF1;
+  --mock:#6F6250; --mock-bg:#F3EEE6; --mock-border:#E4D9C8;
+  --success:#4A635E; --success-subtle:#E8EEEC;
+  --warning:#8F6240; --warning-subtle:#F4EDE4;
+  --danger:#9A5848; --danger-subtle:#F3E8E4;
+  --map:#E6E4DE; --map-line:#C2BDB4; --pin:#3E5470;
+  --tab-bg:#FFFCF8;
+  --sidebar:#2A2724; --sidebar-line:#3A3531; --sidebar-muted:#A39A90;
+  --sidebar-link:#D8D2CA; --sidebar-off:#7A736C;
+  --dog-tag-bg:#EDE6DC; --dog-tag-fg:#6A5240;
+  --stage:#E8E4DE;
+  --radius-md:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--stage);color:var(--fg);font-family:"PingFang SC",-apple-system,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}

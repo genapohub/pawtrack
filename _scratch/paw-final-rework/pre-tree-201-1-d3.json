@@ -1,0 +1,228 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "id": "201:1",
+        "type": "FRAME",
+        "layout": "none",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.9098039269447327,
+              "g": 0.8901960849761963,
+              "b": 0.8705882430076599
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 375,
+        "height": 812,
+        "x": 1900,
+        "y": 6804,
+        "name": "设置",
+        "children": [
+          {
+            "id": "201:2",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9607843160629272,
+                  "g": 0.9490196108818054,
+                  "b": 0.929411768913269
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 0,
+            "name": "Frame",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "201:11",
+                "type": "FRAME",
+                "layout": "none",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 1,
+                      "g": 0.9882352948188782,
+                      "b": 0.9725490212440491
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 375,
+                "height": 88,
+                "x": 0,
+                "y": 0,
+                "name": "Frame",
+                "children": [
+                  {
+                    "id": "201:12",
+                    "type": "TEXT",
+                    "fontSize": 17,
+                    "lineHeight": {
+                      "unit": "AUTO"
+                    },
+                    "fontName": {
+                      "family": "PingFang SC",
+                      "style": "Semibold"
+                    },
+                    "characters": "设置",
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.16470588743686676,
+                          "g": 0.14901961386203766,
+                          "b": 0.13333334028720856
+                        },
+                        "opacity": 1,
+                        "visible": true,
+                        "blendMode": "NORMAL"
+                      }
+                    ],
+                    "width": 34,
+                    "height": 24,
+                    "x": 52,
+                    "y": 52,
+                    "name": "设置",
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP"
+                  },
+                  {
+                    "id": "201:13",
+                    "type": "FRAME",
+                    "layout": "horizontal",
+                    "gap": 0,
+                    "padding": {
+                      "left": 0,
+                      "right": 0,
+                      "top": 0,
+                      "bottom": 0
+                    },
+                    "width": 44,
+                    "height": 44,
+                    "x": 8,
+                    "y": 42,
+                    "name": "Frame",
+                    "children": "..."
+                  },
+                  {
+                    "id": "201:17",
+                    "type": "RECTANGLE",
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.8941176533699036,
+                          "g": 0.8745098114013672,
+                          "b": 0.8470588326454163
+                        },
+                        "opacity": 1,
+                        "visible": true,
+                        "blendMode": "NORMAL"
+                      }
+                    ],
+                    "width": 375,
+                    "height": 1,
+                    "x": 0,
+                    "y": 87,
+                    "name": "Rectangle"
+                  },
+                  {
+                    "id": "289:5698",
+                    "type": "FRAME",
+                    "layout": "none",
+                    "width": 87,
+                    "height": 32,
+                    "x": 281,
+                    "y": 48,
+                    "name": "官方胶囊",
+                    "clipsContent": true,
+                    "children": "..."
+                  },
+                  {
+                    "id": "289:5744",
+                    "type": "TEXT",
+                    "fontSize": 15,
+                    "lineHeight": {
+                      "unit": "AUTO"
+                    },
+                    "fontName": {
+                      "family": "PingFang SC",
+                      "style": "Semibold"
+                    },
+                    "characters": "9:41",
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.16470588743686676,
+                          "g": 0.14901961386203766,
+                          "b": 0.13333334028720856
+                        },
+                        "opacity": 1,
+                        "visible": true,
+                        "blendMode": "NORMAL"
+                      }
+                    ],
+                    "width": 29,
+                    "height": 21,
+                    "x": 21,
+                    "y": 12,
+                    "name": "系统时间",
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP"
+                  }
+                ]
+              },
+              {
+                "id": "201:18",
+                "type": "FRAME",
+                "layout": "none",
+                "width": 375,
+                "height": 724,
+                "x": 0,
+                "y": 88,
+                "name": "Frame",
+                "clipsContent": true,
+                "children": [
+                  {
+                    "id": "201:19",
+                    "type": "FRAME",
+                    "layout": "none",
+                    "width": 375,
+                    "height": 407.79998779296875,
+                    "x": 0,
+                    "y": 0,
+                    "name": "Frame",
+                    "children": "..."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "issues": [
+      "Some nodes do not have the specified properties will be omitted in the result"
+    ]
+  }
+}

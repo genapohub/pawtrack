@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "data": {
+    "operations": [
+      {
+        "type": "Update",
+        "node": "290:503",
+        "updated": {
+          "fontSize": 13,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "小区西门附近",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.24300000071525574,
+                "g": 0.32899999618530273,
+                "b": 0.4390000104904175
+              },
+              "opacity": 1,
+              "visible": true,
+              "blendMode": "NORMAL"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Update",
+        "node": "290:505",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "已选圆心",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.4189999997615814,
+                "g": 0.3919999897480011,
+                "b": 0.3610000014305115
+              },
+              "opacity": 1,
+              "visible": true,
+              "blendMode": "NORMAL"
+            }
+          ],
+          "x": 132,
+          "y": 78
+        }
+      },
+      {
+        "type": "Update",
+        "node": "290:506",
+        "updated": {
+          "fontSize": 13,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Medium"
+          },
+          "characters": "重新点选圆心",
+          "textAlignHorizontal": "CENTER",
+          "textAlignVertical": "CENTER",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Update",
+        "node": "290:501",
+        "updated": {
+          "name": "重新点选圆心"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "ellipse",
+          "id": "290:507",
+          "name": "已选圆心针"
+        }
+      }
+    ],
+    "expiredBindings": "binding names [ pin ] is expired, dont use in next batch_edit"
+  }
+}

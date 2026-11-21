@@ -1,0 +1,109 @@
+{
+  "success": true,
+  "data": {
+    "operations": [
+      {
+        "type": "Update",
+        "node": "189:19",
+        "updated": {
+          "height": 607
+        }
+      },
+      {
+        "type": "Update",
+        "node": "189:45",
+        "updated": {
+          "y": 468
+        }
+      },
+      {
+        "type": "Update",
+        "node": "189:54",
+        "updated": {
+          "y": 551
+        }
+      },
+      {
+        "type": "Delete",
+        "node": "199:56"
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "frame",
+          "id": "290:489",
+          "name": "围栏圆心"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "frame",
+          "id": "290:490",
+          "name": "圆心标题行"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "text",
+          "id": "290:491",
+          "name": "围栏圆心",
+          "content": "围栏圆心"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "text",
+          "id": "290:492",
+          "name": "未选择",
+          "content": "未选择"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "frame",
+          "id": "290:493",
+          "name": "圆心示意地图"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "ellipse",
+          "id": "290:494",
+          "name": "待选范围"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "text",
+          "id": "290:495",
+          "name": "点击地图点选圆心",
+          "content": "点击地图点选圆心"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "frame",
+          "id": "290:496",
+          "name": "在地图上点选圆心"
+        }
+      },
+      {
+        "type": "Insert",
+        "node": {
+          "type": "text",
+          "id": "290:497",
+          "name": "在地图上点选圆心",
+          "content": "在地图上点选圆心"
+        }
+      }
+    ],
+    "expiredBindings": "binding names [ card, head, t1, st, map, ring, mh, btn, bl ] is expired, dont use in next batch_edit"
+  }
+}

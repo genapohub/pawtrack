@@ -1,0 +1,995 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "id": "290:507",
+        "type": "ELLIPSE",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.24300000071525574,
+              "g": 0.32899999618530273,
+              "b": 0.4390000104904175
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 12,
+        "height": 12,
+        "x": 150,
+        "y": 44,
+        "name": "已选圆心针"
+      },
+      {
+        "id": "290:500",
+        "type": "FRAME",
+        "layout": "none",
+        "cornerRadius": 10,
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.9019607901573181,
+              "g": 0.8941176533699036,
+              "b": 0.8705882430076599
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 313,
+        "height": 100,
+        "x": "auto",
+        "y": "auto",
+        "name": "圆心示意地图",
+        "clipsContent": true,
+        "children": [
+          {
+            "id": "290:504",
+            "type": "ELLIPSE",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.24300000071525574,
+                  "g": 0.32899999618530273,
+                  "b": 0.4390000104904175
+                },
+                "opacity": 0.11999999731779099,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "strokes": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.24300000071525574,
+                  "g": 0.32899999618530273,
+                  "b": 0.4390000104904175
+                },
+                "opacity": 0.550000011920929,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 100,
+            "height": 60,
+            "x": 106,
+            "y": 20,
+            "name": "待选范围"
+          },
+          {
+            "id": "290:505",
+            "type": "TEXT",
+            "fontSize": 12,
+            "lineHeight": {
+              "unit": "AUTO"
+            },
+            "fontName": {
+              "family": "PingFang SC",
+              "style": "Regular"
+            },
+            "characters": "已选圆心",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.4189999997615814,
+                  "g": 0.3919999897480011,
+                  "b": 0.3610000014305115
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 48,
+            "height": 17,
+            "x": 132,
+            "y": 78,
+            "name": "已选圆心",
+            "textAlignHorizontal": "LEFT",
+            "textAlignVertical": "TOP"
+          },
+          {
+            "id": "290:507",
+            "type": "ELLIPSE",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.24300000071525574,
+                  "g": 0.32899999618530273,
+                  "b": 0.4390000104904175
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 12,
+            "height": 12,
+            "x": 150,
+            "y": 44,
+            "name": "已选圆心针"
+          }
+        ]
+      },
+      {
+        "id": "290:498",
+        "type": "FRAME",
+        "layout": "vertical",
+        "gap": 8,
+        "padding": {
+          "left": 15,
+          "right": 15,
+          "top": 14,
+          "bottom": 14
+        },
+        "cornerRadius": 14,
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 1,
+              "g": 0.9882352948188782,
+              "b": 0.9725490212440491
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 343,
+        "height": 196,
+        "x": 16,
+        "y": 303,
+        "name": "围栏圆心",
+        "clipsContent": true,
+        "children": [
+          {
+            "id": "290:499",
+            "type": "FRAME",
+            "layout": "horizontal",
+            "gap": 0,
+            "padding": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "width": 313,
+            "height": 21,
+            "x": "auto",
+            "y": "auto",
+            "name": "圆心标题行",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:502",
+                "type": "TEXT",
+                "fontSize": 15,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Medium"
+                },
+                "characters": "围栏圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.16470588743686676,
+                      "g": 0.14901961386203766,
+                      "b": 0.13333334028720856
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "围栏圆心",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              },
+              {
+                "id": "290:503",
+                "type": "TEXT",
+                "fontSize": 13,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Regular"
+                },
+                "characters": "小区西门附近",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "小区西门附近",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              }
+            ]
+          },
+          {
+            "id": "290:500",
+            "type": "FRAME",
+            "layout": "none",
+            "cornerRadius": 10,
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9019607901573181,
+                  "g": 0.8941176533699036,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 313,
+            "height": 100,
+            "x": "auto",
+            "y": "auto",
+            "name": "圆心示意地图",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:504",
+                "type": "ELLIPSE",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 0.11999999731779099,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 0.550000011920929,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 100,
+                "height": 60,
+                "x": 106,
+                "y": 20,
+                "name": "待选范围"
+              },
+              {
+                "id": "290:505",
+                "type": "TEXT",
+                "fontSize": 12,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Regular"
+                },
+                "characters": "已选圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.4189999997615814,
+                      "g": 0.3919999897480011,
+                      "b": 0.3610000014305115
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 48,
+                "height": 17,
+                "x": 132,
+                "y": 78,
+                "name": "已选圆心",
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP"
+              },
+              {
+                "id": "290:507",
+                "type": "ELLIPSE",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24300000071525574,
+                      "g": 0.32899999618530273,
+                      "b": 0.4390000104904175
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 12,
+                "height": 12,
+                "x": 150,
+                "y": 44,
+                "name": "已选圆心针"
+              }
+            ]
+          },
+          {
+            "id": "290:501",
+            "type": "FRAME",
+            "layout": "horizontal",
+            "gap": 0,
+            "padding": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "cornerRadius": 12,
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 1,
+                  "g": 0.9882352948188782,
+                  "b": 0.9725490212440491
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "strokes": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.23899999260902405,
+                  "g": 0.32899999618530273,
+                  "b": 0.4390000104904175
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 313,
+            "height": 36,
+            "x": "auto",
+            "y": "auto",
+            "name": "重新点选圆心",
+            "clipsContent": true,
+            "children": [
+              {
+                "id": "290:506",
+                "type": "TEXT",
+                "fontSize": 13,
+                "lineHeight": {
+                  "unit": "AUTO"
+                },
+                "fontName": {
+                  "family": "PingFang SC",
+                  "style": "Medium"
+                },
+                "characters": "重新点选圆心",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 0.24313725531101227,
+                      "g": 0.3294117748737335,
+                      "b": 0.43921568989753723
+                    },
+                    "opacity": 1,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": "hug_contents",
+                "height": "hug_contents",
+                "x": "auto",
+                "y": "auto",
+                "name": "重新点选圆心",
+                "textAlignHorizontal": "CENTER",
+                "textAlignVertical": "CENTER"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "290:503",
+        "type": "TEXT",
+        "fontSize": 13,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Regular"
+        },
+        "characters": "小区西门附近",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.24300000071525574,
+              "g": 0.32899999618530273,
+              "b": 0.4390000104904175
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": "hug_contents",
+        "height": "hug_contents",
+        "x": "auto",
+        "y": "auto",
+        "name": "小区西门附近",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      },
+      {
+        "id": "290:505",
+        "type": "TEXT",
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Regular"
+        },
+        "characters": "已选圆心",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.4189999997615814,
+              "g": 0.3919999897480011,
+              "b": 0.3610000014305115
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 48,
+        "height": 17,
+        "x": 132,
+        "y": 78,
+        "name": "已选圆心",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      },
+      {
+        "id": "290:501",
+        "type": "FRAME",
+        "layout": "horizontal",
+        "gap": 0,
+        "padding": {
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        "cornerRadius": 12,
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 1,
+              "g": 0.9882352948188782,
+              "b": 0.9725490212440491
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "strokes": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.23899999260902405,
+              "g": 0.32899999618530273,
+              "b": 0.4390000104904175
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 313,
+        "height": 36,
+        "x": "auto",
+        "y": "auto",
+        "name": "重新点选圆心",
+        "clipsContent": true,
+        "children": [
+          {
+            "id": "290:506",
+            "type": "TEXT",
+            "fontSize": 13,
+            "lineHeight": {
+              "unit": "AUTO"
+            },
+            "fontName": {
+              "family": "PingFang SC",
+              "style": "Medium"
+            },
+            "characters": "重新点选圆心",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.24313725531101227,
+                  "g": 0.3294117748737335,
+                  "b": 0.43921568989753723
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": "hug_contents",
+            "height": "hug_contents",
+            "x": "auto",
+            "y": "auto",
+            "name": "重新点选圆心",
+            "textAlignHorizontal": "CENTER",
+            "textAlignVertical": "CENTER"
+          }
+        ]
+      },
+      {
+        "id": "290:506",
+        "type": "TEXT",
+        "fontSize": 13,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Medium"
+        },
+        "characters": "重新点选圆心",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.24313725531101227,
+              "g": 0.3294117748737335,
+              "b": 0.43921568989753723
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": "hug_contents",
+        "height": "hug_contents",
+        "x": "auto",
+        "y": "auto",
+        "name": "重新点选圆心",
+        "textAlignHorizontal": "CENTER",
+        "textAlignVertical": "CENTER"
+      },
+      {
+        "id": "2:128",
+        "type": "FRAME",
+        "layout": "vertical",
+        "gap": 12,
+        "padding": {
+          "left": 32,
+          "right": 32,
+          "top": 32,
+          "bottom": 32
+        },
+        "cornerRadius": 14,
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.9647058844566345,
+              "g": 0.9529411792755127,
+              "b": 0.9333333373069763
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "strokes": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.8899999856948853,
+              "g": 0.8700000047683716,
+              "b": 0.8500000238418579
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 1020,
+        "height": 440,
+        "x": -10,
+        "y": -145,
+        "name": "说明 · 宠迹（平台规范整改待复核）",
+        "clipsContent": true,
+        "children": [
+          {
+            "id": "2:129",
+            "type": "TEXT",
+            "fontSize": 22,
+            "lineHeight": {
+              "unit": "AUTO"
+            },
+            "fontName": {
+              "family": "PingFang SC",
+              "style": "Semibold"
+            },
+            "characters": "宠迹 · 正式设计稿（平台规范整改待复核）",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.1599999964237213,
+                  "g": 0.15000000596046448,
+                  "b": 0.12999999523162842
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": "fill_container",
+            "height": "hug_contents",
+            "x": "auto",
+            "y": "auto",
+            "name": "标题",
+            "textAlignHorizontal": "LEFT",
+            "textAlignVertical": "TOP"
+          },
+          {
+            "id": "2:130",
+            "type": "TEXT",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "AUTO"
+            },
+            "fontName": {
+              "family": "PingFang SC",
+              "style": "Regular"
+            },
+            "characters": "本页以下为接近真实使用的正式产品界面，覆盖登录、添加宠物、绑定设备、位置与轨迹、围栏告警，以及我的、设置与管理端设备告警看数。Tab 为首页 / 社交 / 报警 / 我的，围栏并入报警设置。会员购买、积分兑换、邀请、社交碰头不是本轮必做。真硬件、微信、短信、支付、地图尚未接入，不得写成已对外上线，只写在本说明与封面注释板。色板为 Pawtrack Tokens，雾蓝 #3E5470。气质升级曾于 2026-11-15 16:06 审过，去 Mock 腔曾于 17:15 审过。现状为平台规范整改待复核，通过前不当最终定稿、不开编码。编码已暂停，等哥拿坡审核该项目后再启动。Logo 精稿未放入。未改写宠迹PRD完整版 V2.1。",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.41960784792900085,
+                  "g": 0.3921568691730499,
+                  "b": 0.3607843220233917
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 956,
+            "height": "hug_contents",
+            "x": "auto",
+            "y": "auto",
+            "name": "说明",
+            "textAlignHorizontal": "LEFT",
+            "textAlignVertical": "TOP"
+          }
+        ]
+      },
+      {
+        "id": "2:130",
+        "type": "TEXT",
+        "fontSize": 14,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Regular"
+        },
+        "characters": "本页以下为接近真实使用的正式产品界面，覆盖登录、添加宠物、绑定设备、位置与轨迹、围栏告警，以及我的、设置与管理端设备告警看数。Tab 为首页 / 社交 / 报警 / 我的，围栏并入报警设置。会员购买、积分兑换、邀请、社交碰头不是本轮必做。真硬件、微信、短信、支付、地图尚未接入，不得写成已对外上线，只写在本说明与封面注释板。色板为 Pawtrack Tokens，雾蓝 #3E5470。气质升级曾于 2026-11-15 16:06 审过，去 Mock 腔曾于 17:15 审过。现状为平台规范整改待复核，通过前不当最终定稿、不开编码。编码已暂停，等哥拿坡审核该项目后再启动。Logo 精稿未放入。未改写宠迹PRD完整版 V2.1。",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.41960784792900085,
+              "g": 0.3921568691730499,
+              "b": 0.3607843220233917
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 956,
+        "height": "hug_contents",
+        "x": "auto",
+        "y": "auto",
+        "name": "说明",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      },
+      {
+        "id": "2:129",
+        "type": "TEXT",
+        "fontSize": 22,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Semibold"
+        },
+        "characters": "宠迹 · 正式设计稿（平台规范整改待复核）",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.1599999964237213,
+              "g": 0.15000000596046448,
+              "b": 0.12999999523162842
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": "fill_container",
+        "height": "hug_contents",
+        "x": "auto",
+        "y": "auto",
+        "name": "标题",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      },
+      {
+        "id": "161:1",
+        "type": "FRAME",
+        "layout": "none",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.9098039269447327,
+              "g": 0.8901960849761963,
+              "b": 0.8705882430076599
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 1200,
+        "height": 400,
+        "x": 1084,
+        "y": -105,
+        "name": "封面 · 宠迹正式设计稿（平台规范整改待复核）",
+        "children": [
+          {
+            "id": "161:2",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.239215686917305,
+                  "g": 0.3294117748737335,
+                  "b": 0.43921568989753723
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1200,
+            "height": 400,
+            "x": 0,
+            "y": 0,
+            "name": "Frame",
+            "children": [
+              {
+                "id": "161:3",
+                "type": "FRAME",
+                "layout": "none",
+                "cornerRadius": 12.5,
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 1,
+                      "g": 1,
+                      "b": 1
+                    },
+                    "opacity": 0.16078431904315948,
+                    "visible": true,
+                    "blendMode": "NORMAL"
+                  }
+                ],
+                "width": 300,
+                "height": 28,
+                "x": 48,
+                "y": 36,
+                "name": "Frame",
+                "children": "..."
+              },
+              {
+                "id": "161:5",
+                "type": "FRAME",
+                "layout": "none",
+                "width": 1104,
+                "height": 38,
+                "x": 48,
+                "y": 69,
+                "name": "Frame",
+                "children": "..."
+              },
+              {
+                "id": "161:7",
+                "type": "FRAME",
+                "layout": "vertical",
+                "gap": 0,
+                "padding": {
+                  "left": 0,
+                  "right": 0,
+                  "top": 0,
+                  "bottom": 0.9000020027160645
+                },
+                "width": 1104,
+                "height": 180,
+                "x": 48,
+                "y": 117,
+                "name": "Frame",
+                "children": "..."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "161:4",
+        "type": "TEXT",
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "AUTO"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Medium"
+        },
+        "characters": "正式设计稿 · 平台规范整改待复核",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 280,
+        "height": 17,
+        "x": 10,
+        "y": 5,
+        "name": "正式设计稿 · 已通过",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      },
+      {
+        "id": "161:10",
+        "type": "TEXT",
+        "fontSize": 14,
+        "lineHeight": {
+          "value": 170,
+          "unit": "PERCENT"
+        },
+        "fontName": {
+          "family": "PingFang SC",
+          "style": "Regular"
+        },
+        "characters": "气质升级曾于 2026-11-15 16:06 审过，去 Mock 腔曾于 17:15 审过。现状为平台规范整改待复核，通过前不当最终定稿、不开编码。编码已暂停，等哥拿坡审核该项目后再启动。Token：Pawtrack Tokens（雾蓝 #3E5470）。Logo 精稿未放入。",
+        "fills": [
+          {
+            "type": "SOLID",
+            "color": {
+              "r": 0.9100000262260437,
+              "g": 0.9300000071525574,
+              "b": 0.949999988079071
+            },
+            "opacity": 1,
+            "visible": true,
+            "blendMode": "NORMAL"
+          }
+        ],
+        "width": 1000,
+        "height": "hug_contents",
+        "x": "auto",
+        "y": "auto",
+        "name": "说明注释",
+        "textAlignHorizontal": "LEFT",
+        "textAlignVertical": "TOP"
+      }
+    ],
+    "issues": [
+      "Some nodes do not have the specified properties will be omitted in the result"
+    ]
+  }
+}

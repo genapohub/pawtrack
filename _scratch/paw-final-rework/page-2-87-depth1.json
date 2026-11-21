@@ -1,0 +1,1287 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "id": "2:87",
+        "type": "PAGE",
+        "name": "宠迹",
+        "children": [
+          {
+            "id": "2:128",
+            "type": "FRAME",
+            "layout": "vertical",
+            "gap": 12,
+            "padding": {
+              "left": 32,
+              "right": 32,
+              "top": 32,
+              "bottom": 32
+            },
+            "cornerRadius": 14,
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9647058844566345,
+                  "g": 0.9529411792755127,
+                  "b": 0.9333333373069763
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "strokes": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.8899999856948853,
+                  "g": 0.8700000047683716,
+                  "b": 0.8500000238418579
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1020,
+            "height": 440,
+            "x": -10,
+            "y": -145,
+            "name": "说明 · 宠迹（平台规范整改待复核）",
+            "clipsContent": true,
+            "children": "..."
+          },
+          {
+            "id": "161:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1200,
+            "height": 400,
+            "x": 1084,
+            "y": -105,
+            "name": "封面 · 宠迹正式设计稿（平台规范整改待复核）",
+            "children": "..."
+          },
+          {
+            "id": "162:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 420,
+            "name": "登录-默认",
+            "children": "..."
+          },
+          {
+            "id": "163:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 420,
+            "name": "登录-加载中",
+            "children": "..."
+          },
+          {
+            "id": "164:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 420,
+            "name": "登录-请先输入",
+            "children": "..."
+          },
+          {
+            "id": "165:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 420,
+            "name": "登录-验证码错误",
+            "children": "..."
+          },
+          {
+            "id": "166:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 420,
+            "name": "登录-无法连接服务",
+            "children": "..."
+          },
+          {
+            "id": "167:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 1332,
+            "name": "首页-默认",
+            "children": "..."
+          },
+          {
+            "id": "168:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 1332,
+            "name": "首页-无宠物",
+            "children": "..."
+          },
+          {
+            "id": "169:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 1332,
+            "name": "首页-定位中",
+            "children": "..."
+          },
+          {
+            "id": "170:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 1332,
+            "name": "首页-地图暂不可用",
+            "children": "..."
+          },
+          {
+            "id": "171:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 1332,
+            "name": "宠物列表",
+            "children": "..."
+          },
+          {
+            "id": "172:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 2244,
+            "name": "宠物列表-空",
+            "children": "..."
+          },
+          {
+            "id": "173:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 2244,
+            "name": "宠物列表-加载中",
+            "children": "..."
+          },
+          {
+            "id": "174:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 2244,
+            "name": "宠物列表-失败",
+            "children": "..."
+          },
+          {
+            "id": "175:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 2244,
+            "name": "添加宠物",
+            "children": "..."
+          },
+          {
+            "id": "176:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 2244,
+            "name": "添加宠物-保存失败",
+            "children": "..."
+          },
+          {
+            "id": "177:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 3156,
+            "name": "宠物详情",
+            "children": "..."
+          },
+          {
+            "id": "178:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 3156,
+            "name": "宠物详情-未绑定",
+            "children": "..."
+          },
+          {
+            "id": "179:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 3156,
+            "name": "绑定设备",
+            "children": "..."
+          },
+          {
+            "id": "180:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 3156,
+            "name": "绑定设备-绑定中",
+            "children": "..."
+          },
+          {
+            "id": "181:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 3156,
+            "name": "绑定设备-SN无效",
+            "children": "..."
+          },
+          {
+            "id": "182:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 4068,
+            "name": "绑定设备-已被绑定",
+            "children": "..."
+          },
+          {
+            "id": "183:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 4068,
+            "name": "设备管理",
+            "children": "..."
+          },
+          {
+            "id": "184:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 4068,
+            "name": "设备管理-解绑确认",
+            "children": "..."
+          },
+          {
+            "id": "185:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 4068,
+            "name": "设备管理-解绑失败",
+            "children": "..."
+          },
+          {
+            "id": "186:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 4068,
+            "name": "历史轨迹（近 7 天）",
+            "children": "..."
+          },
+          {
+            "id": "187:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 4980,
+            "name": "历史轨迹-空",
+            "children": "..."
+          },
+          {
+            "id": "188:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 4980,
+            "name": "历史轨迹-加载中",
+            "children": "..."
+          },
+          {
+            "id": "189:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 4980,
+            "name": "报警设置-狗可关闭",
+            "children": "..."
+          },
+          {
+            "id": "190:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 4980,
+            "name": "报警设置-猫不可关",
+            "children": "..."
+          },
+          {
+            "id": "191:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 4980,
+            "name": "报警设置-围栏过小",
+            "children": "..."
+          },
+          {
+            "id": "192:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 5892,
+            "name": "报警设置-未绑定设备",
+            "children": "..."
+          },
+          {
+            "id": "193:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 5892,
+            "name": "报警设置-保存中",
+            "children": "..."
+          },
+          {
+            "id": "194:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 5892,
+            "name": "报警列表",
+            "children": "..."
+          },
+          {
+            "id": "195:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 5892,
+            "name": "报警列表-空",
+            "children": "..."
+          },
+          {
+            "id": "196:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 5892,
+            "name": "报警列表-加载中",
+            "children": "..."
+          },
+          {
+            "id": "197:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 0,
+            "y": 6804,
+            "name": "报警列表-失败",
+            "children": "..."
+          },
+          {
+            "id": "198:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 475,
+            "y": 6804,
+            "name": "报警通知详情",
+            "children": "..."
+          },
+          {
+            "id": "199:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 950,
+            "y": 6804,
+            "name": "我的",
+            "children": "..."
+          },
+          {
+            "id": "200:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1425,
+            "y": 6804,
+            "name": "我的-加载失败",
+            "children": "..."
+          },
+          {
+            "id": "201:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 375,
+            "height": 812,
+            "x": 1900,
+            "y": 6804,
+            "name": "设置",
+            "children": "..."
+          },
+          {
+            "id": "202:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 0,
+            "y": 7796,
+            "name": "管理端登录-默认",
+            "children": "..."
+          },
+          {
+            "id": "203:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 1540,
+            "y": 7796,
+            "name": "管理端登录-加载中",
+            "children": "..."
+          },
+          {
+            "id": "204:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 3080,
+            "y": 7796,
+            "name": "管理端登录-失败",
+            "children": "..."
+          },
+          {
+            "id": "205:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 0,
+            "y": 8796,
+            "name": "管理端-设备列表",
+            "children": "..."
+          },
+          {
+            "id": "206:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 1540,
+            "y": 8796,
+            "name": "管理端-设备空",
+            "children": "..."
+          },
+          {
+            "id": "207:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 3080,
+            "y": 8796,
+            "name": "管理端-设备失败",
+            "children": "..."
+          },
+          {
+            "id": "208:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 0,
+            "y": 9796,
+            "name": "管理端-设备详情",
+            "children": "..."
+          },
+          {
+            "id": "209:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 1540,
+            "y": 9796,
+            "name": "管理端-报警列表",
+            "children": "..."
+          },
+          {
+            "id": "210:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 3080,
+            "y": 9796,
+            "name": "管理端-报警空",
+            "children": "..."
+          },
+          {
+            "id": "211:1",
+            "type": "FRAME",
+            "layout": "none",
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.9098039269447327,
+                  "g": 0.8901960849761963,
+                  "b": 0.8705882430076599
+                },
+                "opacity": 1,
+                "visible": true,
+                "blendMode": "NORMAL"
+              }
+            ],
+            "width": 1440,
+            "height": 900,
+            "x": 0,
+            "y": 10796,
+            "name": "管理端-报警失败",
+            "children": "..."
+          }
+        ]
+      }
+    ],
+    "issues": [
+      "Some nodes do not have the specified properties will be omitted in the result"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "success": true,
+  "data": {
+    "operations": [
+      {
+        "type": "Update",
+        "node": "190:19",
+        "updated": {
+          "height": 571
+        }
+      },
+      {
+        "type": "Update",
+        "node": "190:45",
+        "updated": {
+          "y": 515
+        }
+      },
+      {
+        "type": "Copy",
+        "node": {
+          "id": "290:498",
+          "type": "FRAME",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": {
+            "left": 15,
+            "right": 15,
+            "top": 14,
+            "bottom": 14
+          },
+          "cornerRadius": 14,
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 1,
+                "g": 0.9882352948188782,
+                "b": 0.9725490212440491
+              },
+              "opacity": 1,
+              "visible": true,
+              "blendMode": "NORMAL"
+            }
+          ],
+          "width": 343,
+          "height": 196,
+          "x": 16,
+          "y": 303,
+          "name": "围栏圆心",
+          "clipsContent": true,
+          "children": "..."
+        }
+      }
+    ],
+    "expiredBindings": "binding names [ c190 ] is expired, dont use in next batch_edit"
+  }
+}

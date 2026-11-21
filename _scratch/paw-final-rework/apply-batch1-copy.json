@@ -1,0 +1,175 @@
+{
+  "success": true,
+  "data": {
+    "operations": [
+      {
+        "type": "Delete",
+        "node": "189:44"
+      },
+      {
+        "type": "Update",
+        "node": "189:42",
+        "updated": {
+          "height": 18
+        }
+      },
+      {
+        "type": "Update",
+        "node": "179:36",
+        "updated": {
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "itemSpacing": 0
+        }
+      },
+      {
+        "type": "Update",
+        "node": "179:37",
+        "updated": {
+          "fontSize": 14,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "characters": "扫码绑定",
+          "textAlignHorizontal": "CENTER",
+          "textAlignVertical": "CENTER",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Delete",
+        "node": "179:38"
+      },
+      {
+        "type": "Update",
+        "node": "179:32",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "请输入设备机身的 SN 或激活码。",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Delete",
+        "node": "179:33"
+      },
+      {
+        "type": "Update",
+        "node": "197:18",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "告警列表加载失败，请重试。",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Delete",
+        "node": "197:19"
+      },
+      {
+        "type": "Update",
+        "node": "198:33",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "这是应用内报警通知。"
+        }
+      },
+      {
+        "type": "Update",
+        "node": "198:34",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "短信、电话通知暂不可用。"
+        }
+      },
+      {
+        "type": "Delete",
+        "node": "199:32"
+      },
+      {
+        "type": "Delete",
+        "node": "199:44"
+      },
+      {
+        "type": "Delete",
+        "node": "199:50"
+      },
+      {
+        "type": "Update",
+        "node": "201:27",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "仅好友 / 全部可见 / 不可见。",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Update",
+        "node": "201:28",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "附近曝光与地图分享暂不可用。",
+          "textAutoResize": "WIDTH_AND_HEIGHT"
+        }
+      },
+      {
+        "type": "Update",
+        "node": "201:35",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "500 米 / 1 千米 / 3 千米"
+        }
+      },
+      {
+        "type": "Update",
+        "node": "201:51",
+        "updated": {
+          "fontSize": 12,
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "characters": "查看"
+        }
+      }
+    ],
+    "potentialIssues": [
+      "Node (201:35): text box extends beyond its parent Node (201:34) (overflows by 32px horizontally); content may be clipped. shrink the font, or set width: (fixed number) to make it auto wrap."
+    ],
+    "notify": "Please check and fix all potentialIssues before you start the next task"
+  }
+}
